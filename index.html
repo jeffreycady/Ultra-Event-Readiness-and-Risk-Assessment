@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultra Event Readiness &amp; Risk Assessment Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#DEDACB;
+    --paper-2:#F1EEE1;
+    --ink:#232922;
+    --ink-soft:#565f4e;
+    --pine:#1B2A1F;
+    --pine-2:#25372A;
+    --line:#A79C82;
+    --line-soft:#c9c0a7;
+    --accent:#CB5A28;
+    --accent-ink:#fff6ee;
+    --low:#4B7A4E;
+    --mid:#B2812A;
+    --high:#B23B2E;
+    --low-bg:rgba(75,122,78,0.13);
+    --mid-bg:rgba(178,129,42,0.15);
+    --high-bg:rgba(178,59,46,0.14);
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Big Shoulders Display', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-weight:800;
+    margin:0;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+  a{color:inherit;}
+  button{
+    font-family:'IBM Plex Mono', monospace;
+    cursor:pointer;
+  }
+  button:focus-visible, input:focus-visible, label:focus-within{
+    outline:3px solid var(--accent);
+    outline-offset:2px;
+  }
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* ---------- layout shell ---------- */
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--pine);
+    color:var(--accent-ink);
+    position:relative;
+    overflow:hidden;
+    padding:72px 0 56px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:var(--contour-pattern);
+    opacity:0.5;
+    pointer-events:none;
+  }
+  .hero .wrap{position:relative;z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:#c8b190;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px;height:1px;background:#c8b190;display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(40px, 8vw, 68px);
+    line-height:0.94;
+    color:#F7F2E7;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .hero p.lead{
+    font-family:'Source Serif 4', serif;
+    font-size:18px;
+    color:#d9d2c0;
+    max-width:52ch;
+    margin-top:22px;
+  }
+  .hero-meta{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:34px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .field label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#b7ac93;
+  }
+  .field input{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.25);
+    color:#F7F2E7;
+    padding:10px 12px;
+    font-family:'Source Serif 4', serif;
+    font-size:15px;
+    border-radius:var(--radius);
+    min-width:200px;
+  }
+  .field input::placeholder{color:#9a8f77;}
+  .countdown-hint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent);
+    min-height:14px;
+  }
+  .timing-note{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:#c8b190;
+    margin-top:26px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.14);
+    max-width:52ch;
+  }
+  .timing-note svg{flex-shrink:0;}
+  .days-badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:#c8b190;
+    margin-top:6px;
+  }
+
+  .phase-field{margin-top:28px;max-width:460px;}
+  .phase-field > label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#b7ac93;
+    display:block;margin-bottom:8px;
+  }
+  .phase-indicator{
+    margin-top:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    line-height:1.6;
+    color:#d9d2c0;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.2);
+    padding:13px 14px;
+  }
+  .phase-indicator strong{color:#F7F2E7;}
+  .phase-indicator.muted{color:#a99b7d;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:15px 26px;
+    font-size:13.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    border-radius:var(--radius);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{background:#b04b1f;}
+  .btn:active{transform:translateY(1px);}
+  .btn.ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+  }
+  .btn.ghost:hover{background:rgba(0,0,0,0.04);}
+  .btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .btn-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;}
+
+  .checkpoint-list{
+    margin-top:44px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:2px;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.18);
+  }
+  .checkpoint-list div{
+    background:var(--pine);
+    padding:12px 14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:#cfc4a9;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .checkpoint-list span.n{color:var(--accent);}
+
+  /* ---------- STEPPER ---------- */
+  .stepper-header{
+    background:var(--paper-2);
+    border-bottom:1px solid var(--line-soft);
+    padding:18px 0;
+    position:sticky;top:0;z-index:5;
+  }
+  .progress-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .progress-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    white-space:nowrap;
+    color:var(--ink-soft);
+  }
+  .trail{
+    flex:1;
+    height:26px;
+    position:relative;
+  }
+  .trail svg{width:100%;height:100%;display:block;overflow:visible;}
+  .trail .track{stroke:var(--line-soft);stroke-width:2;fill:none;}
+  .trail .track-done{stroke:var(--accent);stroke-width:2;fill:none;transition:stroke-dasharray .3s ease;}
+  .trail .dot{fill:var(--paper-2);stroke:var(--line);stroke-width:1.5;}
+  .trail .dot.done{fill:var(--accent);stroke:var(--accent);}
+  .trail .dot.current{fill:var(--pine);stroke:var(--pine);}
+
+  .stepper-body{padding:44px 0 100px;}
+  .cat-eyebrow{
+    display:flex;align-items:center;gap:12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:10px;
+  }
+  .cat-icon{width:34px;height:34px;flex-shrink:0;}
+  .stepper-body h2{font-size:clamp(28px,5vw,40px);margin-bottom:8px;}
+  .cat-tagline{color:var(--ink-soft);font-size:16px;max-width:56ch;margin-bottom:36px;font-style:italic;}
+
+  .question{
+    padding:26px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .question:last-child{border-bottom:1px solid var(--line-soft);}
+  .question p.q{
+    font-size:17px;
+    font-weight:600;
+    margin-bottom:16px;
+    max-width:62ch;
+  }
+  .q-num{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--accent);
+    margin-right:8px;
+  }
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 14px;
+    border:1px solid var(--line-soft);
+    border-radius:var(--radius);
+    background:var(--paper-2);
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover{border-color:var(--accent);}
+  .opt input{margin-top:3px;accent-color:var(--accent);flex-shrink:0;}
+  .opt label{font-size:15.5px;cursor:pointer;}
+  .opt.selected{border-color:var(--accent);background:#fbf1e9;}
+
+  .stepper-nav{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:20px;
+  }
+  .nav-hint{font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--ink-soft);}
+
+  /* ---------- RESULTS ---------- */
+  .results-header{background:var(--pine);color:var(--accent-ink);padding:56px 0 40px;position:relative;overflow:hidden;}
+  .results-header::before{content:"";position:absolute;inset:0;background-image:var(--contour-pattern);opacity:0.4;}
+  .results-header .wrap{position:relative;z-index:1;}
+  .score-block{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-top:18px;}
+  .score-num{font-family:'Big Shoulders Display';font-size:clamp(70px,14vw,120px);font-weight:800;line-height:0.85;}
+  .score-suffix{font-family:'IBM Plex Mono';font-size:20px;color:#c8b190;padding-bottom:14px;}
+  .tier-pill{
+    font-family:'IBM Plex Mono';font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:8px 16px;border-radius:20px;display:inline-block;margin-top:14px;
+  }
+  .results-body{padding:48px 0 100px;}
+  .section-title{font-size:24px;margin-bottom:6px;}
+  .section-sub{color:var(--ink-soft);font-size:15px;margin-bottom:28px;max-width:60ch;}
+
+  .skyline-wrap{background:var(--paper-2);border:1px solid var(--line-soft);padding:24px 20px 12px;margin-bottom:56px;}
+  .skyline-wrap svg{width:100%;height:auto;display:block;}
+
+  .priority-list{display:flex;flex-direction:column;gap:18px;margin-bottom:56px;}
+  .priority-card{
+    border-left:4px solid var(--accent);
+    background:var(--paper-2);
+    padding:20px 22px;
+  }
+  .priority-card h3{font-size:19px;letter-spacing:0.01em;margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .priority-card .tier-tag{
+    font-family:'IBM Plex Mono';font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:3px 9px;border-radius:12px;
+  }
+  .priority-card p{font-size:15px;color:var(--ink-soft);margin-top:8px;}
+
+  .checklist{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .check-item{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;}
+  .check-item input[type=checkbox]{margin-top:4px;width:15px;height:15px;accent-color:var(--accent);flex-shrink:0;}
+  .check-item label{cursor:pointer;}
+  .check-item.done label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line);}
+
+  .on-track-strip{
+    background:var(--paper-2);border:1px solid var(--line-soft);
+    padding:18px 22px;margin-bottom:56px;
+  }
+  .on-track-strip h3{font-size:15px;letter-spacing:0.03em;margin-bottom:12px;font-family:'IBM Plex Mono';text-transform:uppercase;color:var(--low);}
+  .on-track-items{display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .on-track-items span{
+    font-size:14px;display:flex;align-items:center;gap:6px;color:var(--ink-soft);
+  }
+  .on-track-items span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--low);display:inline-block;}
+
+  .coach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;background:var(--line-soft);border:1px solid var(--line-soft);margin-bottom:8px;}
+  .coach-card{background:var(--paper-2);padding:20px;display:flex;flex-direction:column;gap:8px;}
+  .coach-card h4{font-family:'Big Shoulders Display';font-size:17px;letter-spacing:0.01em;text-transform:none;}
+  .coach-card p{font-size:13.5px;color:var(--ink-soft);flex:1;}
+  .coach-card a{
+    font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.05em;text-transform:uppercase;
+    color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  }
+  .coach-card a:hover{text-decoration:underline;}
+
+  /* ---------- SITE FOOTER + LICENSE MODAL ---------- */
+  .site-footer{
+    text-align:center; padding:18px 24px 28px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
+  }
+  .site-footer button{
+    background:none;border:none;color:var(--ink-soft);text-decoration:underline;
+    font-family:'IBM Plex Mono', monospace;font-size:11px;cursor:pointer;padding:0;
+  }
+  .site-footer button:hover{color:var(--accent);}
+  .hero .site-footer{color:#a99b7d;}
+  .hero .site-footer button{color:#a99b7d;}
+  .hero .site-footer button:hover{color:var(--accent);}
+  .results-body .site-footer{padding-top:0;}
+
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(27,42,31,0.72);
+    z-index:50; align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--paper-2); max-width:560px; width:100%; max-height:85vh; overflow-y:auto;
+    padding:32px; position:relative; border:1px solid var(--line-soft);
+  }
+  .modal-box h2{font-size:24px;margin-bottom:4px;}
+  .modal-box .modal-sub{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-soft);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:20px;}
+  .modal-close{
+    position:absolute; top:20px; right:20px; background:none; border:none;
+    font-size:22px; line-height:1; color:var(--ink-soft); cursor:pointer; padding:4px;
+  }
+  .modal-close:hover{color:var(--accent);}
+  .license-tier{border:1px solid var(--line-soft); padding:16px 18px; margin-bottom:14px;}
+  .license-tier h3{font-size:15px;font-family:'Big Shoulders Display';text-transform:uppercase;letter-spacing:0.02em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;}
+  .license-tier .price{font-family:'IBM Plex Mono';color:var(--accent);font-size:13px;}
+  .license-tier p{font-size:13.5px;color:var(--ink-soft);}
+  .modal-box .fine-print{font-size:12px;color:var(--ink-soft);margin-top:18px;line-height:1.6;}
+  .modal-box .fine-print strong{color:var(--ink);}
+
+  .breakdown-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line-soft);margin-bottom:56px;}
+  .breakdown-row{
+    display:flex;align-items:center;gap:16px;
+    padding:14px 0;border-bottom:1px solid var(--line-soft);
+  }
+  .breakdown-name{width:220px;flex-shrink:0;font-size:14.5px;font-weight:600;font-family:'Source Serif 4';}
+  .breakdown-bar-track{flex:1;height:10px;background:rgba(0,0,0,0.06);position:relative;}
+  .breakdown-bar-fill{height:100%;}
+  .breakdown-score{
+    width:70px;text-align:right;font-family:'IBM Plex Mono';font-size:13px;flex-shrink:0;
+  }
+
+  .report-meta{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink-soft);margin-bottom:36px;}
+
+  footer.note{
+    max-width:60ch;font-size:13.5px;color:var(--ink-soft);
+    border-top:1px solid var(--line-soft);padding-top:20px;margin-top:8px;
+  }
+
+  @media (max-width:640px){
+    .breakdown-name{width:130px;font-size:13px;}
+    .checkpoint-list{grid-template-columns:repeat(2,1fr);}
+    .progress-label{display:none;}
+  }
+
+  @media print{
+    .hero,.stepper-header,.stepper-body,.no-print{display:none !important;}
+    .results-header{background:#fff !important;color:#000 !important;}
+    .results-header::before{display:none;}
+    .tier-pill{border:1px solid #000;}
+    body{background:#fff;}
+    .skyline-wrap, .priority-card, .breakdown-row, .coach-card{break-inside:avoid;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+/* =========================================================
+   DATA
+   Each question's options are ordered best(0) -> worst(last).
+   Score = index / (options.length-1)  ->  0..1 risk fraction
+========================================================= */
+const CATEGORIES = [
+  {
+    id:'terrain', name:'Terrain & Route Profile', short:'Terrain',
+    tagline:"How the ground ahead matches what you've actually trained on.",
+    remediation:{
+      summary:"Close the gap between your training terrain and what's actually ahead.",
+      actions:[
+        "Add training sessions on terrain that matches the route's technicality and grade",
+        "Study the elevation profile and route maps in detail",
+        "Cover key sections of the actual route in training or recon, if possible",
+        "Practice the specific technical skills the route demands (descending, scrambling, route-finding)"
+      ]
+    },
+    questions:[
+      {q:"What best describes the terrain you'll be covering?",
+       opts:["Mostly flat, non-technical (road, gravel, buffed trail)","Rolling hills, mostly runnable or easily walkable trail","Mountainous, with sustained climbs and descents","Highly technical — scrambling, loose rock, exposed ridgelines, or route-finding required"]},
+      {q:"Roughly how much elevation gain/loss does the route have?",
+       opts:["Under 50 ft of gain per mile (flat)","50–150 ft per mile (rolling)","150–300 ft per mile (mountainous)","Over 300 ft per mile, or sustained steep grades"]},
+      {q:"How much training have you done on terrain that matches the route?",
+       opts:["Extensive — most long efforts mimic this terrain","Some — a few key sessions on similar terrain","Limited — mostly different terrain than what's ahead","None — this will be my first time on this type of terrain"]},
+      {q:"How familiar are you with the actual route?",
+       opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
+      {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+    ]
+  },
+  {
+    id:'environment', name:'Environment & Climate', short:'Environment',
+    tagline:"Heat, cold, altitude, and humidity all change the math — if your body hasn't met them yet.",
+    remediation:{
+      summary:"Build acclimation time before you're in a climate your body hasn't met.",
+      actions:[
+        "Add dedicated heat, humidity, or altitude-specific sessions in the time you have left",
+        "If traveling to altitude, arrive at least a week early — or as close to start time as possible if that's not feasible",
+        "Test cold or wet-weather gear and your layering system in similar conditions",
+        "Pack a weather contingency plan for temperature swings, rain, or wind"
+      ]
+    },
+    questions:[
+      {q:"What environment will you be moving through?",
+       opts:["Similar to what I train in year-round","Moderately different (some added heat, humidity, or altitude)","Significantly different (desert heat, high altitude, rain forest humidity, or deep cold)","Extreme and unfamiliar — I've never trained or spent time in this climate"]},
+      {q:"How does the elevation ahead compare to where you live and train?",
+       opts:["Same or very close","Moderately higher, and I'll arrive at least a week early to adjust","Moderately higher, but I'm arriving less than 72 hours before the start","Much higher (2,000+ ft difference), with no acclimation plan"]},
+      {q:"Have you done any heat or humidity acclimation training for this event?",
+       opts:["Yes, a dedicated block of heat training","Some sessions in the heat or humidity","I've thought about it but haven't done it","No — and it will be much hotter or more humid than my training"]},
+      {q:"If cold, wet, or highly variable weather is possible, have you trained and tested gear in those conditions?",
+       opts:["Yes, extensively — I know how my body and gear respond","Some exposure and testing","Minimal — a session or two","None, and conditions could be extreme"]},
+      {q:"How prepared are you for weather swings on the days ahead (temperature, rain, wind)?",
+       opts:["I have layers and a plan for multiple scenarios","General plan, but haven't tested every piece","One setup packed, hoping for the best","Haven't thought about it"]}
+    ]
+  },
+  {
+    id:'gear', name:'Gear & Tools', short:'Gear',
+    tagline:"Poles, headlamp, pack — the gear you're trusting to get you through, tested or not.",
+    remediation:{
+      summary:"Test everything that matters before it matters.",
+      actions:[
+        "Take poles, headlamp, and pack/vest on long training days before race day",
+        "Break in footwear on terrain similar to the route",
+        "Pack backups for anything battery-powered or easy to lose",
+        "If overnight, test your full shelter/sleep system in conditions close to what's expected"
+      ]
+    },
+    questions:[
+      {q:"Have you reviewed and packed your event's mandatory or recommended gear list?",
+       opts:["Yes, fully — everything is checked off and tested","Mostly — a couple items still need attention","I've glanced at it but haven't packed","I haven't checked the gear list"]},
+      {q:"Have you used your key gear (trekking poles, headlamp, hydration vest, pack, or backpack) extensively before now?",
+       opts:["Yes — all of it, on long training days","Most of it","Only briefly, or just one or two items","No — this is new gear I haven't tested"]},
+      {q:"Are your shoes or boots broken in and matched to the terrain?",
+       opts:["Yes, well broken in and terrain-appropriate","Broken in, but not ideal for this terrain","Fairly new, limited miles on them","Brand new or untested for this distance/terrain"]},
+      {q:"Do you have backup/contingency gear (spare batteries, extra layers, backup navigation)?",
+       opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
+      {q:"If your event involves moving after dark, how comfortable are you on this terrain with a headlamp?",
+       opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"]},
+      {q:"If your event spans multiple days or nights, is your shelter and sleep system (tent, bag or quilt, pad) tested and adequate for expected conditions?",
+       opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"]}
+    ]
+  },
+  {
+    id:'nutrition', name:'Nutrition & Hydration', short:'Nutrition',
+    tagline:"A plan is only as good as how many times it's survived real time on trail.",
+    remediation:{
+      summary:"Rehearse the plan — don't just write it down.",
+      actions:[
+        "Test your fueling plan under conditions matching what's ahead (heat, altitude, humidity)",
+        "Lock in a tested calories/carbs-per-hour target",
+        "Narrow down 3–5 go-to foods you know you tolerate",
+        "If multi-day, calculate a resupply/food-carry plan for the distance between stops"
+      ]
+    },
+    questions:[
+      {q:"Have you trained your on-trail fueling plan under conditions similar to what's ahead (heat, altitude, humidity)?",
+       opts:["Yes, repeatedly, matching expected conditions","Somewhat, though not in matching conditions","I have a plan but haven't tested it","I don't have a tested fueling plan"]},
+      {q:"Have you established and tested a fueling rate (calories or carbs per hour) for sustained effort?",
+       opts:["Yes, tested and tolerated on long training days","I have a target with limited testing","Rough idea, not really tested","No plan"]},
+      {q:"How dialed in is your hydration and electrolyte strategy for the conditions ahead?",
+       opts:["Well-tested plan, tuned to the environment","General plan — drink to thirst with some electrolyte use","Loose plan, not really tested","No real plan"]},
+      {q:"Have you had GI issues on past long efforts, and do you have a plan to manage them?",
+       opts:["No history of issues, or a well-practiced management plan","Occasional issues, general idea of what to adjust","Frequent issues, no clear plan","Frequent issues and no plan at all"]},
+      {q:"How many of your 'go-to' trail foods have you actually tested on long training days?",
+       opts:["3–5+ tested options I know work for me","1–2 tested options","Untested — planning to rely on aid stations or resupply","Haven't thought about food variety at all"]},
+      {q:"If your event spans multiple days, do you have a resupply or food-carry plan sized for the distance between resupply points?",
+       opts:["Yes, calculated and packed/planned","Rough plan, not fully calculated","Vague idea — figuring it out as I go","No plan","Not applicable — single-day event with full support"]}
+    ]
+  },
+  {
+    id:'training', name:'Training & Fitness Readiness', short:'Training',
+    taglineByPhase:{
+      build:"Whether your training plan itself is on track — with time left to adjust it.",
+      taper:"Whether the training you've banked actually matches what's ahead — looking back, not planning ahead."
+    },
+    remediationByPhase:{
+      build:{
+        summary:"You still have weeks to close gaps — use them well.",
+        actions:[
+          "Layer muscular endurance (loaded uphill work) on top of your aerobic base — not instead of your easy volume",
+          "Track weekly vertical gain/loss and compare it against the event's per-mile elevation demands",
+          "Build a general strength foundation before progressing into heavier loaded/uphill-specific work",
+          "Push your longest efforts toward race-like time-on-feet and terrain over the coming weeks",
+          "Address any nagging injury or fatigue signal now, while there's still time to adjust the plan"
+        ]
+      },
+      taper:{
+        summary:"Your training block is done — the highest-value moves left are protecting it.",
+        actions:[
+          "Reduce volume while keeping some intensity/frequency — a taper isn't just stopping",
+          "Skip any new 'confidence-boosting' hard efforts or big vert days this close to the event",
+          "Give any lingering injury real attention now, not during the event",
+          "Redirect the extra time and energy toward sleep, gear prep, and mental rehearsal instead of more training stress"
+        ]
+      }
+    },
+    questionsByPhase:{
+      build:[
+        {q:"Where are you in your aerobic base / muscular endurance progression?",
+         opts:["Aerobic base is solid and I've moved into loaded uphill / muscular-endurance-specific work","Still building aerobic base, with some uphill-specific work mixed in","Mostly easy miles — haven't added uphill-specific loading yet","No structured progression — it's the same type of training every week"]},
+        {q:"How is your weekly vertical gain/loss tracking against what the event demands?",
+         opts:["Tracking it, and on pace to match or exceed race demands by taper","Tracking it, but currently behind where I'd like to be","Not tracking vertical specifically, just time or distance","No elevation-specific training at all"]},
+        {q:"Have you built a general strength foundation before adding heavier loaded uphill work?",
+         opts:["Yes, general strength is in place and I'm progressing into loaded/uphill-specific work","Some strength work, but inconsistent","Just started, or planning to start soon","No strength training in my plan"]},
+        {q:"How are your longest efforts progressing toward race-specific time-on-feet and terrain?",
+         opts:["Building steadily — recent long efforts are approaching race-like duration/terrain","Progressing, but a step behind schedule","Long efforts have stalled or plateaued","Haven't started building toward race-specific long efforts yet"]},
+        {q:"How are you monitoring fatigue and recovery as training load increases (resting heart rate, subjective feedback, sleep)?",
+         opts:["Actively monitoring and adjusting training based on it","Paying loose attention, no formal tracking","Not really monitoring, just pushing through the plan","No monitoring, and I've noticed signs of accumulating fatigue"]},
+        {q:"Any injury or illness in the past 4–6 weeks that's disrupted training?",
+         opts:["None","Minor, fully resolved","Recent, mostly recovered but not 100%","Current, unresolved injury or illness"]}
+      ],
+      taper:[
+        {q:"Looking back at your training block, how well did your volume/mileage buildup match what's ahead?",
+         opts:["Well-matched, gradual build with adequate long efforts","Mostly matched, with a few gaps","Undertrained relative to the distance","Significantly undertrained"]},
+        {q:"Any injury or illness in the past 4–6 weeks?",
+         opts:["None","Minor, fully resolved","Recent, mostly recovered but not 100%","Current, unresolved injury or illness"]},
+        {q:"Did your long days or back-to-back efforts get you close to the time-on-feet you'll need?",
+         opts:["Yes, multiple sessions at or near the expected duration","Some, but shorter than what's ahead","Limited","None"]},
+        {q:"Did your climbing/descending training match the route's elevation demands?",
+         opts:["Yes, closely matched","Somewhat matched","Limited elevation-specific training","Little to none, for a mountainous route"]},
+        {q:"Are you executing your taper right now — reducing volume while keeping some intensity, not just stopping?",
+         opts:["Yes — deliberate taper, reduced volume, maintained some intensity","Reducing volume, but I've also basically stopped everything","Haven't really started tapering yet","Still at full training volume with under 3 weeks to go"]},
+        {q:"Are you resisting the urge to add a 'confidence-boosting' hard effort or big vert day in these final weeks?",
+         opts:["Yes — nothing new or hard planned before the event","Mostly, though I have one moderate effort planned","I have a big/hard session planned in the next week or two","I've already done a big hard effort very recently, close to the event"]}
+      ]
+    }
+  },
+  {
+    id:'medical', name:'Medical & Injury History', short:'Medical',
+    tagline:"The factors that make an ordinary rough patch turn serious.",
+    remediation:{
+      summary:"Get ahead of anything that could turn a rough patch serious.",
+      actions:[
+        "Discuss any pre-existing condition with a doctor before you go",
+        "Make sure needed medications are packed and accessible, and anyone with you knows how to help",
+        "If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan",
+        "Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own"
+      ]
+    },
+    questions:[
+      {q:"Do you have any pre-existing medical conditions relevant to sustained endurance effort (heart, respiratory, metabolic, etc.)?",
+       opts:["None","Yes, well-managed and cleared by a doctor for this event","Yes, and I haven't discussed this event with a doctor","Yes, and it's a known risk factor I haven't addressed"]},
+      {q:"Have you had any injury or pain issues in the past 6 months, and are they fully resolved?",
+       opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
+      {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
+       opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
+      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
+       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
+       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]}
+    ]
+  },
+  {
+    id:'safety', name:'Safety & Emergency Preparedness', short:'Safety',
+    tagline:"What happens if something goes wrong, and whether you'd recognize it in time.",
+    remediation:{
+      summary:"Make sure someone knows your plan, and you know the warning signs.",
+      actions:[
+        "Share your trip plan and expected finish/return window with someone",
+        "Carry basic ID and medical information on you",
+        "Review the early warning signs of heat illness, hyponatremia, and hypothermia",
+        "Learn the symptoms and immediate response for rhabdomyolysis and hypernatremia too — not just the classic heat-illness triad",
+        "Confirm your backup navigation/communication plan for remote sections"
+      ]
+    },
+    questions:[
+      {q:"Have you told someone your trip plan and expected finish or return window?",
+       opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No"]},
+      {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
+       opts:["Always","Usually","Rarely","Never"]},
+      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, or hypothermia in yourself?",
+       opts:["Very confident — I know the signs and what to do","Somewhat familiar","Vague idea","Not familiar at all"]},
+      {q:"For remote sections of the route, do you have a backup navigation/communication plan (map, charged phone, whistle, PLB)?",
+       opts:["Yes, fully equipped","Partially equipped","Relying only on trail markings/signage","No backup plan"]},
+      {q:"Do you know what to do if you or someone with you needs emergency help mid-event?",
+       opts:["Yes, clearly","Roughly","Not really","No idea"]},
+      {q:"How familiar are you with the less-obvious exertion-related conditions (rhabdomyolysis, hypernatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
+       opts:["Very familiar — I know the symptoms and the exact steps to take for each","Familiar with the common ones, less sure on rarer ones like rhabdomyolysis","Vague general awareness — wouldn't know the exact steps","Not familiar with these at all"]}
+    ]
+  },
+  {
+    id:'logistics', name:'Event Logistics & Support', short:'Logistics',
+    tagline:"Support, resupply, and cutoffs — the machinery around the miles.",
+    remediation:{
+      summary:"Get the machinery around the miles locked in.",
+      actions:[
+        "Brief your crew, pacer, or hiking partner on the plan",
+        "Finalize and pack drop bags or resupply boxes",
+        "Map your expected pace against cutoffs or daily mileage targets",
+        "Set clear check-in points with anyone supporting you"
+      ]
+    },
+    questions:[
+      {q:"Do you have a support plan in place — crew, pacer, or hiking partner, if applicable?",
+       opts:["Yes, briefed and confirmed","Yes, but not fully briefed","Loosely planned","No plan, or haven't thought about it"]},
+      {q:"Do you have a drop bag or resupply strategy?",
+       opts:["Yes, packed and planned by stop","Partially planned","Vague idea","No plan / not packed"]},
+      {q:"How familiar are you with checkpoints, aid stations, or resupply points along the way, and any cutoffs or mileage targets?",
+       opts:["Very familiar — I've mapped my pace against cutoffs/targets","Generally familiar","Only vaguely aware","Not familiar at all"]},
+      {q:"Do you have a communication/check-in plan with anyone supporting you?",
+       opts:["Yes, clear check-in points","General plan","Loose or unclear","No plan"]}
+    ]
+  },
+  {
+    id:'mental', name:'Mental Readiness & Pacing', short:'Mental',
+    tagline:"The plan for when your legs and your judgment start to disagree.",
+    remediation:{
+      summary:"Decide the hard calls now, while you can still think clearly.",
+      actions:[
+        "Base your pacing plan on real training paces, not race-day adrenaline",
+        "Define your own turn-around or stopping criteria ahead of time",
+        "Mentally rehearse the low points — night hours, motivation dips",
+        "Write your pacing/decision plan down somewhere you (or your crew) can reference it"
+      ]
+    },
+    questions:[
+      {q:"Is your pacing plan based on realistic training paces and the route profile?",
+       opts:["Yes, data-driven and realistic","Mostly, with some guesswork","Loosely planned","No plan — I'll go out and see how I feel"]},
+      {q:"Have you trained specifically for the fatigue and decision-making challenges of this distance (long efforts deep into fatigue)?",
+       opts:["Yes, extensively","Some exposure","Limited","None — this is a big step up in distance/duration for me"]},
+      {q:"Have you defined your own turn-around or stopping criteria ahead of time (what would make you call it)?",
+       opts:["Yes, clearly defined","Roughly in mind","Not really thought about it","No"]},
+      {q:"How much experience do you have managing the mental low points of a long effort (night hours, low motivation stretches)?",
+       opts:["Significant experience, know my strategies","Some experience","Limited","None"]}
+    ]
+  },
+  {
+    id:'recovery', name:'Recovery Plan', short:'Recovery',
+    tagline:"What happens after you're done, planned before you're standing at the finish.",
+    remediation:{
+      summary:"Plan the aftermath before you're too tired to think about it.",
+      actions:[
+        "Sketch a post-event plan for nutrition, sleep, and light movement",
+        "Decide in advance when/how you'd seek medical follow-up if something comes up",
+        "Set a gradual return-to-training timeline instead of jumping back in hard",
+        "Block time to debrief and capture lessons while they're fresh"
+      ]
+    },
+    questions:[
+      {q:"Do you have a post-event recovery plan (nutrition, sleep, light movement) for the days after?",
+       opts:["Yes, planned","General idea","Not really","No plan"]},
+      {q:"Do you have a plan for addressing any injury or issue that comes up during the event, afterward?",
+       opts:["Yes — I know when/how I'd seek medical follow-up","General idea","Vague","No plan"]},
+      {q:"Do you have a realistic return-to-training timeline planned post-event?",
+       opts:["Yes, planned with a gradual return","Rough idea","No real plan","I plan to jump back into hard training immediately"]},
+      {q:"Do you typically debrief or reflect on big efforts to capture lessons for next time?",
+       opts:["Yes, consistently","Sometimes","Rarely","Never"]}
+    ]
+  }
+];
+
+/* =========================================================
+   PHASE-AWARE ACCESSORS
+   The Training & Fitness Readiness category has two question
+   sets depending on how far out the event is. Everything else
+   is phase-agnostic.
+========================================================= */
+function getQuestions(ci){
+  const cat = CATEGORIES[ci];
+  return cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+}
+function getTagline(ci){
+  const cat = CATEGORIES[ci];
+  return cat.taglineByPhase ? cat.taglineByPhase[state.phase] : cat.tagline;
+}
+function getRemediation(ci){
+  const cat = CATEGORIES[ci];
+  return cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
+}
+function suggestPhase(dateStr){
+  const d = daysUntil(dateStr);
+  if(d===null) return null;
+  return d > 21 ? 'build' : 'taper';
+}
+function phaseCopy(phase){
+  return phase==='build'
+    ? { label:'6\u201312 Weeks Out', short:'6\u201312 weeks out', desc:'Build / peak phase \u2014 training plan still adjustable' }
+    : { label:'3 Weeks Out', short:'3 weeks out', desc:'Taper / final prep \u2014 protecting fitness, not adding it' };
+}
+function phaseStatusText(){
+  if(!state.eventDate){
+    const info = phaseCopy('taper');
+    return `No start date yet \u2014 using <strong>${info.label}</strong> questions by default. Add a start date above to set this automatically.`;
+  }
+  const info = phaseCopy(state.phase);
+  return `<strong>${info.label}</strong> \u2014 ${info.desc} (${daysUntilText(state.eventDate)}).`;
+}
+
+const COACH_LINKS = [
+  {
+    name:'UESCA Coach Directory',
+    url:'https://uesca.com/coach-directory/',
+    blurb:"Search certified ultrarunning coaches by specialty and location — a good fit if your gaps are mostly race-specific: pacing, fueling, or training structure."
+  },
+  {
+    name:'Uphill Athlete Coaching',
+    url:'https://uphillathlete.com/coaching/',
+    blurb:"Built for vert-heavy terrain and mountain objectives — a strong fit if your biggest gaps are elevation, muscular endurance, or multi-day mountain travel."
+  },
+  {
+    name:'The Trek — Thru-Hike Coaching',
+    url:'https://store.thetrek.co/products/thru-hiking-coaching',
+    blurb:"One-on-one sessions with experienced thru-hikers, focused on gear, logistics, and the mental side of multi-day trips."
+  }
+];
+
+/* =========================================================
+   LICENSE
+   Edit STRIPE_PAYMENT_LINK to your real Stripe Payment Link
+   (Stripe Dashboard -> Payment Links -> create one per tier,
+   or one link and let people choose amount). Everything else
+   in this block is just display text.
+========================================================= */
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/REPLACE_WITH_YOUR_LINK';
+
+const LICENSE_TIERS = [
+  { name:'Personal Use', price:'Free', desc:"Use it yourself to prep for your own races or hikes. Share it with training partners. No payment needed." },
+  { name:'Individual Coach License', price:'One-time fee', desc:"Use it with your own coached athletes as part of your coaching business — unlimited athletes, one coach." },
+  { name:'Coaching Business / Team License', price:'One-time fee', desc:"Multiple coaches at the same business, or white-labeled use in a program or gym." }
+];
+
+/* =========================================================
+   PDF EXPORT
+   Builds the report directly with jsPDF's vector/text API
+   (not a DOM screenshot) so it renders cleanly regardless of
+   the SVG/CSS-variable styling used on screen.
+========================================================= */
+const PDF_COLORS = {
+  ink:'#232922', inkSoft:'#565f4e', pine:'#1B2A1F',
+  accent:'#CB5A28', low:'#4B7A4E', mid:'#B2812A', high:'#B23B2E',
+  lineSoft:'#c9c0a7', cream:'#F7F2E7', dim:'#c8b190'
+};
+function pdfTierColor(score){
+  if(score < 34) return PDF_COLORS.low;
+  if(score < 67) return PDF_COLORS.mid;
+  return PDF_COLORS.high;
+}
+function pdfFilename(){
+  const base = (state.eventName || 'ultra-event').trim().toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'ultra-event';
+  const datePart = state.eventDate || new Date().toISOString().slice(0,10);
+  return `readiness-risk-check_${base}_${datePart}.pdf`;
+}
+
+function generatePDF(){
+  if(typeof window.jspdf === 'undefined'){
+    alert("The PDF library hasn't finished loading (needs an internet connection). Try again in a moment, or use the Print button instead.");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'pt', format:'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 50;
+  const contentW = pageW - margin*2;
+  let y = margin;
+
+  function ensureSpace(h){
+    if(y + h > pageH - 60){ doc.addPage(); y = margin; }
+  }
+  function sectionHeader(title, sub){
+    ensureSpace(sub ? 40 : 26);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(title, margin, y); y += 16;
+    if(sub){
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.inkSoft);
+      doc.splitTextToSize(sub, contentW).forEach(l=>{ doc.text(l, margin, y); y += 12; });
+    }
+    y += 6;
+  }
+
+  // ---- compute data ----
+  const catScores = CATEGORIES.map((c,i)=>({
+    name:c.name, score:categoryScore(i), remediation:getRemediation(i)
+  }));
+  const sorted = [...catScores].sort((a,b)=>b.score-a.score);
+  const overall = overallScore();
+  const overallColor = pdfTierColor(overall);
+  const overallTierLabel = overall<34?'Low':overall<67?'Moderate':'High';
+  const needsWork = sorted.filter(c=>c.score>=34);
+  const onTrack = sorted.filter(c=>c.score<34);
+  const phaseLabel = phaseCopy(state.phase).short;
+  const dText = daysUntilText(state.eventDate);
+  const dateStr = state.eventDate ? new Date(state.eventDate+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+
+  // ---- header block ----
+  doc.setFillColor(PDF_COLORS.pine);
+  doc.rect(0,0,pageW,118,'F');
+
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
+  doc.text('ULTRA EVENT READINESS & RISK ASSESSMENT CHECK', margin, 34);
+
+  const maxTitleW = contentW - 150;
+  const titleRaw = (state.eventName || 'Your Event') + (dateStr ? '  \u00b7  '+dateStr : '');
+  const titleLines = doc.splitTextToSize(titleRaw, maxTitleW);
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(PDF_COLORS.cream);
+  doc.text(titleLines[0] + (titleLines.length>1 ? '\u2026' : ''), margin, 58);
+
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
+  doc.text(phaseLabel + (dText ? '  \u00b7  '+dText : ''), margin, 76);
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(32); doc.setTextColor(overallColor);
+  doc.text(String(overall), pageW-margin, 60, {align:'right'});
+  doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.dim);
+  doc.text('/ 100 OVERALL RISK', pageW-margin, 74, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(overallColor);
+  doc.text(overallTierLabel.toUpperCase()+' RISK', pageW-margin, 92, {align:'right'});
+
+  y = 118 + 30;
+
+  // ---- full breakdown ----
+  sectionHeader('Full Breakdown', 'All ten checkpoints, ranked by risk.');
+  const barX = margin + 190, barW = contentW - 190 - 44;
+  sorted.forEach(c=>{
+    ensureSpace(20);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(doc.splitTextToSize(c.name, 180)[0], margin, y+7);
+    doc.setFillColor(PDF_COLORS.lineSoft);
+    doc.rect(barX, y, barW, 7, 'F');
+    doc.setFillColor(pdfTierColor(c.score));
+    doc.rect(barX, y, Math.max(2, barW*(c.score/100)), 7, 'F');
+    doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(pdfTierColor(c.score));
+    doc.text(String(c.score), pageW-margin, y+7, {align:'right'});
+    y += 19;
+  });
+  y += 18;
+
+  // ---- remediation plan ----
+  sectionHeader('Remediation Plan', needsWork.length
+    ? 'Every checkpoint scoring Moderate or High, with concrete next steps.'
+    : 'Nothing scored Moderate or High risk \u2014 see On Track below.');
+
+  needsWork.forEach(c=>{
+    const tColor = pdfTierColor(c.score);
+    ensureSpace(46);
+    doc.setFillColor(tColor);
+    doc.rect(margin, y-10, 3, 16, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(c.name, margin+12, y);
+    doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(tColor);
+    doc.text(`${c.score}/100`, pageW-margin, y, {align:'right'});
+    y += 15;
+
+    doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.inkSoft);
+    doc.splitTextToSize(c.remediation.summary, contentW-12).forEach(l=>{
+      ensureSpace(12); doc.text(l, margin+12, y); y += 12;
+    });
+    y += 5;
+
+    c.remediation.actions.forEach(a=>{
+      const actionLines = doc.splitTextToSize(a, contentW-32);
+      ensureSpace(actionLines.length*12 + 6);
+      doc.setDrawColor(PDF_COLORS.inkSoft); doc.setLineWidth(0.75);
+      doc.rect(margin+12, y-8, 7.5, 7.5, 'S');
+      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.ink);
+      actionLines.forEach((ln,li)=> doc.text(ln, margin+28, y + li*12));
+      y += actionLines.length*12 + 7;
+    });
+    y += 10;
+  });
+
+  // ---- on track ----
+  if(onTrack.length){
+    sectionHeader('On Track');
+    doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.low);
+    onTrack.forEach(c=>{
+      ensureSpace(14);
+      doc.text(`\u2022  ${c.name} \u2014 ${c.score}/100`, margin, y);
+      y += 14;
+    });
+    y += 12;
+  }
+
+  // ---- find a coach ----
+  sectionHeader('Find a Coach');
+  COACH_LINKS.forEach(link=>{
+    ensureSpace(42);
+    doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(link.name, margin, y); y += 13;
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.inkSoft);
+    doc.splitTextToSize(link.blurb, contentW).forEach(l=>{ ensureSpace(11); doc.text(l, margin, y); y += 11; });
+    doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.accent);
+    doc.textWithLink(link.url, margin, y+3, { url: link.url });
+    y += 22;
+  });
+
+  // ---- disclaimer ----
+  ensureSpace(36);
+  doc.setDrawColor(PDF_COLORS.lineSoft); doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW-margin, y); y += 14;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.inkSoft);
+  const disclaimer = "This tool is a self-assessment aid for identifying where your final prep needs attention. It doesn't replace guidance from a coach, and isn't medical advice \u2014 talk to a doctor about any pre-existing condition or new symptom before you go.";
+  doc.splitTextToSize(disclaimer, contentW).forEach(l=>{ ensureSpace(10); doc.text(l, margin, y); y += 10; });
+
+  // ---- running footer + page numbers ----
+  const totalPages = doc.internal.getNumberOfPages();
+  for(let p=1; p<=totalPages; p++){
+    doc.setPage(p);
+    doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
+    doc.text('Ultra Event Readiness & Risk Assessment Check', margin, pageH-24);
+    doc.text(`Page ${p} of ${totalPages}`, pageW-margin, pageH-24, {align:'right'});
+  }
+
+  doc.save(pdfFilename());
+}
+
+/* =========================================================
+   STATE
+========================================================= */
+const state = {
+  screen:'hero', // hero | stepper | results
+  step:0,
+  eventName:'',
+  eventDate:'',
+  phase:'taper', // 'build' (6–12 weeks out) | 'taper' (3 weeks out) — derived from eventDate
+  answers:null
+};
+function initAnswers(){
+  state.answers = CATEGORIES.map((c,i) => new Array(getQuestions(i).length).fill(null));
+}
+initAnswers();
+
+function daysUntil(dateStr){
+  if(!dateStr) return null;
+  const target = new Date(dateStr+'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.round((target-today)/86400000);
+}
+function daysUntilText(dateStr){
+  const d = daysUntil(dateStr);
+  if(d===null) return '';
+  if(d>1) return `${d} days out`;
+  if(d===1) return 'Tomorrow';
+  if(d===0) return 'Today';
+  if(d===-1) return '1 day since';
+  return `${Math.abs(d)} days since`;
+}
+
+/* =========================================================
+   CONTOUR PATTERN (signature topo texture)
+========================================================= */
+const contourSVG = `
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160'>
+  <g fill='none' stroke='%23c8b190' stroke-width='1'>
+    <path d='M-20 20 Q 40 0, 90 20 T 200 15 T 300 25'/>
+    <path d='M-20 46 Q 40 26, 90 46 T 200 41 T 300 51'/>
+    <path d='M-20 74 Q 40 54, 90 74 T 200 69 T 300 79'/>
+    <path d='M-20 102 Q 40 82, 90 102 T 200 97 T 300 107'/>
+    <path d='M-20 130 Q 40 110, 90 130 T 200 125 T 300 135'/>
+  </g>
+</svg>`;
+document.documentElement.style.setProperty('--contour-pattern', `url("data:image/svg+xml,${encodeURIComponent(contourSVG)}")`);
+
+function waypointIcon(color){
+  return `<svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="17" cy="17" r="15.5" stroke="${color}" stroke-width="1" opacity="0.35"/>
+    <circle cx="17" cy="17" r="10.5" stroke="${color}" stroke-width="1" opacity="0.6"/>
+    <circle cx="17" cy="17" r="5.5" stroke="${color}" stroke-width="1.2"/>
+    <circle cx="17" cy="17" r="2" fill="${color}"/>
+  </svg>`;
+}
+
+/* =========================================================
+   SCORING
+========================================================= */
+function categoryScore(ci){
+  const qs = getQuestions(ci);
+  const ans = state.answers[ci];
+  let total = 0;
+  ans.forEach((idx,qi)=>{
+    const max = qs[qi].opts.length - 1;
+    total += idx / max;
+  });
+  return Math.round((total/ans.length)*100);
+}
+function tierOf(score){
+  if(score < 34) return {label:'Low', color:'var(--low)', bg:'var(--low-bg)'};
+  if(score < 67) return {label:'Moderate', color:'var(--mid)', bg:'var(--mid-bg)'};
+  return {label:'High', color:'var(--high)', bg:'var(--high-bg)'};
+}
+function overallScore(){
+  const scores = CATEGORIES.map((c,i)=>categoryScore(i));
+  return Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+}
+function allAnswered(ci){
+  return state.answers[ci].every(v=>v!==null);
+}
+
+/* =========================================================
+   RENDER: HERO
+========================================================= */
+function renderHero(){
+  return `
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Ultra Event Readiness &amp; Risk Assessment Check</div>
+      <h1>Ultra Event<br><em>Readiness &amp; Risk Check</em></h1>
+      <p class="lead">Ten checkpoints covering terrain, environment, gear, fueling, training, safety, and more — built for ultra races and multi-day hikes alike. Take it in the final stretch before you go, while there's still time to fix gear, tighten logistics, or adjust your plan.</p>
+
+      <div class="hero-meta">
+        <div class="field">
+          <label for="eventName">Event name (optional)</label>
+          <input id="eventName" type="text" placeholder="e.g. Western States 100, or Colorado Trail thru-hike" value="${escapeHtml(state.eventName)}">
+        </div>
+        <div class="field">
+          <label for="eventDate">Start date (optional)</label>
+          <input id="eventDate" type="date" value="${state.eventDate}">
+          <span class="countdown-hint" id="countdownHint">${daysUntilText(state.eventDate)}</span>
+        </div>
+      </div>
+
+      <div class="phase-field">
+        <label>Training Phase</label>
+        <div class="phase-indicator${state.eventDate ? '' : ' muted'}">${phaseStatusText()}</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="startBtn">Begin Readiness Check →</button>
+      </div>
+
+      <div class="timing-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c8b190"/><path d="M8 4v4l2.5 2.5" stroke="#c8b190" stroke-width="1.2"/></svg>
+        The Training &amp; Fitness Readiness checkpoint automatically adjusts based on your start date above — everything else stays the same.
+      </div>
+
+      <div class="checkpoint-list">
+        ${CATEGORIES.map((c,i)=>`<div><span class="n mono">${String(i+1).padStart(2,'0')}</span>${c.short}</div>`).join('')}
+      </div>
+
+      ${renderFooter()}
+    </div>
+  </section>
+  ${renderLicenseModal()}`;
+}
+
+/* =========================================================
+   RENDER: STEPPER
+========================================================= */
+function trailSVG(){
+  const n = CATEGORIES.length;
+  const w = 1000, h = 26, pad = 20;
+  const step = (w-pad*2)/(n-1);
+  const pts = CATEGORIES.map((c,i)=>[pad+i*step, h/2]);
+  const path = 'M ' + pts.map(p=>p.join(' ')).join(' L ');
+  const doneCount = state.step; // fully completed steps before current
+  const currentFrac = state.step/(n-1);
+  const doneLen = currentFrac; // fraction of path
+  return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <path class="track" d="${path}" />
+    <path class="track-done" d="${path}" stroke-dasharray="${doneLen*w} ${w}" />
+    ${pts.map((p,i)=>{
+      const cls = i < state.step ? 'done' : (i===state.step ? 'current' : '');
+      return `<circle class="dot ${cls}" cx="${p[0]}" cy="${p[1]}" r="${i===state.step?7:5}"/>`;
+    }).join('')}
+  </svg>`;
+}
+
+function renderStepper(){
+  const ci = state.step;
+  const cat = CATEGORIES[ci];
+  const questions = getQuestions(ci);
+  const tagline = getTagline(ci);
+  const accentColors = ['#CB5A28','#4B7A4E','#B2812A','#7A5C4B','#5A6B8C','#B23B2E','#6B7A5A','#8C5A6B','#4B7A78','#8C6B4B'];
+  const color = accentColors[ci % accentColors.length];
+  const phaseLabel = cat.questionsByPhase ? phaseCopy(state.phase).label : null;
+
+  const dText = daysUntilText(state.eventDate);
+  return `
+  <section class="stepper-header">
+    <div class="wrap">
+      <div class="progress-row">
+        <div class="progress-label mono">Waypoint ${ci+1} / ${CATEGORIES.length}${dText ? ' · '+dText : ''}</div>
+        <div class="trail">${trailSVG()}</div>
+      </div>
+    </div>
+  </section>
+  <section class="stepper-body">
+    <div class="wrap">
+      <div class="cat-eyebrow">
+        <span class="cat-icon">${waypointIcon(color)}</span>
+        ${cat.short}${phaseLabel ? ` · ${phaseLabel}` : ''}
+      </div>
+      <h2>${cat.name}</h2>
+      <p class="cat-tagline">${tagline}</p>
+
+      ${questions.map((q,qi)=>`
+        <div class="question">
+          <p class="q"><span class="q-num mono">${String(qi+1).padStart(2,'0')}</span>${escapeHtml(q.q)}</p>
+          <div class="options">
+            ${q.opts.map((opt,oi)=>`
+              <label class="opt ${state.answers[ci][qi]===oi?'selected':''}">
+                <input type="radio" name="q${ci}_${qi}" value="${oi}" ${state.answers[ci][qi]===oi?'checked':''} data-ci="${ci}" data-qi="${qi}">
+                <span>${escapeHtml(opt)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+
+      <div class="stepper-nav">
+        <button class="btn ghost" id="backBtn" ${ci===0?'disabled':''}>← Back</button>
+        <span class="nav-hint" id="navHint"></span>
+        <button class="btn" id="nextBtn">${ci===CATEGORIES.length-1 ? 'See My Readiness Profile →' : 'Next Waypoint →'}</button>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   RENDER: RESULTS
+========================================================= */
+function skylineSVG(catScores){
+  const n = catScores.length;
+  const w = 900, h = 220, baseY = 190, gap = w/n;
+  const maxPeak = 140;
+  let bars = '';
+  let labels = '';
+  catScores.forEach((cs,i)=>{
+    const x = i*gap + gap/2;
+    const peakH = 26 + (cs.score/100)*maxPeak;
+    const tier = tierOf(cs.score);
+    const halfW = gap*0.34;
+    bars += `<polygon points="${x-halfW},${baseY} ${x},${baseY-peakH} ${x+halfW},${baseY}" fill="${tier.color}" opacity="0.85"/>`;
+    bars += `<text x="${x}" y="${baseY-peakH-10}" text-anchor="middle" class="mono" font-size="13" fill="${tier.color}" font-family="IBM Plex Mono">${cs.score}</text>`;
+    labels += `<text x="${x}" y="${baseY+22}" text-anchor="middle" font-size="11.5" fill="#565f4e" font-family="IBM Plex Mono">${cs.short}</text>`;
+  });
+  return `
+  <svg viewBox="0 0 ${w} ${h+20}">
+    <line x1="0" y1="${baseY-67}" x2="${w}" y2="${baseY-67}" stroke="#c9c0a7" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="${w-4}" y="${baseY-72}" text-anchor="end" font-size="10" fill="#8a8168" font-family="IBM Plex Mono">MODERATE THRESHOLD</text>
+    <line x1="0" y1="${baseY}" x2="${w}" y2="${baseY}" stroke="#A79C82" stroke-width="1.5"/>
+    ${bars}
+    ${labels}
+  </svg>`;
+}
+
+function renderResults(){
+  const catScores = CATEGORIES.map((c,i)=>({
+    id:c.id, name:c.name, short:c.short,
+    remediation:getRemediation(i),
+    score:categoryScore(i)
+  }));
+  const sorted = [...catScores].sort((a,b)=>b.score-a.score);
+  const overall = overallScore();
+  const tier = tierOf(overall);
+  const needsWork = sorted.filter(c=>c.score>=34);
+  const onTrack = sorted.filter(c=>c.score<34);
+  const dateStr = state.eventDate ? new Date(state.eventDate+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+  const dText = daysUntilText(state.eventDate);
+  const phaseLabel = phaseCopy(state.phase).short;
+
+  const coachIntro = overall>=34
+    ? `You flagged some real gaps above. A coach can help you triage what's actually fixable in the time you have left, and what to just plan around.`
+    : `Prep is solid — a coach can still help sharpen pacing, race execution, and the last few percent.`;
+
+  return `
+  <section class="results-header">
+    <div class="wrap">
+      <div class="eyebrow">Readiness &amp; risk assessment complete · ${phaseLabel}${dText ? ' · '+dText : ''}</div>
+      <h1 style="font-size:clamp(28px,5vw,42px);color:#F7F2E7;">
+        ${state.eventName ? escapeHtml(state.eventName) : 'Your Event'}${dateStr ? ' · '+dateStr : ''}
+      </h1>
+      <div class="score-block">
+        <div class="score-num" style="color:${tier.color}">${overall}</div>
+        <div class="score-suffix">/ 100 overall risk</div>
+      </div>
+      <div class="tier-pill" style="background:${tier.color};color:#fff;">${tier.label} Risk</div>
+    </div>
+  </section>
+
+  <section class="results-body">
+    <div class="wrap">
+
+      <h2 class="section-title">Risk skyline</h2>
+      <p class="section-sub">Each peak is one checkpoint. Taller and redder means more risk — that's where a rough patch is most likely to start.</p>
+      <div class="skyline-wrap">${skylineSVG(catScores)}</div>
+
+      <h2 class="section-title">Remediation plan</h2>
+      <p class="section-sub">${needsWork.length ? `Every checkpoint scoring Moderate or High, ranked by risk, with concrete next steps. Check items off as you close them out.` : `Nothing scored Moderate or High risk — see the on-track summary below.`}</p>
+      <div class="priority-list">
+        ${needsWork.map((c,idx)=>{
+          const t = tierOf(c.score);
+          return `
+          <div class="priority-card" style="border-left-color:${t.color}">
+            <h3>${escapeHtml(c.name)} <span class="tier-tag" style="background:${t.bg};color:${t.color}">${c.score}/100 · ${t.label}</span></h3>
+            <p>${escapeHtml(c.remediation.summary)}</p>
+            <ul class="checklist">
+              ${c.remediation.actions.map((a,ai)=>`
+                <li class="check-item">
+                  <input type="checkbox" id="chk_${idx}_${ai}">
+                  <label for="chk_${idx}_${ai}">${escapeHtml(a)}</label>
+                </li>
+              `).join('')}
+            </ul>
+          </div>`;
+        }).join('')}
+      </div>
+
+      ${onTrack.length ? `
+      <div class="on-track-strip">
+        <h3>On track</h3>
+        <div class="on-track-items">
+          ${onTrack.map(c=>`<span>${escapeHtml(c.name)} — ${c.score}/100</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <h2 class="section-title">Full breakdown</h2>
+      <p class="section-sub">All ten checkpoints, ranked by risk.</p>
+      <div class="breakdown-list">
+        ${sorted.map(c=>{
+          const t = tierOf(c.score);
+          return `
+          <div class="breakdown-row">
+            <div class="breakdown-name">${escapeHtml(c.name)}</div>
+            <div class="breakdown-bar-track"><div class="breakdown-bar-fill" style="width:${c.score}%;background:${t.color}"></div></div>
+            <div class="breakdown-score mono" style="color:${t.color}">${c.score}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <h2 class="section-title">Find a coach</h2>
+      <p class="section-sub">${coachIntro}</p>
+      <div class="coach-grid">
+        ${COACH_LINKS.map(link=>`
+          <div class="coach-card">
+            <h4>${escapeHtml(link.name)}</h4>
+            <p>${escapeHtml(link.blurb)}</p>
+            <a href="${link.url}" target="_blank" rel="noopener">Visit site →</a>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="btn-row no-print">
+        <button class="btn" id="exportPdfBtn">Export PDF</button>
+        <button class="btn ghost" id="printBtn">Print</button>
+        <button class="btn ghost" id="retakeBtn">Retake Assessment</button>
+      </div>
+
+      <footer class="note no-print">
+        This tool is a self-assessment aid for identifying where your final prep needs attention. It doesn't replace guidance from a coach, and isn't medical advice — talk to a doctor about any pre-existing condition or new symptom before you go.
+      </footer>
+
+      ${renderFooter()}
+    </div>
+  </section>
+  ${renderLicenseModal()}`;
+}
+
+/* =========================================================
+   FOOTER + LICENSE MODAL
+========================================================= */
+function renderFooter(){
+  return `
+  <div class="site-footer">
+    <button type="button" id="licenseBtn">License</button>
+  </div>`;
+}
+
+function renderLicenseModal(){
+  return `
+  <div class="modal-overlay" id="licenseModal">
+    <div class="modal-box">
+      <button class="modal-close" id="licenseModalClose" aria-label="Close">&times;</button>
+      <div class="modal-sub">License</div>
+      <h2 style="font-size:24px;">Personal use is free.<br>Coaching &amp; commercial use isn't.</h2>
+      <p style="font-size:14px;color:var(--ink-soft);margin:10px 0 22px;">Free for your own personal training and event prep. If you're a coach, gym, or business using this with clients or athletes you're paid to work with, a commercial license is required.</p>
+
+      ${LICENSE_TIERS.map(t=>`
+        <div class="license-tier">
+          <h3>${t.name} <span class="price">${t.price}</span></h3>
+          <p>${t.desc}</p>
+        </div>
+      `).join('')}
+
+      <div class="btn-row" style="margin-top:6px;">
+        <a class="btn" href="${STRIPE_PAYMENT_LINK}" target="_blank" rel="noopener" style="text-decoration:none;">Get a Commercial License \u2192</a>
+      </div>
+
+      <p class="fine-print">
+        <strong>Personal use</strong> means using this tool yourself, for your own training. <strong>Commercial/coaching use</strong> means using it with anyone you coach, train, or advise professionally or for payment, or distributing it as part of a paid product or service.<br><br>
+        This tool is an independent project and isn't affiliated with, endorsed by, or sponsored by UESCA, Uphill Athlete, The Trek, or TrainingPeaks.<br><br>
+        Provided "as is," without warranty. It's a self-assessment aid, not medical advice \u2014 see the disclaimer on the results page.
+      </p>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   UTIL
+========================================================= */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* =========================================================
+   MAIN RENDER + EVENTS
+========================================================= */
+function render(){
+  const app = document.getElementById('app');
+  if(state.screen==='hero') app.innerHTML = renderHero();
+  else if(state.screen==='stepper') app.innerHTML = renderStepper();
+  else app.innerHTML = renderResults();
+
+  attachEvents();
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+
+function attachEvents(){
+  const licenseBtn = document.getElementById('licenseBtn');
+  const licenseModal = document.getElementById('licenseModal');
+  if(licenseBtn && licenseModal){
+    licenseBtn.addEventListener('click', ()=> licenseModal.classList.add('open'));
+    document.getElementById('licenseModalClose').addEventListener('click', ()=> licenseModal.classList.remove('open'));
+    licenseModal.addEventListener('click', e=>{ if(e.target===licenseModal) licenseModal.classList.remove('open'); });
+  }
+
+  if(state.screen==='hero'){
+    document.getElementById('eventName').addEventListener('input', e=> state.eventName = e.target.value);
+    document.getElementById('eventDate').addEventListener('input', e=>{
+      state.eventDate = e.target.value;
+      state.phase = suggestPhase(state.eventDate) || 'taper';
+      render();
+    });
+    document.getElementById('startBtn').addEventListener('click', ()=>{
+      initAnswers();
+      state.screen='stepper'; state.step=0; render();
+    });
+  }
+  else if(state.screen==='stepper'){
+    document.querySelectorAll('.opt input[type=radio]').forEach(inp=>{
+      inp.addEventListener('change', e=>{
+        const ci = +e.target.dataset.ci, qi = +e.target.dataset.qi;
+        state.answers[ci][qi] = +e.target.value;
+        render();
+      });
+    });
+    document.getElementById('backBtn').addEventListener('click', ()=>{
+      if(state.step>0){ state.step--; render(); }
+    });
+    document.getElementById('nextBtn').addEventListener('click', ()=>{
+      if(!allAnswered(state.step)){
+        document.getElementById('navHint').textContent = 'Answer every question to continue.';
+        return;
+      }
+      if(state.step < CATEGORIES.length-1){ state.step++; render(); }
+      else { state.screen='results'; render(); }
+    });
+  }
+  else{
+    document.getElementById('exportPdfBtn').addEventListener('click', ()=>{
+      try{ generatePDF(); }
+      catch(err){
+        console.error(err);
+        alert("Couldn't generate the PDF. Try the Print button instead.");
+      }
+    });
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+    document.getElementById('retakeBtn').addEventListener('click', ()=>{
+      initAnswers();
+      state.screen='hero'; state.step=0; render();
+    });
+    document.querySelectorAll('.check-item input[type=checkbox]').forEach(cb=>{
+      cb.addEventListener('change', e=>{
+        e.target.closest('.check-item').classList.toggle('done', e.target.checked);
+      });
+    });
+  }
+}
+
+render();
+</script>
+</body>
+</html>
