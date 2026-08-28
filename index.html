@@ -327,6 +327,10 @@
   .skyline-wrap{background:var(--paper-2);border:1px solid var(--line-soft);padding:24px 20px 12px;margin-bottom:56px;}
   .skyline-wrap svg{width:100%;height:auto;display:block;}
 
+  .radar-wrap{background:var(--paper-2);border:1px solid var(--line-soft);padding:24px 20px 18px;margin-bottom:56px;}
+  .radar-wrap svg{width:100%;height:auto;display:block;max-width:460px;margin:0 auto;}
+  .radar-caption{font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--ink-soft);text-align:center;margin-top:14px;line-height:1.6;}
+
   .priority-list{display:flex;flex-direction:column;gap:18px;margin-bottom:56px;}
   .priority-card{
     border-left:4px solid var(--accent);
@@ -436,7 +440,7 @@
     .results-header::before{display:none;}
     .tier-pill{border:1px solid #000;}
     body{background:#fff;}
-    .skyline-wrap, .priority-card, .breakdown-row, .coach-card{break-inside:avoid;}
+    .skyline-wrap, .radar-wrap, .priority-card, .breakdown-row, .coach-card{break-inside:avoid;}
     *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
 </style>
@@ -1224,6 +1228,75 @@ function skylineSVG(catScores){
   </svg>`;
 }
 
+function radarSVG(catScores){
+  // catScores in original checkpoint order (not risk-sorted) so the shape
+  // stays consistent between assessments. Plots READINESS (100 - risk
+  // score) so a bigger, fuller shape reads as "more prepared" — the
+  // intuitive direction for a profile chart. Each vertex is colored by
+  // that checkpoint's own risk tier, so weak points are visible even
+  // within an otherwise strong shape.
+  const n = catScores.length;
+  const W = 480, H = 460, cx = 240, cy = 232, R = 152, RINGS = 4;
+  const angle = i => -Math.PI/2 + (i*2*Math.PI)/n;
+  const pt = (i, r) => [cx + r*Math.cos(angle(i)), cy + r*Math.sin(angle(i))];
+
+  let rings = '';
+  for(let t=1; t<=RINGS; t++){
+    const r = (R*t)/RINGS;
+    const pts = [];
+    for(let i=0;i<n;i++) pts.push(pt(i,r).map(v=>v.toFixed(1)).join(','));
+    rings += `<polygon points="${pts.join(' ')}" fill="none" stroke="${t===RINGS?'#A79C82':'#ded6bf'}" stroke-width="1"/>`;
+  }
+
+  let spokes = '';
+  for(let i=0;i<n;i++){
+    const [x,y] = pt(i,R);
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ded6bf" stroke-width="1"/>`;
+  }
+
+  let ringLabels = '';
+  for(let t=1;t<=RINGS;t++){
+    const val = Math.round(100*t/RINGS);
+    ringLabels += `<text x="${cx+6}" y="${(cy-(R*t)/RINGS+4).toFixed(1)}" font-size="9.5" fill="#8a8168" font-family="IBM Plex Mono">${val}</text>`;
+  }
+
+  let axisLabels = '';
+  for(let i=0;i<n;i++){
+    const a = angle(i);
+    const [x,y] = pt(i, R+24);
+    const c = Math.cos(a), s = Math.sin(a);
+    const anchor = Math.abs(c) < 0.35 ? 'middle' : (c>0?'start':'end');
+    let dy = '0.35em';
+    if(s < -0.35) dy='0em';
+    if(s > 0.35) dy='0.85em';
+    const t = tierOf(catScores[i].score);
+    axisLabels += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" dy="${dy}" font-size="11.5" font-family="IBM Plex Mono" fill="${t.color}">${catScores[i].short}</text>`;
+  }
+
+  const pts = catScores.map((cs,i)=>{
+    const readiness = 100 - cs.score;
+    return pt(i, (R*readiness)/100);
+  });
+  const ptStr = pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ');
+  const overallColor = tierOf(overallScore()).color;
+
+  let vertices = '';
+  pts.forEach((p,i)=>{
+    const t = tierOf(catScores[i].score);
+    vertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="#F1EEE1" stroke-width="1.5"/>`;
+  });
+
+  return `
+  <svg viewBox="0 0 ${W} ${H}">
+    ${rings}
+    ${spokes}
+    <polygon points="${ptStr}" fill="${overallColor}" fill-opacity="0.15" stroke="${overallColor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${vertices}
+    ${ringLabels}
+    ${axisLabels}
+  </svg>`;
+}
+
 function renderResults(){
   const catScores = CATEGORIES.map((c,i)=>({
     id:c.id, name:c.name, short:c.short,
@@ -1264,6 +1337,13 @@ function renderResults(){
       <h2 class="section-title">Risk skyline</h2>
       <p class="section-sub">Each peak is one checkpoint. Taller and redder means more risk — that's where a rough patch is most likely to start.</p>
       <div class="skyline-wrap">${skylineSVG(catScores)}</div>
+
+      <h2 class="section-title">Readiness radar</h2>
+      <p class="section-sub">The same ten checkpoints as one shape. Bigger and further out is better — each point is colored by that checkpoint's own risk level, so a weak spot still stands out even inside a strong overall shape.</p>
+      <div class="radar-wrap">
+        ${radarSVG(catScores)}
+        <p class="radar-caption">Plotted as readiness (100 \u2212 risk score) at each checkpoint. Green = low risk, amber = moderate, red = high.</p>
+      </div>
 
       <h2 class="section-title">Remediation plan</h2>
       <p class="section-sub">${needsWork.length ? `Every checkpoint scoring Moderate or High, ranked by risk, with concrete next steps. Check items off as you close them out.` : `Nothing scored Moderate or High risk — see the on-track summary below.`}</p>
