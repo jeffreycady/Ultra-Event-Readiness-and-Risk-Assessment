@@ -1465,14 +1465,16 @@ function escapeHtml(str){
 /* =========================================================
    MAIN RENDER + EVENTS
 ========================================================= */
-function render(){
+function render(scrollTop = true){
   const app = document.getElementById('app');
   if(state.screen==='hero') app.innerHTML = renderHero();
   else if(state.screen==='stepper') app.innerHTML = renderStepper();
   else app.innerHTML = renderResults();
 
   attachEvents();
-  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  if(scrollTop){
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  }
 }
 
 function attachEvents(){
@@ -1489,7 +1491,7 @@ function attachEvents(){
     document.getElementById('eventDate').addEventListener('input', e=>{
       state.eventDate = e.target.value;
       state.phase = suggestPhase(state.eventDate) || 'taper';
-      render();
+      render(false);
     });
     document.getElementById('startBtn').addEventListener('click', ()=>{
       initAnswers();
@@ -1501,7 +1503,7 @@ function attachEvents(){
       inp.addEventListener('change', e=>{
         const ci = +e.target.dataset.ci, qi = +e.target.dataset.qi;
         state.answers[ci][qi] = +e.target.value;
-        render();
+        render(false);
       });
     });
     document.getElementById('backBtn').addEventListener('click', ()=>{
