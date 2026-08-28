@@ -376,6 +376,7 @@
     text-align:center; padding:18px 24px 28px;
     font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft);
   }
+  .site-footer .footer-dot{margin:0 8px;opacity:0.6;}
   .site-footer button{
     background:none;border:none;color:var(--ink-soft);text-decoration:underline;
     font-family:'IBM Plex Mono', monospace;font-size:11px;cursor:pointer;padding:0;
@@ -801,10 +802,17 @@ const COACH_LINKS = [
    LICENSE
    Edit STRIPE_PAYMENT_LINK to your real Stripe Payment Link
    (Stripe Dashboard -> Payment Links -> create one per tier,
-   or one link and let people choose amount). Everything else
-   in this block is just display text.
+   or one link and let people choose amount). Edit COPYRIGHT_HOLDER
+   to your name or business name — it's used in the footer, the
+   license modal, and the PDF export. Everything else in this
+   block is just display text.
 ========================================================= */
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/REPLACE_WITH_YOUR_LINK';
+const COPYRIGHT_HOLDER = 'Jeffrey Cady';
+const COPYRIGHT_YEAR = new Date().getFullYear();
+function copyrightLine(){
+  return `\u00a9 ${COPYRIGHT_YEAR} ${COPYRIGHT_HOLDER}. All rights reserved.`;
+}
 
 const LICENSE_TIERS = [
   { name:'Personal Use', price:'Free', desc:"Use it yourself to prep for your own races or hikes. Share it with training partners. No payment needed." },
@@ -984,6 +992,10 @@ function generatePDF(){
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.inkSoft);
   const disclaimer = "This tool is a self-assessment aid for identifying where your final prep needs attention. It doesn't replace guidance from a coach, and isn't medical advice \u2014 talk to a doctor about any pre-existing condition or new symptom before you go.";
   doc.splitTextToSize(disclaimer, contentW).forEach(l=>{ ensureSpace(10); doc.text(l, margin, y); y += 10; });
+  y += 4;
+  ensureSpace(10);
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.inkSoft);
+  doc.text(copyrightLine(), margin, y); y += 10;
 
   // ---- running footer + page numbers ----
   const totalPages = doc.internal.getNumberOfPages();
@@ -1422,6 +1434,8 @@ function renderResults(){
 function renderFooter(){
   return `
   <div class="site-footer">
+    <span class="copyright">${copyrightLine()}</span>
+    <span class="footer-dot">\u00b7</span>
     <button type="button" id="licenseBtn">License</button>
   </div>`;
 }
@@ -1447,6 +1461,7 @@ function renderLicenseModal(){
       </div>
 
       <p class="fine-print">
+        <strong>${copyrightLine()}</strong><br><br>
         <strong>Personal use</strong> means using this tool yourself, for your own training. <strong>Commercial/coaching use</strong> means using it with anyone you coach, train, or advise professionally or for payment, or distributing it as part of a paid product or service.<br><br>
         This tool is an independent project and isn't affiliated with, endorsed by, or sponsored by UESCA, Uphill Athlete, The Trek, or TrainingPeaks.<br><br>
         Provided "as is," without warranty. It's a self-assessment aid, not medical advice \u2014 see the disclaimer on the results page.
