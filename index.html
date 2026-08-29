@@ -8,108 +8,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 <style>
+  /* Page-specific styles only — shared tokens, resets, type,
+     layout shell, hero mechanism, and buttons live in theme.css */
+
   :root{
-    --paper:#DEDACB;
-    --paper-2:#F1EEE1;
-    --ink:#232922;
-    --ink-soft:#565f4e;
-    --pine:#1B2A1F;
-    --pine-2:#25372A;
-    --line:#A79C82;
-    --line-soft:#c9c0a7;
-    --accent:#CB5A28;
+    /* A slightly different warm-white than theme's --cream,
+       used specifically for this tool's two dark headers. */
     --accent-ink:#fff6ee;
-    --low:#4B7A4E;
-    --mid:#B2812A;
-    --high:#B23B2E;
-    --low-bg:rgba(75,122,78,0.13);
-    --mid-bg:rgba(178,129,42,0.15);
-    --high-bg:rgba(178,59,46,0.14);
-    --radius:2px;
   }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Source Serif 4', Georgia, serif;
-    -webkit-font-smoothing:antialiased;
-    line-height:1.5;
-  }
-  h1,h2,h3,.display{
-    font-family:'Big Shoulders Display', sans-serif;
-    text-transform:uppercase;
-    letter-spacing:0.02em;
-    font-weight:800;
-    margin:0;
-  }
-  .mono{
-    font-family:'IBM Plex Mono', monospace;
-  }
-  a{color:inherit;}
-  button{
-    font-family:'IBM Plex Mono', monospace;
-    cursor:pointer;
-  }
-  button:focus-visible, input:focus-visible, label:focus-within{
-    outline:3px solid var(--accent);
-    outline-offset:2px;
-  }
-  .screen{display:none;}
-  .screen.active{display:block;}
+  body{line-height:1.5;}
 
-  /* ---------- layout shell ---------- */
-  .wrap{max-width:820px;margin:0 auto;padding:0 24px;}
-
-  /* ---------- HERO ---------- */
-  .hero{
-    background:var(--pine);
-    color:var(--accent-ink);
-    position:relative;
-    overflow:hidden;
-    padding:72px 0 56px;
-  }
-  .hero::before{
-    content:"";
-    position:absolute;inset:0;
-    background-image:var(--contour-pattern);
-    opacity:0.5;
-    pointer-events:none;
-  }
-  .hero .wrap{position:relative;z-index:1;}
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:#c8b190;
-    margin-bottom:18px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .eyebrow::before{
-    content:"";
-    width:26px;height:1px;background:#c8b190;display:inline-block;
-  }
-  .hero h1{
-    font-size:clamp(40px, 8vw, 68px);
-    line-height:0.94;
-    color:#F7F2E7;
-  }
-  .hero h1 em{
-    font-style:normal;
-    color:var(--accent);
-  }
-  .hero p.lead{
-    font-family:'Source Serif 4', serif;
-    font-size:18px;
-    color:#d9d2c0;
-    max-width:52ch;
-    margin-top:22px;
-  }
+  /* ---------- HERO (page-specific overrides + form fields) ---------- */
+  .hero{padding:72px 0 56px; color:var(--accent-ink);}
+  .hero h1{font-size:clamp(40px, 8vw, 68px); line-height:0.94;}
   .hero-meta{
     display:flex;
     gap:14px;
@@ -183,32 +97,6 @@
   }
   .phase-indicator strong{color:#F7F2E7;}
   .phase-indicator.muted{color:#a99b7d;}
-
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    padding:15px 26px;
-    font-size:13.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    border-radius:var(--radius);
-    transition:transform .15s ease, background .15s ease;
-  }
-  .btn:hover{background:#b04b1f;}
-  .btn:active{transform:translateY(1px);}
-  .btn.ghost{
-    background:transparent;
-    border:1px solid var(--line);
-    color:var(--ink);
-  }
-  .btn.ghost:hover{background:rgba(0,0,0,0.04);}
-  .btn:disabled{opacity:0.35;cursor:not-allowed;}
-  .btn.small{padding:9px 16px;font-size:11.5px;display:inline-flex;}
-  .btn-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;}
 
   .checkpoint-list{
     margin-top:44px;
@@ -373,8 +261,13 @@
   .checklist{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}
   .check-item{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;}
   .check-item input[type=checkbox]{margin-top:4px;width:15px;height:15px;accent-color:var(--accent);flex-shrink:0;}
-  .check-item label{cursor:pointer;}
+  .check-item label{cursor:pointer;flex:1;}
   .check-item.done label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line);}
+  .item-link{
+    flex-shrink:0;margin-left:auto;padding-left:8px;
+    font-size:13px;color:var(--ink-soft);text-decoration:none;line-height:1.4;
+  }
+  .item-link:hover{color:var(--accent);}
 
   .on-track-strip{
     background:var(--paper-2);border:1px solid var(--line-soft);
@@ -494,10 +387,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Close the gap between your training terrain and what's actually ahead.",
       actions:[
-        "Add training sessions on terrain that matches the route's technicality and grade",
-        "Study the elevation profile and route maps in detail",
-        "Cover key sections of the actual route in training or recon, if possible",
-        "Practice the specific technical skills the route demands (descending, scrambling, route-finding)"
+        {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
+        {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
       ]
     },
     questions:[
@@ -519,10 +412,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Build acclimation time before you're in a climate your body hasn't met.",
       actions:[
-        "Add dedicated heat, humidity, or altitude-specific sessions in the time you have left",
-        "If traveling to altitude, arrive at least a week early — or as close to start time as possible if that's not feasible",
-        "Test cold or wet-weather gear and your layering system in similar conditions",
-        "Pack a weather contingency plan for temperature swings, rain, or wind"
+        {text:"Add dedicated heat, humidity, or altitude-specific sessions in the time you have left", url:"https://www.irunfar.com/handle-the-heat-heat-acclimation-for-endurance-running"},
+        {text:"If traveling to altitude, arrive at least a week early — or as close to start time as possible if that's not feasible", url:"https://www.youtube.com/watch?v=T_DLqHYafko"},
+        {text:"Test cold or wet-weather gear and your layering system in similar conditions", url:"https://trailrunner.com/trail-news/what-should-i-wear-how-to-layer-for-cold-weather-trail-runs/"},
+        {text:"Pack a weather contingency plan for temperature swings, rain, or wind", url:"https://trailrunner.com/trail-news/what-should-i-wear-how-to-layer-for-cold-weather-trail-runs/"}
       ]
     },
     questions:[
@@ -544,10 +437,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Test everything that matters before it matters.",
       actions:[
-        "Take poles, headlamp, and pack/vest on long training days before race day",
-        "Break in footwear on terrain similar to the route",
-        "Pack backups for anything battery-powered or easy to lose",
-        "If overnight, test your full shelter/sleep system in conditions close to what's expected"
+        {text:"Take poles, headlamp, and pack/vest on long training days before race day", url:"https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/"},
+        {text:"Break in footwear on terrain similar to the route", url:"https://www.ultrapedestrian.com/how-to-break-in-trail-running-shoes/"},
+        {text:"Pack backups for anything battery-powered or easy to lose", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"},
+        {text:"If overnight, test your full shelter/sleep system in conditions close to what's expected", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"}
       ]
     },
     questions:[
@@ -571,10 +464,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Rehearse the plan — don't just write it down.",
       actions:[
-        "Test your fueling plan under conditions matching what's ahead (heat, altitude, humidity)",
-        "Lock in a tested calories/carbs-per-hour target",
-        "Narrow down 3–5 go-to foods you know you tolerate",
-        "If multi-day, calculate a resupply/food-carry plan for the distance between stops"
+        {text:"Test your fueling plan under conditions matching what's ahead (heat, altitude, humidity)", url:"https://relentlessforwardcommotion.com/fueling-for-an-ultramarathon-a-complete-guide-to-race-day-nutrition/"},
+        {text:"Lock in a tested calories/carbs-per-hour target", url:"https://www.youtube.com/watch?v=N0bNkyFmoBc"},
+        {text:"Narrow down 3–5 go-to foods you know you tolerate", url:"https://relentlessforwardcommotion.com/fueling-for-an-ultramarathon-a-complete-guide-to-race-day-nutrition/"},
+        {text:"If multi-day, calculate a resupply/food-carry plan for the distance between stops", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"}
       ]
     },
     questions:[
@@ -602,20 +495,20 @@ const CATEGORIES = [
       build:{
         summary:"You still have weeks to close gaps — use them well.",
         actions:[
-          "Layer muscular endurance (loaded uphill work) on top of your aerobic base — not instead of your easy volume",
-          "Track weekly vertical gain/loss and compare it against the event's per-mile elevation demands",
-          "Build a general strength foundation before progressing into heavier loaded/uphill-specific work",
-          "Push your longest efforts toward race-like time-on-feet and terrain over the coming weeks",
-          "Address any nagging injury or fatigue signal now, while there's still time to adjust the plan"
+          {text:"Layer muscular endurance (loaded uphill work) on top of your aerobic base — not instead of your easy volume", url:"https://uphillathlete.com/strength-training/muscular-endurance-for-mountain-athletes/"},
+          {text:"Track weekly vertical gain/loss and compare it against the event's per-mile elevation demands", url:"https://uphillathlete.com/strength-training/muscular-endurance-for-mountain-athletes/"},
+          {text:"Build a general strength foundation before progressing into heavier loaded/uphill-specific work", url:"https://uphillathlete.com/strength-training/strength-training-for-the-mountain-athlete/"},
+          {text:"Push your longest efforts toward race-like time-on-feet and terrain over the coming weeks", url:"https://www.youtube.com/watch?v=GlXUVUuIep0"},
+          {text:"Address any nagging injury or fatigue signal now, while there's still time to adjust the plan", url:"https://uphillathlete.com/strength-training/muscular-endurance-for-mountain-athletes/"}
         ]
       },
       taper:{
         summary:"Your training block is done — the highest-value moves left are protecting it.",
         actions:[
-          "Reduce volume while keeping some intensity/frequency — a taper isn't just stopping",
-          "Skip any new 'confidence-boosting' hard efforts or big vert days this close to the event",
-          "Give any lingering injury real attention now, not during the event",
-          "Redirect the extra time and energy toward sleep, gear prep, and mental rehearsal instead of more training stress"
+          {text:"Reduce volume while keeping some intensity/frequency — a taper isn't just stopping", url:"https://trainright.com/tapering-ultrarunning-prevent-taper-tantrum/"},
+          {text:"Skip any new 'confidence-boosting' hard efforts or big vert days this close to the event", url:"https://www.youtube.com/watch?v=chfvgll_hS4"},
+          {text:"Give any lingering injury real attention now, not during the event", url:"https://trainright.com/tapering-ultrarunning-prevent-taper-tantrum/"},
+          {text:"Redirect the extra time and energy toward sleep, gear prep, and mental rehearsal instead of more training stress", url:"https://www.youtube.com/watch?v=chfvgll_hS4"}
         ]
       }
     },
@@ -656,10 +549,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Get ahead of anything that could turn a rough patch serious.",
       actions:[
-        "Discuss any pre-existing condition with a doctor before you go",
-        "Make sure needed medications are packed and accessible, and anyone with you knows how to help",
-        "If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan",
-        "Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own"
+        {text:"Discuss any pre-existing condition with a doctor before you go", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Make sure needed medications are packed and accessible, and anyone with you knows how to help", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own", url:"https://www.youtube.com/watch?v=aDIvspLzj1g"}
       ]
     },
     questions:[
@@ -681,12 +574,12 @@ const CATEGORIES = [
     remediation:{
       summary:"Make sure someone knows your plan, and you know the warning signs.",
       actions:[
-        "Share your trip plan and expected finish/return window with someone",
-        "Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists",
-        "Carry basic ID and medical information on you",
-        "Review the early warning signs of heat illness, hyponatremia, and hypothermia",
-        "Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis",
-        "Confirm your backup navigation/communication plan for remote sections"
+        {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+        {text:"Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+        {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+        {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+        {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+        {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"}
       ]
     },
     questions:[
@@ -712,10 +605,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Get the machinery around the miles locked in.",
       actions:[
-        "Brief your crew, pacer, or hiking partner on the plan",
-        "Finalize and pack drop bags or resupply boxes",
-        "Map your expected pace against cutoffs or daily mileage targets",
-        "Set clear check-in points with anyone supporting you"
+        {text:"Brief your crew, pacer, or hiking partner on the plan", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"},
+        {text:"Finalize and pack drop bags or resupply boxes", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"},
+        {text:"Map your expected pace against cutoffs or daily mileage targets", url:"https://www.youtube.com/watch?v=FClpCNWjzcM"},
+        {text:"Set clear check-in points with anyone supporting you", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"}
       ]
     },
     questions:[
@@ -735,10 +628,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Decide the hard calls now, while you can still think clearly.",
       actions:[
-        "Base your pacing plan on real training paces, not race-day adrenaline",
-        "Define your own turn-around or stopping criteria ahead of time",
-        "Mentally rehearse the low points — night hours, motivation dips",
-        "Write your pacing/decision plan down somewhere you (or your crew) can reference it"
+        {text:"Base your pacing plan on real training paces, not race-day adrenaline", url:"https://trainright.com/ultramarathon-pacing-strategies-staying-in-the-moment/"},
+        {text:"Define your own turn-around or stopping criteria ahead of time", url:"https://www.trailrunnermag.com/training/how-to-know-when-to-dnf/"},
+        {text:"Mentally rehearse the low points — night hours, motivation dips", url:"https://www.youtube.com/watch?v=HpOiy4oHQq4"},
+        {text:"Write your pacing/decision plan down somewhere you (or your crew) can reference it", url:"https://trainright.com/ultramarathon-pacing-strategies-staying-in-the-moment/"}
       ]
     },
     questions:[
@@ -758,10 +651,10 @@ const CATEGORIES = [
     remediation:{
       summary:"Plan the aftermath before you're too tired to think about it.",
       actions:[
-        "Sketch a post-event plan for nutrition, sleep, and light movement",
-        "Decide in advance when/how you'd seek medical follow-up if something comes up",
-        "Set a gradual return-to-training timeline instead of jumping back in hard",
-        "Block time to debrief and capture lessons while they're fresh"
+        {text:"Sketch a post-event plan for nutrition, sleep, and light movement", url:"https://trainright.com/recovery-after-running-an-ultramarathon/"},
+        {text:"Decide in advance when/how you'd seek medical follow-up if something comes up", url:"https://trainright.com/recovery-after-running-an-ultramarathon/"},
+        {text:"Set a gradual return-to-training timeline instead of jumping back in hard", url:"https://trainright.com/recovery-after-running-an-ultramarathon/"},
+        {text:"Block time to debrief and capture lessons while they're fresh", url:"https://www.youtube.com/watch?v=te2IJ1w1LUI"}
       ]
     },
     questions:[
@@ -1060,13 +953,21 @@ function generatePDF(){
     y += 5;
 
     c.remediation.actions.forEach(a=>{
-      const actionLines = doc.splitTextToSize(a, contentW-32);
-      ensureSpace(actionLines.length*12 + 6);
+      const actionLines = doc.splitTextToSize(a.text, contentW-32);
+      const hasLink = !!a.url;
+      const blockH = actionLines.length*12 + (hasLink ? 11 : 0) + 7;
+      ensureSpace(blockH);
       doc.setDrawColor(PDF_COLORS.inkSoft); doc.setLineWidth(0.75);
       doc.rect(margin+12, y-8, 7.5, 7.5, 'S');
       doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.ink);
       actionLines.forEach((ln,li)=> doc.text(ln, margin+28, y + li*12));
-      y += actionLines.length*12 + 7;
+      y += actionLines.length*12;
+      if(hasLink){
+        doc.setFont('courier','normal'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.accent);
+        doc.textWithLink('-> Starting place', margin+28, y+2, { url: a.url });
+        y += 11;
+      }
+      y += 7;
     });
     y += 10;
   });
@@ -1152,29 +1053,9 @@ function daysUntilText(dateStr){
   return `${Math.abs(d)} days since`;
 }
 
-/* =========================================================
-   CONTOUR PATTERN (signature topo texture)
-========================================================= */
-const contourSVG = `
-<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160'>
-  <g fill='none' stroke='%23c8b190' stroke-width='1'>
-    <path d='M-20 20 Q 40 0, 90 20 T 200 15 T 300 25'/>
-    <path d='M-20 46 Q 40 26, 90 46 T 200 41 T 300 51'/>
-    <path d='M-20 74 Q 40 54, 90 74 T 200 69 T 300 79'/>
-    <path d='M-20 102 Q 40 82, 90 102 T 200 97 T 300 107'/>
-    <path d='M-20 130 Q 40 110, 90 130 T 200 125 T 300 135'/>
-  </g>
-</svg>`;
-document.documentElement.style.setProperty('--contour-pattern', `url("data:image/svg+xml,${encodeURIComponent(contourSVG)}")`);
-
-function waypointIcon(color){
-  return `<svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="17" cy="17" r="15.5" stroke="${color}" stroke-width="1" opacity="0.35"/>
-    <circle cx="17" cy="17" r="10.5" stroke="${color}" stroke-width="1" opacity="0.6"/>
-    <circle cx="17" cy="17" r="5.5" stroke="${color}" stroke-width="1.2"/>
-    <circle cx="17" cy="17" r="2" fill="${color}"/>
-  </svg>`;
-}
+/* Note: the topo contour pattern (--contour-pattern) and the
+   waypointIcon() function used below are provided by theme.js,
+   loaded in <head>. */
 
 /* =========================================================
    SCORING
@@ -1484,7 +1365,8 @@ function renderResults(){
               ${c.remediation.actions.map((a,ai)=>`
                 <li class="check-item">
                   <input type="checkbox" id="chk_${idx}_${ai}">
-                  <label for="chk_${idx}_${ai}">${escapeHtml(a)}</label>
+                  <label for="chk_${idx}_${ai}">${escapeHtml(a.text)}</label>
+                  ${a.url ? `<a class="item-link" href="${a.url}" target="_blank" rel="noopener" aria-label="Starting place for: ${escapeHtml(a.text)}" title="Starting place">\u2197</a>` : ''}
                 </li>
               `).join('')}
             </ul>
