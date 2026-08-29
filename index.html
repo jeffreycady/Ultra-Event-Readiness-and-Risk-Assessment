@@ -555,9 +555,9 @@ const CATEGORIES = [
       {q:"Do you have backup/contingency gear (spare batteries, extra layers, backup navigation)?",
        opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
       {q:"If your event involves moving after dark, how comfortable are you on this terrain with a headlamp?",
-       opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"]},
+       opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"], naIndex:4},
       {q:"If your event spans multiple days or nights, is your shelter and sleep system (tent, bag or quilt, pad) tested and adequate for expected conditions?",
-       opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"]}
+       opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"], naIndex:4}
     ]
   },
   {
@@ -584,7 +584,7 @@ const CATEGORIES = [
       {q:"How many of your 'go-to' trail foods have you actually tested on long training days?",
        opts:["3–5+ tested options I know work for me","1–2 tested options","Untested — planning to rely on aid stations or resupply","Haven't thought about food variety at all"]},
       {q:"If your event spans multiple days, do you have a resupply or food-carry plan sized for the distance between resupply points?",
-       opts:["Yes, calculated and packed/planned","Rough plan, not fully calculated","Vague idea — figuring it out as I go","No plan","Not applicable — single-day event with full support"]}
+       opts:["Yes, calculated and packed/planned","Rough plan, not fully calculated","Vague idea — figuring it out as I go","No plan","Not applicable — single-day event with full support"], naIndex:4}
     ]
   },
   {
@@ -686,7 +686,7 @@ const CATEGORIES = [
     },
     questions:[
       {q:"Have you told someone your trip plan and expected finish or return window?",
-       opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No"]},
+       opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No","Not applicable — organized event with registration, bib tracking, and check-ins already in place"], naIndex:4},
       {q:"Do you know where medical support is along the route (aid stations, checkpoints) and whether the event has an emergency contact number?",
        opts:["Yes — I know where medical support is and have any event emergency number saved","I have a rough idea of aid station locations, but haven't looked up an emergency number","I'm assuming I can flag someone down or rely on event staff if needed","I haven't looked into this at all"]},
       {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
@@ -1166,8 +1166,11 @@ function categoryScore(ci){
   const ans = state.answers[ci];
   let total = 0;
   ans.forEach((idx,qi)=>{
-    const max = qs[qi].opts.length - 1;
-    total += idx / max;
+    const q = qs[qi];
+    const hasNA = q.naIndex !== undefined;
+    const isNA = hasNA && idx === q.naIndex;
+    const max = hasNA ? q.naIndex - 1 : q.opts.length - 1;
+    total += isNA ? 0 : idx / max;
   });
   return Math.round((total/ans.length)*100);
 }
