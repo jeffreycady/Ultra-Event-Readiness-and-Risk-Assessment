@@ -65,8 +65,3 @@ license lapses (non-payment, cancellation, or non-renewal) or these terms
 are violated, commercial-use rights end and the license holder must either
 renew or stop commercial/coaching use. Personal use is granted indefinitely,
 free of charge, subject to these terms.
----
-This document is a starting template, not a substitute for legal advice.
-If you plan to sell licenses at any meaningful scale, it's worth having a
-lawyer review this — particularly the liability and warranty sections, given
-the health- and safety-adjacent subject matter — before you rely on it.
