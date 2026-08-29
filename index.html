@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultra Event Readiness &amp; Risk Assessment Check</title>
+<title>Ultra Event Readiness & Risk Assessment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -251,13 +251,13 @@
   }
   .trail{
     flex:1;
-    height:26px;
+    height:34px;
     position:relative;
   }
   .trail svg{width:100%;height:100%;display:block;overflow:visible;}
-  .trail .track{stroke:var(--line-soft);stroke-width:2;fill:none;}
-  .trail .track-done{stroke:var(--accent);stroke-width:2;fill:none;transition:stroke-dasharray .3s ease;}
-  .trail .dot{fill:var(--paper-2);stroke:var(--line);stroke-width:1.5;}
+  .trail .track{stroke:var(--line);stroke-width:4;fill:none;stroke-linecap:round;}
+  .trail .track-done{stroke:var(--accent);stroke-width:4;fill:none;stroke-linecap:round;transition:stroke-dasharray .3s ease;}
+  .trail .dot{fill:var(--paper-2);stroke:var(--line);stroke-width:2.5;}
   .trail .dot.done{fill:var(--accent);stroke:var(--accent);}
   .trail .dot.current{fill:var(--pine);stroke:var(--pine);}
 
@@ -652,15 +652,18 @@ const CATEGORIES = [
       summary:"Make sure someone knows your plan, and you know the warning signs.",
       actions:[
         "Share your trip plan and expected finish/return window with someone",
+        "Look up where medical support is along the route, and save the event's emergency number if one exists",
         "Carry basic ID and medical information on you",
         "Review the early warning signs of heat illness, hyponatremia, and hypothermia",
-        "Learn the symptoms and immediate response for rhabdomyolysis and hypernatremia too — not just the classic heat-illness triad",
+        "Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis",
         "Confirm your backup navigation/communication plan for remote sections"
       ]
     },
     questions:[
       {q:"Have you told someone your trip plan and expected finish or return window?",
        opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No"]},
+      {q:"Do you know where medical support is along the route (aid stations, checkpoints) and whether the event has an emergency contact number?",
+       opts:["Yes — I know where medical support is and have any event emergency number saved","I have a rough idea of aid station locations, but haven't looked up an emergency number","I'm assuming I can flag someone down or rely on event staff if needed","I haven't looked into this at all"]},
       {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
        opts:["Always","Usually","Rarely","Never"]},
       {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, or hypothermia in yourself?",
@@ -669,7 +672,7 @@ const CATEGORIES = [
        opts:["Yes, fully equipped","Partially equipped","Relying only on trail markings/signage","No backup plan"]},
       {q:"Do you know what to do if you or someone with you needs emergency help mid-event?",
        opts:["Yes, clearly","Roughly","Not really","No idea"]},
-      {q:"How familiar are you with the less-obvious exertion-related conditions (rhabdomyolysis, hypernatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
+      {q:"How familiar are you with serious exertion-related conditions (rhabdomyolysis, hyperthermia, hypothermia, hypernatremia, hyponatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
        opts:["Very familiar — I know the symptoms and the exact steps to take for each","Familiar with the common ones, less sure on rarer ones like rhabdomyolysis","Vague general awareness — wouldn't know the exact steps","Not familiar with these at all"]}
     ]
   },
@@ -895,7 +898,7 @@ function generatePDF(){
   doc.rect(0,0,pageW,118,'F');
 
   doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
-  doc.text('ULTRA EVENT READINESS & RISK ASSESSMENT CHECK', margin, 34);
+  doc.text('ULTRA EVENT READINESS & RISK ASSESSMENT', margin, 34);
 
   const maxTitleW = contentW - 150;
   const titleRaw = (state.eventName || 'Your Event') + (dateStr ? '  \u00b7  '+dateStr : '');
@@ -1008,7 +1011,7 @@ function generatePDF(){
   for(let p=1; p<=totalPages; p++){
     doc.setPage(p);
     doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
-    doc.text('Ultra Event Readiness & Risk Assessment Check', margin, pageH-24);
+    doc.text('Ultra Event Readiness & Risk Assessment', margin, pageH-24);
     doc.text(`Page ${p} of ${totalPages}`, pageW-margin, pageH-24, {align:'right'});
   }
 
@@ -1104,8 +1107,8 @@ function renderHero(){
   return `
   <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">Ultra Event Readiness &amp; Risk Assessment Check</div>
-      <h1>Ultra Event<br><em>Readiness &amp; Risk Check</em></h1>
+      <div class="eyebrow">Ultra Event Readiness &amp; Risk Assessment</div>
+      <h1>Ultra Event<br><em>Readiness &amp; Risk Assessment</em></h1>
       <p class="lead">Ten checkpoints covering terrain, environment, gear, fueling, training, safety, and more — built for ultra races and multi-day hikes alike. Take it in the final stretch before you go, while there's still time to fix gear, tighten logistics, or adjust your plan.</p>
 
       <div class="hero-meta">
@@ -1149,20 +1152,20 @@ function renderHero(){
 ========================================================= */
 function trailSVG(){
   const n = CATEGORIES.length;
-  const w = 1000, h = 26, pad = 20;
-  const step = (w-pad*2)/(n-1);
+  const w = 1000, h = 30, pad = 24;
+  const pathLen = w - pad*2;
+  const step = pathLen/(n-1);
   const pts = CATEGORIES.map((c,i)=>[pad+i*step, h/2]);
   const path = 'M ' + pts.map(p=>p.join(' ')).join(' L ');
-  const doneCount = state.step; // fully completed steps before current
   const currentFrac = state.step/(n-1);
-  const doneLen = currentFrac; // fraction of path
+  const doneLen = currentFrac * pathLen;
   return `
   <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
     <path class="track" d="${path}" />
-    <path class="track-done" d="${path}" stroke-dasharray="${doneLen*w} ${w}" />
+    <path class="track-done" d="${path}" stroke-dasharray="${doneLen} ${w}" />
     ${pts.map((p,i)=>{
       const cls = i < state.step ? 'done' : (i===state.step ? 'current' : '');
-      return `<circle class="dot ${cls}" cx="${p[0]}" cy="${p[1]}" r="${i===state.step?7:5}"/>`;
+      return `<circle class="dot ${cls}" cx="${p[0]}" cy="${p[1]}" r="${i===state.step?10:7.5}"/>`;
     }).join('')}
   </svg>`;
 }
