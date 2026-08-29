@@ -345,6 +345,31 @@
   }
   .priority-card p{font-size:15px;color:var(--ink-soft);margin-top:8px;}
 
+  .info-btn{
+    width:22px;height:22px;border-radius:50%;
+    border:1.5px solid var(--ink-soft);background:transparent;color:var(--ink-soft);
+    font-family:'IBM Plex Mono';font-size:12px;line-height:1;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+    margin-left:auto;
+  }
+  .info-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .resource-link{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:14px 0;border-top:1px solid var(--line-soft);
+  }
+  .resource-link:first-of-type{border-top:none;}
+  .resource-link .kind{
+    font-family:'IBM Plex Mono';font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--accent);width:52px;flex-shrink:0;padding-top:2px;
+  }
+  .resource-link .body a{
+    font-size:15px;color:var(--ink);text-decoration:none;font-weight:600;
+  }
+  .resource-link .body a:hover{color:var(--accent);text-decoration:underline;}
+  .resource-link .body .src{
+    display:block;font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-soft);margin-top:3px;
+  }
+
   .checklist{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}
   .check-item{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;}
   .check-item input[type=checkbox]{margin-top:4px;width:15px;height:15px;accent-color:var(--accent);flex-shrink:0;}
@@ -801,6 +826,65 @@ const COACH_LINKS = [
     blurb:"One-on-one sessions with experienced thru-hikers, focused on gear, logistics, and the mental side of multi-day trips."
   }
 ];
+
+/* =========================================================
+   RESOURCES
+   Curated further-reading and video links per checkpoint,
+   shown in the "Learn more" popup on each remediation card.
+========================================================= */
+const RESOURCES = {
+  terrain:{
+    article:{title:'An Introduction to Downhill Trail Running Techniques', source:'iRunFar', url:'https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques'},
+    video:{title:'Run Fast Downhill | How to Run Technical Trails', url:'https://www.youtube.com/watch?v=EIJ_4g4S6vA'}
+  },
+  environment:{
+    article:{title:'Handle the Heat: Heat Acclimation for Endurance Running', source:'iRunFar', url:'https://www.irunfar.com/handle-the-heat-heat-acclimation-for-endurance-running'},
+    video:{title:'Mountaineering 101: High Altitude & Acclimatization', url:'https://www.youtube.com/watch?v=T_DLqHYafko'}
+  },
+  gear:{
+    article:{title:'4 Running Pole Techniques Trail and Ultrarunners Should Master', source:'Jason Koop / CTS', url:'https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/'},
+    video:{title:'How to Use Poles in Trail Running — The Ultimate Guide', url:'https://www.youtube.com/watch?v=ljr5WltXKnM'}
+  },
+  nutrition:{
+    article:{title:'Fueling for an Ultramarathon: A Complete Guide to Race Day Nutrition', source:'Relentless Forward Commotion', url:'https://relentlessforwardcommotion.com/fueling-for-an-ultramarathon-a-complete-guide-to-race-day-nutrition/'},
+    video:{title:'Inside a Pro-Level Ultrarunning Fueling Strategy', url:'https://www.youtube.com/watch?v=N0bNkyFmoBc'}
+  },
+  training:{
+    build:{
+      article:{title:'Muscular Endurance for Mountain Athletes: Why Your Legs Fail', source:'Uphill Athlete', url:'https://uphillathlete.com/strength-training/muscular-endurance-for-mountain-athletes/'},
+      video:{title:'Muscular Endurance Training with Uphill Athlete Coaches', url:'https://www.youtube.com/watch?v=GlXUVUuIep0'}
+    },
+    taper:{
+      article:{title:'Tapering for Ultrarunning: Boost Race Performance and Prevent Taper Tantrums', source:'CTS', url:'https://trainright.com/tapering-ultrarunning-prevent-taper-tantrum/'},
+      video:{title:'Ultramarathon Taper Tips', url:'https://www.youtube.com/watch?v=chfvgll_hS4'}
+    }
+  },
+  medical:{
+    article:{title:'Warning Signs: Rhabdomyolysis in Trail Runners', source:'Trail Runner Magazine', url:'https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/'},
+    video:{title:'How Much Workout Is Too Much? — Rhabdomyolysis', url:'https://www.youtube.com/watch?v=aDIvspLzj1g'}
+  },
+  safety:{
+    article:{title:'Exercise-Associated Hyponatremia: The (Not So) Salty Truth', source:'iRunFar', url:'https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth'},
+    video:{title:'Recognizing and Treating Heat Illness and Heat Stroke', url:'https://www.youtube.com/watch?v=gSnyIpeuR50'}
+  },
+  logistics:{
+    article:{title:'How to Crew Ultra Runners: A Complete Guide for Crew Members', source:'TrainingPeaks', url:'https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/'},
+    video:{title:'10 Tips for Crewing an Ultra Marathon', url:'https://www.youtube.com/watch?v=FClpCNWjzcM'}
+  },
+  mental:{
+    article:{title:'Ultramarathon Pacing Strategies: Why Staying in the Moment Works', source:'Jason Koop / CTS', url:'https://trainright.com/ultramarathon-pacing-strategies-staying-in-the-moment/'},
+    video:{title:'Ultramarathon Pacing: 5 Science-Backed Strategies to Finish Strong', url:'https://www.youtube.com/watch?v=HpOiy4oHQq4'}
+  },
+  recovery:{
+    article:{title:'Optimizing Recovery After an Ultramarathon', source:'CTS', url:'https://trainright.com/recovery-after-running-an-ultramarathon/'},
+    video:{title:'How to Recover Fast After an Ultramarathon (5 Proven Tips)', url:'https://www.youtube.com/watch?v=te2IJ1w1LUI'}
+  }
+};
+function getResources(ci){
+  const cat = CATEGORIES[ci];
+  const r = RESOURCES[cat.id];
+  return (r && r.build) ? r[state.phase] : r;
+}
 
 /* =========================================================
    LICENSE
@@ -1373,7 +1457,7 @@ function renderResults(){
           const t = tierOf(c.score);
           return `
           <div class="priority-card" style="border-left-color:${t.color}">
-            <h3>${escapeHtml(c.name)} <span class="tier-tag" style="background:${t.bg};color:${t.color}">${c.score}/100 · ${t.label}</span></h3>
+            <h3>${escapeHtml(c.name)} <span class="tier-tag" style="background:${t.bg};color:${t.color}">${c.score}/100 · ${t.label}</span><button type="button" class="info-btn" data-cat-id="${c.id}" aria-label="Learn more about ${escapeHtml(c.name)}">i</button></h3>
             <p>${escapeHtml(c.remediation.summary)}</p>
             <ul class="checklist">
               ${c.remediation.actions.map((a,ai)=>`
@@ -1434,7 +1518,8 @@ function renderResults(){
       ${renderFooter()}
     </div>
   </section>
-  ${renderLicenseModal()}`;
+  ${renderLicenseModal()}
+  ${renderResourcesModal()}`;
 }
 
 /* =========================================================
@@ -1476,6 +1561,43 @@ function renderLicenseModal(){
   </div>`;
 }
 
+function renderResourcesModal(){
+  return `
+  <div class="modal-overlay" id="resourcesModal">
+    <div class="modal-box">
+      <button class="modal-close" id="resourcesModalClose" aria-label="Close">&times;</button>
+      <div class="modal-sub">Learn more</div>
+      <div id="resourcesModalBody"></div>
+    </div>
+  </div>`;
+}
+function resourceLinkRow(kind, item){
+  if(!item) return '';
+  return `
+  <div class="resource-link">
+    <span class="kind">${kind}</span>
+    <div class="body">
+      <a href="${item.url}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>
+      ${item.source ? `<span class="src">${escapeHtml(item.source)}</span>` : `<span class="src">YouTube</span>`}
+    </div>
+  </div>`;
+}
+function openResourcesModal(catId){
+  const ci = CATEGORIES.findIndex(c=>c.id===catId);
+  if(ci===-1) return;
+  const cat = CATEGORIES[ci];
+  const res = getResources(ci);
+  const body = document.getElementById('resourcesModalBody');
+  if(!body || !res) return;
+  body.innerHTML = `
+    <h2 style="font-size:22px;">${escapeHtml(cat.name)}</h2>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:6px 0 16px;">A couple of starting points if you want to dig into this checkpoint further.</p>
+    ${resourceLinkRow('Article', res.article)}
+    ${resourceLinkRow('Video', res.video)}
+  `;
+  document.getElementById('resourcesModal').classList.add('open');
+}
+
 /* =========================================================
    UTIL
 ========================================================= */
@@ -1505,6 +1627,15 @@ function attachEvents(){
     licenseBtn.addEventListener('click', ()=> licenseModal.classList.add('open'));
     document.getElementById('licenseModalClose').addEventListener('click', ()=> licenseModal.classList.remove('open'));
     licenseModal.addEventListener('click', e=>{ if(e.target===licenseModal) licenseModal.classList.remove('open'); });
+  }
+
+  const resourcesModal = document.getElementById('resourcesModal');
+  if(resourcesModal){
+    document.getElementById('resourcesModalClose').addEventListener('click', ()=> resourcesModal.classList.remove('open'));
+    resourcesModal.addEventListener('click', e=>{ if(e.target===resourcesModal) resourcesModal.classList.remove('open'); });
+    document.querySelectorAll('.info-btn[data-cat-id]').forEach(btn=>{
+      btn.addEventListener('click', ()=> openResourcesModal(btn.dataset.catId));
+    });
   }
 
   if(state.screen==='hero'){
