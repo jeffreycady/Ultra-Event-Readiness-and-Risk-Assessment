@@ -480,7 +480,12 @@
 /* =========================================================
    DATA
    Each question's options are ordered best(0) -> worst(last).
-   Score = index / (options.length-1)  ->  0..1 risk fraction
+   Score = index / (options.length-1) -> 0..1 risk fraction.
+   Questions with a `naIndex` property have a trailing "Not
+   applicable" option at that index: selecting it scores 0
+   (no risk), and the real options are scored against
+   (naIndex-1) instead of the full option count, so the worst
+   real answer still reaches a full 1.0.
 ========================================================= */
 const CATEGORIES = [
   {
@@ -677,7 +682,7 @@ const CATEGORIES = [
       summary:"Make sure someone knows your plan, and you know the warning signs.",
       actions:[
         "Share your trip plan and expected finish/return window with someone",
-        "Look up where medical support is along the route, and save the event's emergency number if one exists",
+        "Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists",
         "Carry basic ID and medical information on you",
         "Review the early warning signs of heat illness, hyponatremia, and hypothermia",
         "Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis",
@@ -687,8 +692,8 @@ const CATEGORIES = [
     questions:[
       {q:"Have you told someone your trip plan and expected finish or return window?",
        opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No","Not applicable — organized event with registration, bib tracking, and check-ins already in place"], naIndex:4},
-      {q:"Do you know where medical support is along the route (aid stations, checkpoints) and whether the event has an emergency contact number?",
-       opts:["Yes — I know where medical support is and have any event emergency number saved","I have a rough idea of aid station locations, but haven't looked up an emergency number","I'm assuming I can flag someone down or rely on event staff if needed","I haven't looked into this at all"]},
+      {q:"Do you know where to find medical help — on-course aid stations and EMS, plus the nearest hospital or urgent care off-course — and the event's emergency contact number, if any?",
+       opts:["Yes — I know on-course medical support, the nearest hospital/urgent care, and have any event emergency number saved","I know the on-course aid stations, but haven't looked into off-course hospitals, urgent care, or an emergency number","I have a rough idea, but haven't confirmed any of this","I haven't looked into this at all","Not applicable — organized event with on-course medical staff and established emergency protocols"], naIndex:4},
       {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
        opts:["Always","Usually","Rarely","Never"]},
       {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, or hypothermia in yourself?",
@@ -887,6 +892,19 @@ function getResources(ci){
 }
 
 /* =========================================================
+   QUESTIONNAIRE VERSION
+   Bump this any time you add, remove, reword, or rescore a
+   question (including adding a "Not applicable" option) —
+   anything that changes what an answer means or how it scores.
+   It's shown in the app footer and on every PDF export, so
+   someone comparing an old report to a new one can tell
+   whether they're looking at the same question set.
+   Simple scheme: 1.0, 1.1, 1.2... bump the first number only
+   for a major overhaul (e.g. a whole new category).
+========================================================= */
+const QUESTIONNAIRE_VERSION = '1.1';
+
+/* =========================================================
    LICENSE
    Set your own prices and Stripe Payment Links below — one
    link per paid tier, since they're different amounts. In
@@ -982,7 +1000,7 @@ function generatePDF(){
   doc.rect(0,0,pageW,118,'F');
 
   doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
-  doc.text('ULTRA EVENT READINESS & RISK ASSESSMENT', margin, 34);
+  doc.text(`ULTRA EVENT READINESS & RISK ASSESSMENT \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, 34);
 
   const maxTitleW = contentW - 150;
   const titleRaw = (state.eventName || 'Your Event') + (dateStr ? '  \u00b7  '+dateStr : '');
@@ -1095,7 +1113,7 @@ function generatePDF(){
   for(let p=1; p<=totalPages; p++){
     doc.setPage(p);
     doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
-    doc.text('Ultra Event Readiness & Risk Assessment', margin, pageH-24);
+    doc.text(`Ultra Event Readiness & Risk Assessment \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, pageH-24);
     doc.text(`Page ${p} of ${totalPages}`, pageW-margin, pageH-24, {align:'right'});
   }
 
@@ -1532,6 +1550,8 @@ function renderFooter(){
   return `
   <div class="site-footer">
     <span class="copyright">${copyrightLine()}</span>
+    <span class="footer-dot">\u00b7</span>
+    <span>v${QUESTIONNAIRE_VERSION}</span>
     <span class="footer-dot">\u00b7</span>
     <button type="button" id="licenseBtn">License</button>
   </div>`;
