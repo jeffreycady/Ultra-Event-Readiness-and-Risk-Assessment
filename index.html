@@ -30,29 +30,6 @@
     flex-wrap:wrap;
     margin-top:34px;
   }
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .field label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:#b7ac93;
-  }
-  .field input{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.25);
-    color:#F7F2E7;
-    padding:10px 12px;
-    font-family:'Source Serif 4', serif;
-    font-size:15px;
-    border-radius:var(--radius);
-    min-width:200px;
-  }
-  .field input::placeholder{color:#9a8f77;}
   .countdown-hint{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
@@ -281,6 +258,15 @@
   .on-track-items span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--low);display:inline-block;}
 
   .coach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;background:var(--line-soft);border:1px solid var(--line-soft);margin-bottom:8px;}
+
+  .built-by-coach{
+    background:var(--pine-2);color:var(--cream);
+    padding:28px 26px;margin-bottom:36px;
+    display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;
+  }
+  .built-by-coach .copy{flex:1;min-width:220px;}
+  .built-by-coach h3{font-size:19px;color:var(--cream);margin-bottom:6px;}
+  .built-by-coach p{font-size:14px;color:#d9d2c0;margin:0;max-width:48ch;}
   .coach-card{background:var(--paper-2);padding:20px;display:flex;flex-direction:column;gap:8px;}
   .coach-card h4{font-family:'Big Shoulders Display';font-size:17px;letter-spacing:0.01em;text-transform:none;}
   .coach-card p{font-size:13.5px;color:var(--ink-soft);flex:1;}
@@ -707,6 +693,66 @@ function phaseStatusText(){
   return `<strong>${info.label}</strong> \u2014 ${info.desc} (${daysUntilText(state.eventDate)}).`;
 }
 
+/* =========================================================
+   FEATURED COACH (referral attribution)
+   ------------------------------------------------------------
+   If you self-host your own copy of this tool, you don't need
+   any of this — just edit the 'jeff' entry below (or replace
+   it with your own) and it'll always show. This machinery only
+   matters if you're running ONE shared instance that multiple
+   licensed coaches send their own clients to.
+
+   HOW TO ADD A LICENSED COACH:
+   1. Add an entry below, keyed by a short slug (letters only).
+   2. Give that coach a link like:
+        https://uera.jcady.org/?coach=SLUG
+      Anyone who lands via that link sees their info instead of
+      the default. No param (or an unrecognized one) falls back
+      to DEFAULT_COACH_SLUG. As a secondary check, if someone
+      clicks straight through from a listed coach's own site
+      with no ?coach= param, their referring domain is matched
+      against the registry too — but don't rely on that alone,
+      most real shares (text, email, social) carry no referrer.
+   3. isCreator:true shows "Built by a coach" framing (use this
+      only for you, the tool's actual author). Any other entry
+      should have isCreator:false and a blurb written as a
+      referral, not an authorship claim.
+========================================================= */
+const DEFAULT_COACH_SLUG = 'jeff';
+const COACH_REGISTRY = {
+  jeff:{
+    isCreator:true,
+    name:'Jeff Cady',
+    url:'https://jcady.org',
+    blurb:"Hi, I'm Jeff Cady \u2014 the UESCA certified ultrarunning coach who built this tool. If you'd rather have a training plan built around your real risk factors than figure it out solo, let's talk."
+  }
+  // Example of a licensed coach — copy this shape, uncomment,
+  // and give them the matching ?coach=sarah link:
+  // sarah:{
+  //   isCreator:false,
+  //   name:'Sarah Smith',
+  //   url:'https://sarahsmithcoaching.com',
+  //   blurb:"This assessment was shared with you by Sarah Smith, a certified coach. Want help turning these results into an actual plan? Get in touch."
+  // }
+};
+function getFeaturedCoach(){
+  let slug = null;
+  try{ slug = new URLSearchParams(window.location.search).get('coach'); }catch(e){}
+  if(slug && COACH_REGISTRY[slug]) return COACH_REGISTRY[slug];
+
+  try{
+    if(document.referrer){
+      const refHost = new URL(document.referrer).hostname.replace(/^www\./,'');
+      for(const key in COACH_REGISTRY){
+        const entryHost = new URL(COACH_REGISTRY[key].url).hostname.replace(/^www\./,'');
+        if(refHost === entryHost) return COACH_REGISTRY[key];
+      }
+    }
+  }catch(e){}
+
+  return COACH_REGISTRY[DEFAULT_COACH_SLUG];
+}
+
 const COACH_LINKS = [
   {
     name:'UESCA Coach Directory',
@@ -818,10 +864,10 @@ const LICENSE_TIERS = [
     link:null },
   { name:'Individual Coach License', price:'$49 / year',
     desc:"Use it with your own coached athletes as part of your coaching business — unlimited athletes, one coach. Renews annually.",
-    link:'https://buy.stripe.com/REPLACE_WITH_COACH_LINK' },
+    link:'https://buy.stripe.com/7sY5kF1rMd0Z1N4fQd7bW00' },
   { name:'Coaching Business / Team License', price:'$129 / year',
     desc:"Multiple coaches at the same business, or white-labeled use in a program or gym. Renews annually.",
-    link:'https://buy.stripe.com/REPLACE_WITH_BUSINESS_LINK' }
+    link:'https://buy.stripe.com/00wfZj7Qa8KJ1N4cE17bW02' }
 ];
 
 /* =========================================================
@@ -986,6 +1032,19 @@ function generatePDF(){
 
   // ---- find a coach ----
   sectionHeader('Find a Coach');
+
+  const featuredCoach = getFeaturedCoach();
+  ensureSpace(46);
+  doc.setFillColor(PDF_COLORS.accent);
+  doc.rect(margin, y-10, 3, 16, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(PDF_COLORS.ink);
+  doc.text(featuredCoach.isCreator ? 'Built by a coach' : 'Your coach', margin+12, y); y += 13;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.inkSoft);
+  doc.splitTextToSize(featuredCoach.blurb, contentW-12).forEach(l=>{ ensureSpace(11); doc.text(l, margin+12, y); y += 11; });
+  doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.accent);
+  doc.textWithLink(featuredCoach.url, margin+12, y+3, { url: featuredCoach.url });
+  y += 26;
+
   COACH_LINKS.forEach(link=>{
     ensureSpace(42);
     doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(PDF_COLORS.ink);
@@ -1318,6 +1377,7 @@ function renderResults(){
   const dateStr = state.eventDate ? new Date(state.eventDate+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
   const dText = daysUntilText(state.eventDate);
   const phaseLabel = phaseCopy(state.phase).short;
+  const featuredCoach = getFeaturedCoach();
 
   const coachIntro = overall>=34
     ? `You flagged some real gaps above. A coach can help you triage what's actually fixable in the time you have left, and what to just plan around.`
@@ -1394,6 +1454,14 @@ function renderResults(){
             <div class="breakdown-score mono" style="color:${t.color}">${c.score}</div>
           </div>`;
         }).join('')}
+      </div>
+
+      <div class="built-by-coach">
+        <div class="copy">
+          <h3>${featuredCoach.isCreator ? 'Built by a coach' : 'Your coach'}</h3>
+          <p>${escapeHtml(featuredCoach.blurb)}</p>
+        </div>
+        <a class="btn" href="${featuredCoach.url}" target="_blank" rel="noopener">Visit ${escapeHtml(featuredCoach.url.replace(/^https?:\/\//,''))} &rarr;</a>
       </div>
 
       <h2 class="section-title">Find a coach</h2>
