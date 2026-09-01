@@ -1142,6 +1142,152 @@ function generatePDF(){
   doc.save(pdfFilename());
 }
 
+function compareFilename(before, after){
+  const base = (after.event || before.event || 'ultra-event').trim().toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'ultra-event';
+  const datePart = after.date || new Date().toISOString().slice(0,10);
+  return `readiness-comparison_${base}_${datePart}.pdf`;
+}
+
+function generateComparePDF(before, after){
+  if(typeof window.jspdf === 'undefined'){
+    alert("The PDF library hasn't finished loading (needs an internet connection). Try again in a moment, or use the Print button instead.");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'pt', format:'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 50;
+  const contentW = pageW - margin*2;
+  let y = margin;
+
+  function ensureSpace(h){
+    if(y + h > pageH - 60){ doc.addPage(); y = margin; }
+  }
+  function sectionHeader(title, sub){
+    ensureSpace(sub ? 40 : 26);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(title, margin, y); y += 16;
+    if(sub){
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.inkSoft);
+      doc.splitTextToSize(sub, contentW).forEach(l=>{ doc.text(l, margin, y); y += 12; });
+    }
+    y += 6;
+  }
+
+  const { insights, stillWeak } = generateInsights(before, after);
+  const overallDelta = after.overall - before.overall;
+  const deltaColor = overallDelta < -4 ? PDF_COLORS.low : overallDelta > 4 ? PDF_COLORS.high : PDF_COLORS.mid;
+
+  // ---- header ----
+  doc.setFillColor(PDF_COLORS.pine);
+  doc.rect(0,0,pageW,118,'F');
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
+  doc.text(`COMPARE PROGRESS \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, 34);
+
+  const titleRaw = `${before.event || 'Earlier'} -> ${after.event || 'Latest'}`;
+  const titleLines = doc.splitTextToSize(titleRaw, contentW-150);
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(PDF_COLORS.cream);
+  doc.text(titleLines[0] + (titleLines.length>1 ? '\u2026' : ''), margin, 58);
+
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
+  const dateLine = [before.date, after.date].filter(Boolean).join('  ->  ');
+  if(dateLine) doc.text(dateLine, margin, 76);
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(24); doc.setTextColor(PDF_COLORS.dim);
+  doc.text(String(before.overall), pageW-margin-70, 62, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(PDF_COLORS.dim);
+  doc.text('->', pageW-margin-55, 58);
+  doc.setFont('helvetica','bold'); doc.setFontSize(32); doc.setTextColor(deltaColor);
+  doc.text(String(after.overall), pageW-margin, 62, {align:'right'});
+  doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.dim);
+  doc.text(`${overallDelta>0?'+':''}${overallDelta} OVERALL`, pageW-margin, 78, {align:'right'});
+
+  y = 118 + 30;
+
+  // ---- full breakdown, before vs after ----
+  sectionHeader('Full Breakdown', 'Every checkpoint, earlier vs. latest.');
+  CATEGORIES.forEach(c=>{
+    const b = before.scores[c.id], a = after.scores[c.id];
+    if(typeof b!=='number' || typeof a!=='number') return;
+    const delta = a-b;
+    const dColor = delta<-4?PDF_COLORS.low:delta>4?PDF_COLORS.high:PDF_COLORS.inkSoft;
+    ensureSpace(19);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(c.name, margin, y+7);
+    doc.setFont('courier','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.inkSoft);
+    doc.text(`${b} -> ${a}`, pageW-margin-55, y+7, {align:'right'});
+    doc.setTextColor(dColor);
+    doc.text(`${delta>0?'+':''}${delta}`, pageW-margin, y+7, {align:'right'});
+    y += 19;
+  });
+  y += 16;
+
+  // ---- insights ----
+  sectionHeader('Insights');
+  insights.forEach(line=>{
+    const lines = doc.splitTextToSize(line, contentW-16);
+    ensureSpace(lines.length*12+10);
+    doc.setFillColor(PDF_COLORS.accent);
+    doc.rect(margin, y-9, 3, 12, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(PDF_COLORS.ink);
+    lines.forEach((l,li)=> doc.text(l, margin+12, y + li*12));
+    y += lines.length*12 + 10;
+  });
+  y += 8;
+
+  // ---- still needs focus ----
+  sectionHeader('Still Needs Focus', stillWeak.length
+    ? 'Scoring Moderate or High in the latest assessment.'
+    : 'Nothing scored Moderate or High this time.');
+  stillWeak.forEach(d=>{
+    ensureSpace(19);
+    const t = pdfTierColor(d.after);
+    const barX = margin+190, barW = contentW-190-44;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(doc.splitTextToSize(d.name, 180)[0], margin, y+7);
+    doc.setFillColor(PDF_COLORS.lineSoft);
+    doc.rect(barX, y, barW, 7, 'F');
+    doc.setFillColor(t);
+    doc.rect(barX, y, Math.max(2, barW*(d.after/100)), 7, 'F');
+    doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(t);
+    doc.text(String(d.after), pageW-margin, y+7, {align:'right'});
+    y += 19;
+  });
+  y += 16;
+
+  // ---- coach attribution + disclaimer ----
+  const featuredCoach = getFeaturedCoach();
+  sectionHeader(featuredCoach.isCreator ? 'Built by a coach' : 'Your coach');
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.inkSoft);
+  doc.splitTextToSize(featuredCoach.blurb, contentW).forEach(l=>{ ensureSpace(11); doc.text(l, margin, y); y += 11; });
+  doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.accent);
+  doc.textWithLink(featuredCoach.url, margin, y+3, { url: featuredCoach.url });
+  y += 28;
+
+  ensureSpace(36);
+  doc.setDrawColor(PDF_COLORS.lineSoft); doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW-margin, y); y += 14;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.inkSoft);
+  const disclaimer = "This comparison is a self-assessment aid, not medical advice \u2014 talk to a doctor about any pre-existing condition or new symptom before you go.";
+  doc.splitTextToSize(disclaimer, contentW).forEach(l=>{ ensureSpace(10); doc.text(l, margin, y); y += 10; });
+  y += 4;
+  ensureSpace(10);
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(PDF_COLORS.inkSoft);
+  doc.text(copyrightLine(), margin, y); y += 10;
+
+  const totalPages = doc.internal.getNumberOfPages();
+  for(let p=1; p<=totalPages; p++){
+    doc.setPage(p);
+    doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
+    doc.text(`Ultra Event Readiness & Risk Assessment \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, pageH-24);
+    doc.text(`Page ${p} of ${totalPages}`, pageW-margin, pageH-24, {align:'right'});
+  }
+
+  doc.save(compareFilename(before, after));
+}
+
 /* =========================================================
    COMPARE PROGRESS
    Read a UERA-exported PDF back in (via the hidden data marker
@@ -1404,6 +1550,7 @@ function renderHero(){
 
       <div class="btn-row">
         <button class="btn" id="startBtn">Begin Readiness Check →</button>
+        <button type="button" class="btn ghost-dark" id="compareFromHeroBtn">Compare With a Past Assessment &rarr;</button>
       </div>
 
       <div class="timing-note">
@@ -1413,10 +1560,6 @@ function renderHero(){
 
       <div class="checkpoint-list">
         ${CATEGORIES.map((c,i)=>`<div><span class="n mono">${String(i+1).padStart(2,'0')}</span>${c.short}</div>`).join('')}
-      </div>
-
-      <div class="timing-note" style="border-top:none;padding-top:0;margin-top:20px;">
-        <button type="button" class="upload-switch" id="compareFromHeroBtn" style="color:#c8b190;">Comparing to a past assessment? Upload it here &rarr;</button>
       </div>
 
       ${renderFooter()}
@@ -1628,6 +1771,9 @@ function renderResults(){
         <div class="score-suffix">/ 100 overall risk</div>
       </div>
       <div class="tier-pill" style="background:${tier.color};color:#fff;">${tier.label} Risk</div>
+      <div class="btn-row no-print" style="margin-top:24px;">
+        <button type="button" class="btn ghost-dark" id="compareFromResultsBtn">Compare With a Previous Assessment &rarr;</button>
+      </div>
     </div>
   </section>
 
@@ -1713,10 +1859,6 @@ function renderResults(){
         <button class="btn" id="exportPdfBtn">Export PDF</button>
         <button class="btn ghost" id="printBtn">Print</button>
         <button class="btn ghost" id="retakeBtn">Retake Assessment</button>
-      </div>
-
-      <div class="timing-note no-print" style="border-top:none;padding-top:0;margin-top:18px;">
-        <button type="button" class="upload-switch" id="compareFromResultsBtn" style="color:var(--ink-soft);">Compare with a previous assessment &rarr;</button>
       </div>
 
       <footer class="note no-print">
@@ -1826,7 +1968,8 @@ function renderCompare(){
       }
 
       <div class="btn-row no-print">
-        <button class="btn ghost" id="compareBackBtn">&larr; Back</button>
+        ${bothReady ? `<button class="btn" id="exportCompareBtn">Export Comparison PDF</button>` : ''}
+        <button class="btn ghost" id="compareBackBtn">&larr; Back to Assessment</button>
       </div>
 
       ${renderFooter()}
@@ -2017,6 +2160,14 @@ function attachEvents(){
     if(switchToLive) switchToLive.addEventListener('click', ()=>{
       state.compare.afterMode='live'; state.compare.afterData=getLiveAssessmentData(); state.compare.afterError=null;
       render(false);
+    });
+    const exportCompareBtn = document.getElementById('exportCompareBtn');
+    if(exportCompareBtn) exportCompareBtn.addEventListener('click', ()=>{
+      try{ generateComparePDF(state.compare.beforeData, state.compare.afterData); }
+      catch(err){
+        console.error(err);
+        alert("Couldn't generate the comparison PDF. Try again in a moment.");
+      }
     });
     document.getElementById('compareBackBtn').addEventListener('click', ()=>{
       const hasLiveResults = state.answers && !state.answers.some(a=>a.some(v=>v===null));
