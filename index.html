@@ -603,8 +603,8 @@ const CATEGORIES = [
       questions:[
         {q:"How long have you been running consistently before considering this?",
          opts:["More than a year of consistent training","6 months to a year","Less than 6 months","Just starting out"]},
-        {q:"Are you comfortable running in the 25–30+ miles a week range, or built up to something close to it?",
-         opts:["Yes, that's a normal week for me already","I'm close, and building toward it","I'm well under that and haven't started building up","I have no idea what my weekly mileage even is"]},
+        {q:"Can your training availability support the minimum weekly volume your target distance needs during peak training weeks — 6 hours/week for a 50K or 50-miler, or 9 hours/week for a 100K or 100-miler?",
+         opts:["Yes — I can realistically hit that during peak training weeks","Close, but I'd need to make some real adjustments to get there","Not currently — my available time falls well short of that","I haven't worked out what my target distance actually requires"]},
         {q:"Have you progressed through shorter distances first — 10K, half marathon, marathon — before aiming for your first ultra?",
          opts:["Yes, I've built up through those distances","I've done a half marathon or marathon, but that's it","I've only done shorter races (5K/10K)","This would be my first real race of any distance"]},
         {q:"Are you currently free of chronic or nagging injuries, and have you been building volume gradually rather than jumping straight to ultra-level training?",
@@ -622,7 +622,7 @@ const CATEGORIES = [
       ],
       remediationActions:[
         {text:"Bank at least a year of consistent, patiently-built training before treating an ultra as the goal, not the stretch", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
-        {text:"Build up to a comfortable 25–30+ mile week before your ultra-specific training block even starts", url:"https://www.injinji.com/blog/how-to-train-for-your-first-ultra-choosing-a-race-training-plans-and-essential-gear"},
+        {text:"Know your target distance's minimum weekly hours during peak training \u2014 6 hrs/week for a 50K or 50-miler, 9 hrs/week for a 100K or 100-miler \u2014 and build your schedule to actually hit it", url:"https://trainright.com/ultramarathon-training-time-required/"},
         {text:"Race up through shorter distances first — a half marathon or marathon builds real race-day habits an ultra will demand", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
         {text:"Increase weekly volume gradually and don't skip cutback weeks — big, fast jumps in mileage are the most common way new ultrarunners get hurt", url:"https://run.outsideonline.com/training/getting-started/myth-of-the-10-percent-rule/"},
         {text:"Map out realistically where the training time will come from before you commit — work, family, and sleep don't pause for a training block", url:"https://ultrarunning.com/featured/training-for-an-ultra-on-a-busy-schedule/"},
@@ -959,7 +959,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.4';
+const QUESTIONNAIRE_VERSION = '1.5';
 
 /* =========================================================
    LICENSE
