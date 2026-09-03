@@ -1174,6 +1174,52 @@ function generatePDF(){
     y += 22;
   });
 
+  // ---- your answers (full question + selected-answer detail, for a coach) ----
+  doc.addPage(); y = margin;
+  sectionHeader('Your Answers', "Every question and what you selected, by checkpoint \u2014 so a coach can see not just the score, but where you see yourself. Each answer is colored by its own risk level.");
+
+  CATEGORIES.forEach((c,ci)=>{
+    const qs = getQuestions(ci);
+    const catAnswers = state.answers[ci];
+    const catScore = categoryScore(ci);
+    const catColor = pdfTierColor(catScore);
+
+    ensureSpace(26);
+    doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(PDF_COLORS.ink);
+    doc.text(c.name, margin, y);
+    doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(catColor);
+    doc.text(`${catScore}/100`, pageW-margin, y, {align:'right'});
+    y += 8;
+    if(c.questionsByPhase){
+      doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
+      const phaseNote = phaseCopy(state.phase).short + (state.isFirstUltra && c.firstUltraExtra ? ' + first-ultra questions' : '');
+      doc.text(phaseNote, margin, y); y += 10;
+    } else {
+      y += 4;
+    }
+
+    qs.forEach((q,qi)=>{
+      const idx = catAnswers[qi];
+      const hasNA = q.naIndex !== undefined;
+      const isNA = hasNA && idx === q.naIndex;
+      const max = hasNA ? q.naIndex - 1 : q.opts.length - 1;
+      const fraction = isNA ? 0 : (max > 0 ? idx/max : 0);
+      const answerColor = pdfTierColor(Math.round(fraction*100));
+
+      const qLines = doc.splitTextToSize(`${qi+1}. ${q.q}`, contentW-10);
+      ensureSpace(qLines.length*10 + 14);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.ink);
+      qLines.forEach((l,li)=> doc.text(l, margin+8, y+li*10));
+      y += qLines.length*10 + 2;
+
+      const answerLines = doc.splitTextToSize('-> ' + q.opts[idx], contentW-24);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(answerColor);
+      answerLines.forEach((l,li)=>{ ensureSpace(10); doc.text(l, margin+22, y+li*10); });
+      y += answerLines.length*10 + 8;
+    });
+    y += 8;
+  });
+
   // ---- disclaimer ----
   ensureSpace(36);
   doc.setDrawColor(PDF_COLORS.lineSoft); doc.setLineWidth(0.5);
