@@ -83,7 +83,7 @@
   .phase-indicator strong{color:#F7F2E7;}
   .phase-indicator.muted{color:#a99b7d;}
 
-  .first-ultra-toggle{margin-top:18px;max-width:460px;}
+  .first-ultra-toggle{margin-top:18px;max-width:460px;display:flex;flex-direction:column;gap:10px;}
   .first-ultra-toggle label{
     display:flex;align-items:center;gap:10px;
     font-family:'IBM Plex Mono', monospace;
@@ -647,6 +647,44 @@ const CATEGORIES = [
         article:{title:"The New Ultramarathon Runner's Four Year Training Plan", source:"Jason Koop / CTS", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
         video:{title:"Guide To Running Your First Ultramarathon", url:"https://www.youtube.com/watch?v=bo7QzAGNfdo"}
       }
+    },
+    firstHikeExtra:{
+      // Layered on top of whichever phase question set is already
+      // showing, only when the "This is my first long-distance
+      // hike" toggle is on. Independent of firstUltraExtra above —
+      // both can be active at once if somehow applicable.
+      questions:[
+        {q:"Have you built up gradually — day hikes, then overnight trips — before attempting this, or is this jumping straight to multi-day?",
+         opts:["Yes, I've progressively built up through day hikes and overnight trips","I've done a few overnights, but not a lot","I've only day-hiked, never spent a night on trail","This would be my first time hiking overnight at all"]},
+        {q:"Have you trained hiking with a fully loaded pack — matching your actual trip weight — not just an empty or lightly-loaded one?",
+         opts:["Yes, multiple training hikes at or near my actual trip weight","A few training hikes, but lighter than my real pack will be","Only hiked with a light daypack, never near full weight","Haven't trained with a loaded pack at all"]},
+        {q:"Have you hiked multiple consecutive days in a row before, to know how your body holds up on day 2, 3, or beyond?",
+         opts:["Yes, several consecutive-day trips under my belt","One or two back-to-back days, nothing longer","Only single-day efforts, never back-to-back","No consecutive-day experience at all"]},
+        {q:"Is your planned route matched to your experience — not requiring complex navigation or extreme remoteness for a first attempt?",
+         opts:["Yes, I chose a well-established, appropriately-scoped route","Mostly, though it has some remote or technical sections","It's fairly remote or complex for a first attempt","Haven't thought about how the route matches my experience"]},
+        {q:"Have you planned and budgeted for the full trip — resupply costs, lodging or permits, gear, and an emergency buffer?",
+         opts:["Yes, fully planned and budgeted","Mostly planned, a few gaps left","Only loosely thought about it","Haven't planned or budgeted at all"]},
+        {q:"Do you have a support system in place — someone managing resupply boxes, checking in on your progress, or a hiking partner?",
+         opts:["Yes — real support from people who understand this","Some support, but I'm mostly on my own","My circle doesn't really get it yet","Haven't thought about this"]},
+        {q:"Do you have a specific trail or route that genuinely speaks to you — one you're all in on, not just \"a long hike\" in the abstract?",
+         opts:["Yes — I have a specific trail I'm fully committed to","I have one in mind, but not fully committed yet","I know I want to do a long hike, but haven't picked one","Nothing specific in mind yet"]},
+        {q:"Have you been actively researching and planning — route, gear, resupply points — rather than just deciding you want to do this?",
+         opts:["Yes, deep into route/gear/resupply research already","Some research done, more to go","Only surface-level research so far","Haven't really started researching yet"]}
+      ],
+      remediationActions:[
+        {text:"Build up gradually — day hikes, then overnights, then multi-day trips — rather than jumping straight to your goal hike", url:"https://www.ula-equipment.com/2025/02/26/how-to-train-for-a-thru-hike/"},
+        {text:"Train with your pack loaded to actual trip weight, not empty or lightly loaded — this is what most first-timers get wrong", url:"https://www.rei.com/learn/expert-advice/thru-hiking-goal-training.html"},
+        {text:"Do at least one back-to-back multi-day trip before your goal hike, so you know what day 2 and 3 actually feel like", url:"https://www.the-backpacking-site.com/off-the-beaten-path/how-to-train-for-a-thru-hike/"},
+        {text:"Pick a well-established, appropriately-scoped route for a first attempt — save the remote, technical routes for once you have miles under you", url:"https://stories.strava.com/articles/how-to-prepare-for-your-first-thru-hike"},
+        {text:"Build a real budget — resupply, lodging/permits, gear, and an emergency buffer — running out of money ends more thru-hikes than injuries do", url:"https://www.cleverhiker.com/backpacking/21-pro-tips-for-the-first-time-thru-hiker/"},
+        {text:"Line up your support system now — someone to manage resupply boxes and check in on your progress", url:"https://www.cleverhiker.com/backpacking/21-pro-tips-for-the-first-time-thru-hiker/"},
+        {text:"Commit to one specific trail you're genuinely excited about, rather than staying vague about \"doing a long hike someday\"", url:"https://www.eathomas.com/skills/a-helpful-guide-to-start-planning-your-first-thru-hike"},
+        {text:"Set aside real weekly time for route, gear, and resupply research — treat planning as part of the training, not an afterthought", url:"https://www.eathomas.com/skills/a-helpful-guide-to-start-planning-your-first-thru-hike"}
+      ],
+      resources:{
+        article:{title:"How to Train for a Thru-Hike: Getting Trail Ready", source:"ULA Equipment", url:"https://www.ula-equipment.com/2025/02/26/how-to-train-for-a-thru-hike/"},
+        video:{title:"30 Tips for First Time Thru Hikers (After 17,000 miles)", url:"https://www.youtube.com/watch?v=4_cIy2gVBAg"}
+      }
     }
   },
   {
@@ -784,11 +822,10 @@ const CATEGORIES = [
 ========================================================= */
 function getQuestions(ci){
   const cat = CATEGORIES[ci];
-  const base = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
-  if(state.isFirstUltra && cat.firstUltraExtra){
-    return [...base, ...cat.firstUltraExtra.questions];
-  }
-  return base;
+  let qs = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+  if(state.isFirstUltra && cat.firstUltraExtra) qs = [...qs, ...cat.firstUltraExtra.questions];
+  if(state.isFirstHike && cat.firstHikeExtra) qs = [...qs, ...cat.firstHikeExtra.questions];
+  return qs;
 }
 function getTagline(ci){
   const cat = CATEGORIES[ci];
@@ -797,10 +834,10 @@ function getTagline(ci){
 function getRemediation(ci){
   const cat = CATEGORIES[ci];
   const base = cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
-  if(state.isFirstUltra && cat.firstUltraExtra){
-    return { summary: base.summary, actions: [...base.actions, ...cat.firstUltraExtra.remediationActions] };
-  }
-  return base;
+  let actions = base.actions;
+  if(state.isFirstUltra && cat.firstUltraExtra) actions = [...actions, ...cat.firstUltraExtra.remediationActions];
+  if(state.isFirstHike && cat.firstHikeExtra) actions = [...actions, ...cat.firstHikeExtra.remediationActions];
+  return { summary: base.summary, actions };
 }
 function suggestPhase(dateStr){
   const d = daysUntil(dateStr);
@@ -954,6 +991,9 @@ const RESOURCES = {
 };
 function getResources(ci){
   const cat = CATEGORIES[ci];
+  if(state.isFirstHike && cat.firstHikeExtra){
+    return cat.firstHikeExtra.resources;
+  }
   if(state.isFirstUltra && cat.firstUltraExtra){
     return cat.firstUltraExtra.resources;
   }
@@ -972,7 +1012,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.6';
+const QUESTIONNAIRE_VERSION = '1.7';
 
 /* =========================================================
    LICENSE
@@ -1205,7 +1245,10 @@ function generatePDF(){
     y += 8;
     if(c.questionsByPhase){
       doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
-      const phaseNote = phaseCopy(state.phase).short + (state.isFirstUltra && c.firstUltraExtra ? ' + first-ultra questions' : '');
+      const extraNotes = [];
+      if(state.isFirstUltra && c.firstUltraExtra) extraNotes.push('first-ultra questions');
+      if(state.isFirstHike && c.firstHikeExtra) extraNotes.push('first-hike questions');
+      const phaseNote = phaseCopy(state.phase).short + (extraNotes.length ? ' + ' + extraNotes.join(' + ') : '');
       doc.text(phaseNote, margin, y); y += 10;
     } else {
       y += 4;
@@ -1585,6 +1628,7 @@ const state = {
   eventDate:'',
   phase:'taper', // 'build' (6–12 weeks out) | 'taper' (3 weeks out) — derived from eventDate
   isFirstUltra:false,
+  isFirstHike:false,
   answers:null,
   compare:{
     beforeData:null, beforeError:null, beforeLoading:false,
@@ -1687,6 +1731,10 @@ function renderHero(){
           <input type="checkbox" id="firstUltraToggle" ${state.isFirstUltra ? 'checked' : ''}>
           This is my first ultra — add a few extra questions on base-building and race choice
         </label>
+        <label for="firstHikeToggle">
+          <input type="checkbox" id="firstHikeToggle" ${state.isFirstHike ? 'checked' : ''}>
+          This is my first long-distance hike — add a few extra questions on pack weight and trip planning
+        </label>
       </div>
 
       <div class="btn-row">
@@ -1742,9 +1790,11 @@ function renderStepper(){
   const phaseLabel = cat.questionsByPhase ? phaseCopy(state.phase).label : null;
 
   const dText = daysUntilText(state.eventDate);
-  const firstUltraSplit = (state.isFirstUltra && cat.firstUltraExtra)
-    ? questions.length - cat.firstUltraExtra.questions.length
-    : -1;
+  const baseLen = (cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions).length;
+  const ultraOn = state.isFirstUltra && cat.firstUltraExtra;
+  const hikeOn = state.isFirstHike && cat.firstHikeExtra;
+  const firstUltraSplit = ultraOn ? baseLen : -1;
+  const firstHikeSplit = hikeOn ? baseLen + (ultraOn ? cat.firstUltraExtra.questions.length : 0) : -1;
   return `
   <section class="stepper-header">
     <div class="wrap">
@@ -1768,6 +1818,13 @@ function renderStepper(){
           <div class="first-ultra-divider">
             <span class="line"></span>
             <span class="label">Since this is your first ultra</span>
+            <span class="line"></span>
+          </div>
+        ` : ''}
+        ${qi === firstHikeSplit ? `
+          <div class="first-ultra-divider">
+            <span class="line"></span>
+            <span class="label">Since this is your first long hike</span>
             <span class="line"></span>
           </div>
         ` : ''}
@@ -2254,6 +2311,10 @@ function attachEvents(){
     });
     document.getElementById('firstUltraToggle').addEventListener('change', e=>{
       state.isFirstUltra = e.target.checked;
+      render(false);
+    });
+    document.getElementById('firstHikeToggle').addEventListener('change', e=>{
+      state.isFirstHike = e.target.checked;
       render(false);
     });
     document.getElementById('startBtn').addEventListener('click', ()=>{
