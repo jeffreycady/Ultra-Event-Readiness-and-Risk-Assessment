@@ -83,6 +83,16 @@
   .phase-indicator strong{color:#F7F2E7;}
   .phase-indicator.muted{color:#a99b7d;}
 
+  .first-ultra-toggle{margin-top:18px;max-width:460px;}
+  .first-ultra-toggle label{
+    display:flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;color:#d9d2c0;cursor:pointer;line-height:1.4;
+  }
+  .first-ultra-toggle input[type=checkbox]{
+    width:18px;height:18px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;
+  }
+
   .checkpoint-list{
     margin-top:44px;
     display:grid;
@@ -573,6 +583,34 @@ const CATEGORIES = [
         {q:"Are you resisting the urge to add a 'confidence-boosting' hard effort or big vert day in these final weeks?",
          opts:["Yes — nothing new or hard planned before the event","Mostly, though I have one moderate effort planned","I have a big/hard session planned in the next week or two","I've already done a big hard effort very recently, close to the event"]}
       ]
+    },
+    firstUltraExtra:{
+      // Layered on top of whichever phase question set is already
+      // showing, only when the "This is my first ultra" toggle is on.
+      // Grounded in Jason Koop's "Learn, Train, Challenge, Optimize"
+      // four-year framework for new ultrarunners.
+      questions:[
+        {q:"How long have you been running consistently before considering this?",
+         opts:["More than a year of consistent training","6 months to a year","Less than 6 months","Just starting out"]},
+        {q:"Have you progressed through shorter distances first — 10K, half marathon, marathon — before aiming for your first ultra?",
+         opts:["Yes, I've built up through those distances","I've done a half marathon or marathon, but that's it","I've only done shorter races (5K/10K)","This would be my first real race of any distance"]},
+        {q:"Do you have a support system in place — training partners, family, friends, or a coach who get what you're taking on?",
+         opts:["Yes — real support from people who understand this","Some support, but I'm mostly on my own","My circle doesn't really get it yet","Haven't thought about this"]},
+        {q:"Do you have a specific race that genuinely speaks to you — one you're all in on, not just \"an ultra\" in the abstract?",
+         opts:["Yes — I have a specific race I'm fully committed to","I have one in mind, but not fully committed yet","I know I want to do an ultra, but haven't picked one","Nothing specific in mind yet"]},
+        {q:"How consistent has your weekly running actually been?",
+         opts:["Very consistent — 4+ days most weeks, minimal gaps","Fairly consistent — 3–4 days most weeks, some gaps","Inconsistent — sporadic, stop-and-start","Just getting started / not yet running regularly"]}
+      ],
+      remediationActions:[
+        {text:"Bank at least a year of consistent, patiently-built training before treating an ultra as the goal, not the stretch", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Race up through shorter distances first — a half marathon or marathon builds real race-day habits an ultra will demand", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Build your support system before race day — a training partner, family who understands the time commitment, or a coach", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Pick one specific race you're genuinely excited about and commit to it, rather than staying vague about \"doing an ultra someday\"", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"}
+      ],
+      resources:{
+        article:{title:"The New Ultramarathon Runner's Four Year Training Plan", source:"Jason Koop / CTS", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        video:{title:"Guide To Running Your First Ultramarathon", url:"https://www.youtube.com/watch?v=bo7QzAGNfdo"}
+      }
     }
   },
   {
@@ -710,7 +748,11 @@ const CATEGORIES = [
 ========================================================= */
 function getQuestions(ci){
   const cat = CATEGORIES[ci];
-  return cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+  const base = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+  if(state.isFirstUltra && cat.firstUltraExtra){
+    return [...base, ...cat.firstUltraExtra.questions];
+  }
+  return base;
 }
 function getTagline(ci){
   const cat = CATEGORIES[ci];
@@ -718,7 +760,11 @@ function getTagline(ci){
 }
 function getRemediation(ci){
   const cat = CATEGORIES[ci];
-  return cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
+  const base = cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
+  if(state.isFirstUltra && cat.firstUltraExtra){
+    return { summary: base.summary, actions: [...base.actions, ...cat.firstUltraExtra.remediationActions] };
+  }
+  return base;
 }
 function suggestPhase(dateStr){
   const d = daysUntil(dateStr);
@@ -872,6 +918,9 @@ const RESOURCES = {
 };
 function getResources(ci){
   const cat = CATEGORIES[ci];
+  if(state.isFirstUltra && cat.firstUltraExtra){
+    return cat.firstUltraExtra.resources;
+  }
   const r = RESOURCES[cat.id];
   return (r && r.build) ? r[state.phase] : r;
 }
@@ -887,7 +936,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.2';
+const QUESTIONNAIRE_VERSION = '1.3';
 
 /* =========================================================
    LICENSE
@@ -1453,6 +1502,7 @@ const state = {
   eventName:'',
   eventDate:'',
   phase:'taper', // 'build' (6–12 weeks out) | 'taper' (3 weeks out) — derived from eventDate
+  isFirstUltra:false,
   answers:null,
   compare:{
     beforeData:null, beforeError:null, beforeLoading:false,
@@ -1546,6 +1596,13 @@ function renderHero(){
       <div class="phase-field">
         <label>Training Phase</label>
         <div class="phase-indicator${state.eventDate ? '' : ' muted'}">${phaseStatusText()}</div>
+      </div>
+
+      <div class="first-ultra-toggle">
+        <label for="firstUltraToggle">
+          <input type="checkbox" id="firstUltraToggle" ${state.isFirstUltra ? 'checked' : ''}>
+          This is my first ultra — add a few extra questions on base-building and race choice
+        </label>
       </div>
 
       <div class="btn-row">
@@ -2099,6 +2156,10 @@ function attachEvents(){
     document.getElementById('eventDate').addEventListener('input', e=>{
       state.eventDate = e.target.value;
       state.phase = suggestPhase(state.eventDate) || 'taper';
+      render(false);
+    });
+    document.getElementById('firstUltraToggle').addEventListener('change', e=>{
+      state.isFirstUltra = e.target.checked;
       render(false);
     });
     document.getElementById('startBtn').addEventListener('click', ()=>{
