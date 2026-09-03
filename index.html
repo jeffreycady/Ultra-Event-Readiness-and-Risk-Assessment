@@ -83,14 +83,17 @@
   .phase-indicator strong{color:#F7F2E7;}
   .phase-indicator.muted{color:#a99b7d;}
 
-  .first-ultra-toggle{margin-top:18px;max-width:460px;display:flex;flex-direction:column;gap:10px;}
-  .first-ultra-toggle label{
+  .event-type-field{margin-top:18px;max-width:460px;display:flex;flex-direction:column;gap:9px;}
+  .event-type-legend{
+    font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#a99b7d;margin-bottom:2px;
+  }
+  .event-type-field label{
     display:flex;align-items:center;gap:10px;
     font-family:'IBM Plex Mono', monospace;
     font-size:12.5px;color:#d9d2c0;cursor:pointer;line-height:1.4;
   }
-  .first-ultra-toggle input[type=checkbox]{
-    width:18px;height:18px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;
+  .event-type-field input[type=radio]{
+    width:16px;height:16px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;
   }
 
   .checkpoint-list{
@@ -685,6 +688,86 @@ const CATEGORIES = [
         article:{title:"How to Train for a Thru-Hike: Getting Trail Ready", source:"ULA Equipment", url:"https://www.ula-equipment.com/2025/02/26/how-to-train-for-a-thru-hike/"},
         video:{title:"30 Tips for First Time Thru Hikers (After 17,000 miles)", url:"https://www.youtube.com/watch?v=4_cIy2gVBAg"}
       }
+    },
+    firstMountaineeringExtra:{
+      // Grounded in Steve House & Scott Johnston's "Training for the New
+      // Alpinism": aerobic base first, gradual/continuous progression,
+      // functional strength specific to the objective \u2014 plus the
+      // practical, safety-critical side (technical training, avalanche
+      // competency, partner readiness, turnaround discipline).
+      questions:[
+        {q:"Have you built a solid aerobic base first \u2014 mostly easy, sustainable effort \u2014 before adding intensity or objective-specific training?",
+         opts:["Yes, aerobic base first, then added specificity","Mostly, though I've mixed in intensity earlier than ideal","Not really \u2014 I've gone mostly straight to hard training","No structured base-building at all"]},
+        {q:"Has your training followed a gradual, continuous progression, rather than big jumps in volume or intensity that risk injury or overtraining?",
+         opts:["Yes, steady and gradual throughout","Mostly gradual, with a couple of bigger jumps","Several big jumps in volume or intensity","No real structure \u2014 sporadic and inconsistent"]},
+        {q:"Have you trained functional strength and muscular endurance specific to your objective \u2014 carrying a loaded pack for hours \u2014 not just general gym strength?",
+         opts:["Yes, loaded-pack specific training built in","Some, but mostly generic gym strength work","Little to none, mostly just cardio","Haven't trained strength specifically at all"]},
+        {q:"Have you taken a mountaineering course or gone with a qualified guide to learn core technical skills \u2014 ice axe, crampon use, self-arrest, rope or glacier travel \u2014 before attempting this unguided?",
+         opts:["Yes, formal course or guide training completed","Some instruction, but not comprehensive","Self-taught from videos/reading only","No technical training at all"]},
+        {q:"Is your planned objective appropriately scoped for a first attempt \u2014 a non-technical peak within your current skill level, not the hardest option available?",
+         opts:["Yes, deliberately chosen well within my skill level","Mostly, though it has some harder sections","It's fairly ambitious for a first attempt","Haven't really thought about how it matches my skill level"]},
+        {q:"If your route crosses avalanche terrain, do you have avalanche safety training (like AIARE Level 1) and real competency with a beacon, shovel, and probe?",
+         opts:["Yes, trained and genuinely competent with the gear","Some training, but rusty on the gear","Own the gear, but no formal training","No avalanche training, and route may cross avalanche terrain"]},
+        {q:"Do you have a competent partner or team with matching skills and experience for roped or technical sections?",
+         opts:["Yes, a partner/team with matching skills and experience","Partner is less experienced than me, or vice versa","Going with people I haven't climbed with before","Planning to go solo on terrain that really calls for a partner"]},
+        {q:"Do you have a clear, pre-decided turnaround plan and the discipline to use it, regardless of how close you are to the summit?",
+         opts:["Yes, specific turnaround criteria decided in advance","General idea, nothing specific","No real plan \u2014 I'll decide in the moment","I tend to push on regardless of warning signs"]},
+        {q:"Do you have wilderness first aid training (yours or a partner's), given how far this objective may be from professional help?",
+         opts:["Yes, WFA/WFR trained (me or my partner)","Basic first aid only, nothing wilderness-specific","No formal training at all","Haven't thought about this"]}
+      ],
+      remediationActions:[
+        {text:"Build your aerobic base first \u2014 roughly 85% of training volume should stay below your aerobic threshold, with intensity added only once that base is built", url:"https://uphillathlete.com/aerobic-training/"},
+        {text:"Progress gradually and continuously \u2014 big jumps in volume or intensity are the fastest route to injury or overtraining, not to fitness", url:"https://uphillathlete.com/product/training-for-the-new-alpinism-book/"},
+        {text:"Train muscular endurance specific to carrying a loaded pack for hours, not just raw gym strength \u2014 that's what actually gets taxed on the mountain", url:"https://uphillathlete.com/podcast/training-for-mountaineering-base-training/"},
+        {text:"Take a mountaineering course or hire a guide to learn ice axe, crampon, and rope skills before going unguided \u2014 these aren't skills to learn for the first time on your objective", url:"https://www.rei.com/learn/expert-advice/mountaineering-summit-adventures.html"},
+        {text:"Pick a non-technical objective well within your current skill level for a first attempt \u2014 save harder routes for once you've built real mountain experience", url:"https://www.internationalalpineguides.com/blog/2024/4/28/the-proper-steps-to-begin-the-sport-of-mountaineering"},
+        {text:"Get avalanche safety training (AIARE Level 1) and practice with your beacon, shovel, and probe until it's second nature, if your route crosses avalanche terrain", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"},
+        {text:"Line up a partner with matching skills for roped sections \u2014 technical terrain is a team sport, and a mismatched partner is its own risk factor", url:"https://www.redbull.com/us-en/beginner-guide-how-to-do-mountaineering"},
+        {text:"Decide your turnaround criteria before you leave, not on the mountain \u2014 the turnaround call is consistently cited as the hardest and most important decision in mountaineering", url:"https://globalsummitguide.com/complete-guide-essential-mountaineering-skills/"},
+        {text:"Get wilderness first aid training, or make sure someone on your team has it \u2014 you may be hours or days from professional help", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"}
+      ],
+      resources:{
+        article:{title:"How to Train for Alpinism: Building the Fitness for Long, Technical Mountain Days", source:"Uphill Athlete", url:"https://uphillathlete.com/alpinism/how-to-train-for-alpinism/"},
+        video:{title:"Training for Mountaineering Webinar with Steve House", url:"https://www.youtube.com/watch?v=V5TCSeYP6Wk"}
+      }
+    },
+    firstSkimoExtra:{
+      // Grounded in House, Johnston & Jornet's "Training for the Uphill
+      // Athlete": aerobic base first, structured weekly volume, recovery
+      // management \u2014 plus race-specific practicalities (gear, terrain,
+      // transitions, format) that pure training theory doesn't cover.
+      questions:[
+        {q:"Have you built a solid aerobic base through consistent training, before adding race-pace intensity?",
+         opts:["Yes, aerobic base first, then race-pace work added","Mostly, though intensity crept in early","Not really \u2014 mostly race-pace effort so far","No structured base-building at all"]},
+        {q:"Can your weekly training hours support what ski mountaineering racing actually demands \u2014 building toward several hours a week as your race approaches?",
+         opts:["Yes, realistically building toward peak-week hours","Close, but would need real adjustments","Well under what's needed, and no plan to close the gap","Haven't worked out what my race actually demands"]},
+        {q:"Are you a confident, competent skier on ungroomed, off-piste, and expert-level terrain \u2014 not just groomed runs \u2014 since race courses often go off-piste?",
+         opts:["Yes, fully comfortable on ungroomed/expert terrain","Reasonably comfortable, some terrain still challenges me","Mostly a groomed-run skier so far","Not confident off-piste at all"]},
+        {q:"Have you trained and practiced on your actual race gear \u2014 skis, boots, bindings \u2014 rather than planning to use it for the first time on race day?",
+         opts:["Yes, multiple sessions on my actual race gear","A little time on it, not much","Only tried it briefly, or not at all","Planning to use unfamiliar gear on race day"]},
+        {q:"Have you practiced your skin-to-ski transitions until they're fast and automatic?",
+         opts:["Yes, practiced repeatedly until automatic","A few practice runs, still a bit clumsy","Rarely practiced","Never practiced transitions at all"]},
+        {q:"Do you have a plan for managing fatigue and recovery if you're racing or training back-to-back, not just for a single event?",
+         opts:["Yes, recovery planned as deliberately as training","General idea, nothing specific","No real plan for managing fatigue","Haven't thought about this"]},
+        {q:"Do you have real competency with mandatory avalanche safety gear \u2014 beacon, shovel, probe \u2014 not just ownership of it?",
+         opts:["Yes, genuinely practiced and competent","Own the gear, but rusty on using it","Borrowed/rented gear, minimal practice","No real competency with this gear"]},
+        {q:"Do you understand the actual race format and course structure \u2014 transitions, mandatory gear checks, marked route \u2014 so race day isn't your first exposure to how it works?",
+         opts:["Yes, researched the format and course structure","General idea of what to expect","Not really, planning to figure it out on the day","No idea what the race format actually involves"]}
+      ],
+      remediationActions:[
+        {text:"Build your aerobic base first, the same principle behind all Uphill Athlete training \u2014 race-pace intensity only pays off once that foundation is there", url:"https://uphillathlete.com/aerobic-training/"},
+        {text:"Structured skimo plans generally run 6\u201310 hours/week at peak \u2014 make sure your schedule can actually support that before race day, not just in theory", url:"https://uphillathlete.com/training-plans/16-week-basic-skimo-racing-training-plan/"},
+        {text:"Get comfortable on ungroomed, off-piste, and expert terrain before race day \u2014 many courses intentionally leave the groomed runs", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
+        {text:"Train on your actual race gear beforehand \u2014 race skis and boots behave very differently from touring setups, and race day is the wrong time to find that out", url:"https://www.voile.com/blog/a-beginners-guide-to-skimo-racing/"},
+        {text:"Practice transitions \u2014 skins off, boots to ski mode \u2014 until they're automatic; fumbled transitions cost more time than most people expect", url:"http://www.skintrack.com/tips-tricks-advice/6-tips-to-get-ready-for-your-first-ski-mountaineering-race/"},
+        {text:"Plan your recovery as deliberately as your training, especially around back-to-back race weekends \u2014 fatigue management is part of the program, not an afterthought", url:"https://uphillathlete.com/product/training-for-the-uphill-athlete-book/"},
+        {text:"Practice with your beacon, shovel, and probe until you're genuinely competent, not just equipped \u2014 many races require this gear for a reason", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
+        {text:"Read up on the actual race format beforehand \u2014 transition zones, mandatory gear checks, how the course is marked \u2014 so none of it is a surprise on race morning", url:"https://www.microcosm-coaching.com/microblog/guide-to-ski-mountaineering-skimo-racing/"}
+      ],
+      resources:{
+        article:{title:"16-Week Basic Skimo Racing Training Plan", source:"Uphill Athlete", url:"https://uphillathlete.com/training-plans/16-week-basic-skimo-racing-training-plan/"},
+        video:{title:"How to Train for Skiing and Ski Mountaineering (Stomp It Pod, w/ Uphill Athlete)", url:"https://www.youtube.com/watch?v=yYsgm8jf2Rk"}
+      }
     }
   },
   {
@@ -820,12 +903,38 @@ const CATEGORIES = [
    sets depending on how far out the event is. Everything else
    is phase-agnostic.
 ========================================================= */
+const EVENT_TYPE_EXTRA_KEY = {
+  ultra:'firstUltraExtra', mountaineering:'firstMountaineeringExtra',
+  skimo:'firstSkimoExtra', hike:'firstHikeExtra'
+};
+const EVENT_TYPE_LABEL = {
+  ultra:'Since this is your first ultra',
+  mountaineering:'Since this is your first mountaineering objective',
+  skimo:'Since this is your first skimo race',
+  hike:'Since this is your first long hike'
+};
+const EVENT_TYPE_NAME = {
+  ultra:'Ultramarathon',
+  mountaineering:'Mountaineering',
+  skimo:'Ski Mountaineering (Skimo)',
+  hike:'Long-Distance Hike'
+};
+const EVENT_TYPE_FIRST_LABEL = {
+  ultra:'This is my first ultra',
+  mountaineering:'This is my first mountaineering objective',
+  skimo:'This is my first skimo race',
+  hike:'This is my first long-distance hike'
+};
+function currentExtra(cat){
+  if(!state.isFirstEvent) return null;
+  const key = EVENT_TYPE_EXTRA_KEY[state.eventType];
+  return key ? cat[key] : null;
+}
 function getQuestions(ci){
   const cat = CATEGORIES[ci];
-  let qs = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
-  if(state.isFirstUltra && cat.firstUltraExtra) qs = [...qs, ...cat.firstUltraExtra.questions];
-  if(state.isFirstHike && cat.firstHikeExtra) qs = [...qs, ...cat.firstHikeExtra.questions];
-  return qs;
+  const base = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+  const extra = currentExtra(cat);
+  return extra ? [...base, ...extra.questions] : base;
 }
 function getTagline(ci){
   const cat = CATEGORIES[ci];
@@ -834,10 +943,8 @@ function getTagline(ci){
 function getRemediation(ci){
   const cat = CATEGORIES[ci];
   const base = cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
-  let actions = base.actions;
-  if(state.isFirstUltra && cat.firstUltraExtra) actions = [...actions, ...cat.firstUltraExtra.remediationActions];
-  if(state.isFirstHike && cat.firstHikeExtra) actions = [...actions, ...cat.firstHikeExtra.remediationActions];
-  return { summary: base.summary, actions };
+  const extra = currentExtra(cat);
+  return extra ? { summary: base.summary, actions:[...base.actions, ...extra.remediationActions] } : base;
 }
 function suggestPhase(dateStr){
   const d = daysUntil(dateStr);
@@ -991,12 +1098,8 @@ const RESOURCES = {
 };
 function getResources(ci){
   const cat = CATEGORIES[ci];
-  if(state.isFirstHike && cat.firstHikeExtra){
-    return cat.firstHikeExtra.resources;
-  }
-  if(state.isFirstUltra && cat.firstUltraExtra){
-    return cat.firstUltraExtra.resources;
-  }
+  const extra = currentExtra(cat);
+  if(extra) return extra.resources;
   const r = RESOURCES[cat.id];
   return (r && r.build) ? r[state.phase] : r;
 }
@@ -1012,7 +1115,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.7';
+const QUESTIONNAIRE_VERSION = '2.0';
 
 /* =========================================================
    LICENSE
@@ -1245,10 +1348,8 @@ function generatePDF(){
     y += 8;
     if(c.questionsByPhase){
       doc.setFont('courier','normal'); doc.setFontSize(7.5); doc.setTextColor(PDF_COLORS.inkSoft);
-      const extraNotes = [];
-      if(state.isFirstUltra && c.firstUltraExtra) extraNotes.push('first-ultra questions');
-      if(state.isFirstHike && c.firstHikeExtra) extraNotes.push('first-hike questions');
-      const phaseNote = phaseCopy(state.phase).short + (extraNotes.length ? ' + ' + extraNotes.join(' + ') : '');
+      const extraActive = currentExtra(c);
+      const phaseNote = phaseCopy(state.phase).short + (extraActive ? ` + ${state.eventType}-specific questions` : '');
       doc.text(phaseNote, margin, y); y += 10;
     } else {
       y += 4;
@@ -1627,8 +1728,8 @@ const state = {
   eventName:'',
   eventDate:'',
   phase:'taper', // 'build' (6–12 weeks out) | 'taper' (3 weeks out) — derived from eventDate
-  isFirstUltra:false,
-  isFirstHike:false,
+  eventType:'ultra', // 'ultra' | 'mountaineering' | 'skimo' | 'hike' — which discipline this is
+  isFirstEvent:false, // separate from eventType — whether to layer in that discipline's first-timer questions
   answers:null,
   compare:{
     beforeData:null, beforeError:null, beforeLoading:false,
@@ -1726,14 +1827,30 @@ function renderHero(){
         <div class="phase-indicator${state.eventDate ? '' : ' muted'}">${phaseStatusText()}</div>
       </div>
 
-      <div class="first-ultra-toggle">
-        <label for="firstUltraToggle">
-          <input type="checkbox" id="firstUltraToggle" ${state.isFirstUltra ? 'checked' : ''}>
-          This is my first ultra — add a few extra questions on base-building and race choice
+      <div class="event-type-field">
+        <div class="event-type-legend mono">What kind of event is this?</div>
+        <label>
+          <input type="radio" name="eventType" value="ultra" ${state.eventType==='ultra' ? 'checked' : ''}>
+          Ultramarathon
         </label>
-        <label for="firstHikeToggle">
-          <input type="checkbox" id="firstHikeToggle" ${state.isFirstHike ? 'checked' : ''}>
-          This is my first long-distance hike — add a few extra questions on pack weight and trip planning
+        <label>
+          <input type="radio" name="eventType" value="mountaineering" ${state.eventType==='mountaineering' ? 'checked' : ''}>
+          Mountaineering
+        </label>
+        <label>
+          <input type="radio" name="eventType" value="skimo" ${state.eventType==='skimo' ? 'checked' : ''}>
+          Ski Mountaineering (Skimo)
+        </label>
+        <label>
+          <input type="radio" name="eventType" value="hike" ${state.eventType==='hike' ? 'checked' : ''}>
+          Long-Distance Hike
+        </label>
+      </div>
+
+      <div class="first-ultra-toggle">
+        <label for="firstEventToggle">
+          <input type="checkbox" id="firstEventToggle" ${state.isFirstEvent ? 'checked' : ''}>
+          ${EVENT_TYPE_FIRST_LABEL[state.eventType]} — add a few extra readiness questions
         </label>
       </div>
 
@@ -1791,10 +1908,9 @@ function renderStepper(){
 
   const dText = daysUntilText(state.eventDate);
   const baseLen = (cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions).length;
-  const ultraOn = state.isFirstUltra && cat.firstUltraExtra;
-  const hikeOn = state.isFirstHike && cat.firstHikeExtra;
-  const firstUltraSplit = ultraOn ? baseLen : -1;
-  const firstHikeSplit = hikeOn ? baseLen + (ultraOn ? cat.firstUltraExtra.questions.length : 0) : -1;
+  const extraActive = currentExtra(cat);
+  const extraSplit = extraActive ? baseLen : -1;
+  const extraLabel = EVENT_TYPE_LABEL[state.eventType];
   return `
   <section class="stepper-header">
     <div class="wrap">
@@ -1814,17 +1930,10 @@ function renderStepper(){
       <p class="cat-tagline">${tagline}</p>
 
       ${questions.map((q,qi)=>`
-        ${qi === firstUltraSplit ? `
+        ${qi === extraSplit ? `
           <div class="first-ultra-divider">
             <span class="line"></span>
-            <span class="label">Since this is your first ultra</span>
-            <span class="line"></span>
-          </div>
-        ` : ''}
-        ${qi === firstHikeSplit ? `
-          <div class="first-ultra-divider">
-            <span class="line"></span>
-            <span class="label">Since this is your first long hike</span>
+            <span class="label">${extraLabel}</span>
             <span class="line"></span>
           </div>
         ` : ''}
@@ -2309,12 +2418,14 @@ function attachEvents(){
       state.phase = suggestPhase(state.eventDate) || 'taper';
       render(false);
     });
-    document.getElementById('firstUltraToggle').addEventListener('change', e=>{
-      state.isFirstUltra = e.target.checked;
-      render(false);
+    document.querySelectorAll('input[name=eventType]').forEach(radio=>{
+      radio.addEventListener('change', e=>{
+        state.eventType = e.target.value;
+        render(false);
+      });
     });
-    document.getElementById('firstHikeToggle').addEventListener('change', e=>{
-      state.isFirstHike = e.target.checked;
+    document.getElementById('firstEventToggle').addEventListener('change', e=>{
+      state.isFirstEvent = e.target.checked;
       render(false);
     });
     document.getElementById('startBtn').addEventListener('click', ()=>{
