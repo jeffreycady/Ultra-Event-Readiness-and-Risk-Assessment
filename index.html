@@ -181,6 +181,19 @@
     color:var(--accent);
     margin-right:8px;
   }
+  .info-tag{
+    display:inline-block;
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:0.05em;
+    color:var(--ink-soft);
+    background:var(--paper-2);
+    border:1px solid var(--line-soft);
+    padding:3px 8px;
+    border-radius:20px;
+    margin-left:10px;
+    vertical-align:middle;
+  }
   .options{display:flex;flex-direction:column;gap:8px;}
   .opt{
     display:flex;
@@ -606,6 +619,7 @@ const CATEGORIES = [
         {q:"Can your training availability support the minimum weekly volume your target distance needs during peak training weeks — 6 hours/week for a 50K or 50-miler, or 9 hours/week for a 100K or 100-miler?",
          opts:["Yes — I can realistically hit that during peak training weeks","Close, but I'd need to make some real adjustments to get there","Not currently — my available time falls well short of that","I haven't worked out what my target distance actually requires"]},
         {q:"Have you progressed through shorter distances first — 10K, half marathon, marathon — before aiming for your first ultra?",
+         info:true,
          opts:["Yes, I've built up through those distances","I've done a half marathon or marathon, but that's it","I've only done shorter races (5K/10K)","This would be my first real race of any distance"]},
         {q:"Are you currently free of chronic or nagging injuries, and have you been building volume gradually rather than jumping straight to ultra-level training?",
          opts:["Yes — healthy, and I've increased volume gradually","One minor niggle I'm managing, nothing serious","A recurring issue that flares up under higher volume","An active injury, or I've been ramping volume up fast"]},
@@ -623,7 +637,6 @@ const CATEGORIES = [
       remediationActions:[
         {text:"Bank at least a year of consistent, patiently-built training before treating an ultra as the goal, not the stretch", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
         {text:"Know your target distance's minimum weekly hours during peak training \u2014 6 hrs/week for a 50K or 50-miler, 9 hrs/week for a 100K or 100-miler \u2014 and build your schedule to actually hit it", url:"https://trainright.com/ultramarathon-training-time-required/"},
-        {text:"Race up through shorter distances first — a half marathon or marathon builds real race-day habits an ultra will demand", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
         {text:"Increase weekly volume gradually and don't skip cutback weeks — big, fast jumps in mileage are the most common way new ultrarunners get hurt", url:"https://run.outsideonline.com/training/getting-started/myth-of-the-10-percent-rule/"},
         {text:"Map out realistically where the training time will come from before you commit — work, family, and sleep don't pause for a training block", url:"https://ultrarunning.com/featured/training-for-an-ultra-on-a-busy-schedule/"},
         {text:"Build your support system before race day — a training partner, family who understands the time commitment, or a coach", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
@@ -959,7 +972,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.5';
+const QUESTIONNAIRE_VERSION = '1.6';
 
 /* =========================================================
    LICENSE
@@ -1204,9 +1217,9 @@ function generatePDF(){
       const isNA = hasNA && idx === q.naIndex;
       const max = hasNA ? q.naIndex - 1 : q.opts.length - 1;
       const fraction = isNA ? 0 : (max > 0 ? idx/max : 0);
-      const answerColor = pdfTierColor(Math.round(fraction*100));
+      const answerColor = q.info ? PDF_COLORS.inkSoft : pdfTierColor(Math.round(fraction*100));
 
-      const qLines = doc.splitTextToSize(`${qi+1}. ${q.q}`, contentW-10);
+      const qLines = doc.splitTextToSize(`${qi+1}. ${q.q}${q.info ? '  [for your coach \u2014 not scored]' : ''}`, contentW-10);
       ensureSpace(qLines.length*10 + 14);
       doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.ink);
       qLines.forEach((l,li)=> doc.text(l, margin+8, y+li*10));
@@ -1616,15 +1629,17 @@ function daysUntilText(dateStr){
 function categoryScore(ci){
   const qs = getQuestions(ci);
   const ans = state.answers[ci];
-  let total = 0;
+  let total = 0, count = 0;
   ans.forEach((idx,qi)=>{
     const q = qs[qi];
+    if(q.info) return; // informational-only — shown to the athlete/coach, but doesn't move the risk score
     const hasNA = q.naIndex !== undefined;
     const isNA = hasNA && idx === q.naIndex;
     const max = hasNA ? q.naIndex - 1 : q.opts.length - 1;
     total += isNA ? 0 : idx / max;
+    count++;
   });
-  return Math.round((total/ans.length)*100);
+  return count ? Math.round((total/count)*100) : 0;
 }
 function tierOf(score){
   if(score < 34) return {label:'Low', color:'var(--low)', bg:'var(--low-bg)'};
@@ -1757,7 +1772,7 @@ function renderStepper(){
           </div>
         ` : ''}
         <div class="question">
-          <p class="q"><span class="q-num mono">${String(qi+1).padStart(2,'0')}</span>${escapeHtml(q.q)}</p>
+          <p class="q"><span class="q-num mono">${String(qi+1).padStart(2,'0')}</span>${escapeHtml(q.q)}${q.info ? ' <span class="info-tag mono">FOR YOUR COACH \u2014 DOESN\u2019T AFFECT YOUR SCORE</span>' : ''}</p>
           <div class="options">
             ${q.opts.map((opt,oi)=>`
               <label class="opt ${state.answers[ci][qi]===oi?'selected':''}">
