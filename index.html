@@ -598,14 +598,23 @@ const CATEGORIES = [
       // Layered on top of whichever phase question set is already
       // showing, only when the "This is my first ultra" toggle is on.
       // Grounded in Jason Koop's "Learn, Train, Challenge, Optimize"
-      // four-year framework for new ultrarunners.
+      // four-year framework for new ultrarunners, plus a few other
+      // well-sourced first-timer readiness factors.
       questions:[
         {q:"How long have you been running consistently before considering this?",
          opts:["More than a year of consistent training","6 months to a year","Less than 6 months","Just starting out"]},
+        {q:"Are you comfortable running in the 25–30+ miles a week range, or built up to something close to it?",
+         opts:["Yes, that's a normal week for me already","I'm close, and building toward it","I'm well under that and haven't started building up","I have no idea what my weekly mileage even is"]},
         {q:"Have you progressed through shorter distances first — 10K, half marathon, marathon — before aiming for your first ultra?",
          opts:["Yes, I've built up through those distances","I've done a half marathon or marathon, but that's it","I've only done shorter races (5K/10K)","This would be my first real race of any distance"]},
+        {q:"Are you currently free of chronic or nagging injuries, and have you been building volume gradually rather than jumping straight to ultra-level training?",
+         opts:["Yes — healthy, and I've increased volume gradually","One minor niggle I'm managing, nothing serious","A recurring issue that flares up under higher volume","An active injury, or I've been ramping volume up fast"]},
+        {q:"Do you realistically have the time this will take — several hours a week, growing as training builds — without it colliding with work, family, or other major commitments?",
+         opts:["Yes, I've thought this through and the time is there","Mostly, though it'll be tight some weeks","Not really — I haven't figured out where this fits","Haven't thought about the time commitment at all"]},
         {q:"Do you have a support system in place — training partners, family, friends, or a coach who get what you're taking on?",
          opts:["Yes — real support from people who understand this","Some support, but I'm mostly on my own","My circle doesn't really get it yet","Haven't thought about this"]},
+        {q:"Do you understand that walking — especially uphill — is a normal, smart part of ultra racing, not a sign of failure?",
+         opts:["Yes, and I already practice a run/walk strategy in training","I understand it intellectually but haven't practiced it","Not really — I assume I should be running the whole way","Never thought about it"]},
         {q:"Do you have a specific race that genuinely speaks to you — one you're all in on, not just \"an ultra\" in the abstract?",
          opts:["Yes — I have a specific race I'm fully committed to","I have one in mind, but not fully committed yet","I know I want to do an ultra, but haven't picked one","Nothing specific in mind yet"]},
         {q:"How consistent has your weekly running actually been?",
@@ -613,8 +622,12 @@ const CATEGORIES = [
       ],
       remediationActions:[
         {text:"Bank at least a year of consistent, patiently-built training before treating an ultra as the goal, not the stretch", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Build up to a comfortable 25–30+ mile week before your ultra-specific training block even starts", url:"https://www.injinji.com/blog/how-to-train-for-your-first-ultra-choosing-a-race-training-plans-and-essential-gear"},
         {text:"Race up through shorter distances first — a half marathon or marathon builds real race-day habits an ultra will demand", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Increase weekly volume gradually and don't skip cutback weeks — big, fast jumps in mileage are the most common way new ultrarunners get hurt", url:"https://run.outsideonline.com/training/getting-started/myth-of-the-10-percent-rule/"},
+        {text:"Map out realistically where the training time will come from before you commit — work, family, and sleep don't pause for a training block", url:"https://ultrarunning.com/featured/training-for-an-ultra-on-a-busy-schedule/"},
         {text:"Build your support system before race day — a training partner, family who understands the time commitment, or a coach", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"},
+        {text:"Practice a run/walk strategy in training now — walking hills isn't failure, it's how almost every ultrarunner actually finishes", url:"https://relentlessforwardcommotion.com/run-walk-strategies-for-ultramarathon-why-they-work-how-to-execute-them/"},
         {text:"Pick one specific race you're genuinely excited about and commit to it, rather than staying vague about \"doing an ultra someday\"", url:"https://trainright.com/new-ultramarathon-runner-four-year-training-plan/"}
       ],
       resources:{
@@ -946,7 +959,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '1.3';
+const QUESTIONNAIRE_VERSION = '1.4';
 
 /* =========================================================
    LICENSE
