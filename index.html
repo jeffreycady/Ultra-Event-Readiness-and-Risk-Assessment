@@ -294,12 +294,12 @@
 
   .info-btn{
     width:22px;height:22px;border-radius:50%;
-    border:1.5px solid var(--ink-soft);background:transparent;color:var(--ink-soft);
-    font-family:'IBM Plex Mono';font-size:12px;line-height:1;cursor:pointer;
+    border:1.5px solid var(--accent);background:transparent;color:var(--accent);
+    font-family:'IBM Plex Mono';font-size:12px;font-weight:600;line-height:1;cursor:pointer;
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
     margin-left:auto;
   }
-  .info-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .info-btn:hover{background:var(--accent);color:#fff;}
   .resource-link{
     display:flex;align-items:flex-start;gap:12px;
     padding:14px 0;border-top:1px solid var(--line-soft);
@@ -323,10 +323,13 @@
   .check-item label{cursor:pointer;flex:1;}
   .check-item.done label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line);}
   .item-link{
-    flex-shrink:0;margin-left:auto;padding-left:8px;
-    font-size:13px;color:var(--ink-soft);text-decoration:none;line-height:1.4;
+    flex-shrink:0;margin-left:auto;padding-left:10px;
+    display:inline-flex;align-items:center;gap:3px;white-space:nowrap;
+    font-size:12.5px;font-family:'IBM Plex Mono', monospace;font-weight:500;letter-spacing:0.01em;
+    color:var(--accent);text-decoration:underline;text-decoration-color:rgba(203,90,40,0.45);
+    text-underline-offset:2px;line-height:1.4;
   }
-  .item-link:hover{color:var(--accent);}
+  .item-link:hover{text-decoration-color:var(--accent);}
 
   .on-track-strip{
     background:var(--paper-2);border:1px solid var(--line-soft);
@@ -2234,7 +2237,7 @@ function renderResults(){
                 <li class="check-item">
                   <input type="checkbox" id="chk_${idx}_${ai}">
                   <label for="chk_${idx}_${ai}">${escapeHtml(a.text)}</label>
-                  ${a.url ? `<a class="item-link" href="${a.url}" target="_blank" rel="noopener" aria-label="Starting place for: ${escapeHtml(a.text)}" title="Starting place">\u2197</a>` : ''}
+                  ${a.url ? `<a class="item-link" href="${a.url}" target="_blank" rel="noopener" aria-label="Starting place for: ${escapeHtml(a.text)}">Guide \u2197</a>` : ''}
                 </li>
               `).join('')}
             </ul>
