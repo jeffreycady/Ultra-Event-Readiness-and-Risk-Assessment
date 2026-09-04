@@ -501,30 +501,113 @@ const CATEGORIES = [
   },
   {
     id:'gear', name:'Gear & Tools', short:'Gear',
-    tagline:"Poles, headlamp, pack — the gear you're trusting to get you through, tested or not.",
-    remediation:{
-      summary:"Test everything that matters before it matters.",
-      actions:[
-        {text:"Take poles, headlamp, and pack/vest on long training days before race day", url:"https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/"},
-        {text:"Break in footwear on terrain similar to the route", url:"https://www.ultrapedestrian.com/how-to-break-in-trail-running-shoes/"},
-        {text:"Pack backups for anything battery-powered or easy to lose", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"},
-        {text:"If overnight, test your full shelter/sleep system in conditions close to what's expected", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"}
-      ]
+    tagline:"The gear you're trusting to get you through, tested or not.",
+    taglineByEventType:{
+      ultra:"Poles, headlamp, pack — the gear you're trusting to get you through, tested or not.",
+      hike:"Poles, headlamp, pack — the gear you're trusting to get you through, tested or not.",
+      mountaineering:"Ice axe, crampons, rope, harness — technical gear only helps if you actually know how to use it.",
+      skimo:"Skis, boots, bindings, skins, avalanche gear — your actual race setup, not a general touring kit."
     },
-    questions:[
-      {q:"Have you reviewed and packed your event's mandatory or recommended gear list?",
-       opts:["Yes, fully — everything is checked off and tested","Mostly — a couple items still need attention","I've glanced at it but haven't packed","I haven't checked the gear list"]},
-      {q:"Have you used your key gear (trekking poles, headlamp, hydration vest, pack, or backpack) extensively before now?",
-       opts:["Yes — all of it, on long training days","Most of it","Only briefly, or just one or two items","No — this is new gear I haven't tested"]},
-      {q:"Are your shoes or boots broken in and matched to the terrain?",
-       opts:["Yes, well broken in and terrain-appropriate","Broken in, but not ideal for this terrain","Fairly new, limited miles on them","Brand new or untested for this distance/terrain"]},
-      {q:"Do you have backup/contingency gear (spare batteries, extra layers, backup navigation)?",
-       opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
-      {q:"If your event involves moving after dark, how comfortable are you on this terrain with a headlamp?",
-       opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"], naIndex:4},
-      {q:"If your event spans multiple days or nights, is your shelter and sleep system (tent, bag or quilt, pad) tested and adequate for expected conditions?",
-       opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"], naIndex:4}
-    ]
+    remediationByEventType:{
+      ultra:{
+        summary:"Test everything that matters before it matters.",
+        actions:[
+          {text:"Take poles, headlamp, and pack/vest on long training days before race day", url:"https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/"},
+          {text:"Break in footwear on terrain similar to the route", url:"https://www.ultrapedestrian.com/how-to-break-in-trail-running-shoes/"},
+          {text:"Pack backups for anything battery-powered or easy to lose", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"},
+          {text:"If overnight, test your full shelter/sleep system in conditions close to what's expected", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"}
+        ]
+      },
+      hike:{
+        summary:"Test everything that matters before it matters.",
+        actions:[
+          {text:"Take poles, headlamp, and pack/vest on long training days before race day", url:"https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/"},
+          {text:"Break in footwear on terrain similar to the route", url:"https://www.ultrapedestrian.com/how-to-break-in-trail-running-shoes/"},
+          {text:"Pack backups for anything battery-powered or easy to lose", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"},
+          {text:"If overnight, test your full shelter/sleep system in conditions close to what's expected", url:"https://trainright.com/the-complete-ultramarathon-checklist-what-to-pack-for-race-day/"}
+        ]
+      },
+      mountaineering:{
+        summary:"Technical gear only helps if you actually know how to use it \u2014 test everything before it matters.",
+        actions:[
+          {text:"Match your technical gear \u2014 harness, rope, protection, ice axe, crampons \u2014 to your route's actual demands, not a generic list", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"},
+          {text:"Practice ice axe self-arrest, crampon technique, and rope systems until they're second nature, not just something you own", url:"https://www.rei.com/learn/expert-advice/how-to-use-crampons.html"},
+          {text:"Fit-test your crampons on your actual mountaineering boots before the trip \u2014 a poor fit or heel lift causes real problems on technical terrain", url:"https://www.alpineascents.com/blog/gear/how-to-fit-crampons/"},
+          {text:"Pack backups for critical gear \u2014 headlamp batteries, a basic repair kit, extra layers", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"},
+          {text:"Test your full layering system in conditions as close to your objective's as you can get beforehand", url:"https://uphillathlete.com/alpinism/how-to-train-for-alpinism/"},
+          {text:"If your route crosses glaciated terrain, carry a crevasse rescue kit and practice the rescue systems before you need them", url:"https://www.rei.com/learn/expert-advice/crevasse-rescue-skills.html"}
+        ]
+      },
+      skimo:{
+        summary:"Race gear behaves differently from touring gear \u2014 test everything on your actual setup before race day.",
+        actions:[
+          {text:"Review your race's mandatory/recommended gear list \u2014 transceiver, shovel, probe, helmet \u2014 well before race day", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
+          {text:"Train and race on your actual race setup \u2014 skis, boots, bindings, skins \u2014 not a general touring kit you've never really tested", url:"https://www.voile.com/blog/a-beginners-guide-to-skimo-racing/"},
+          {text:"Fit-test your race boots in both walk mode and ski mode before race day, not for the first time at the start line", url:"https://www.voile.com/blog/a-beginners-guide-to-skimo-racing/"},
+          {text:"Pack backups \u2014 extra skin glue or straps, a spare pole basket, layers for changing conditions", url:"http://www.skintrack.com/tips-tricks-advice/6-tips-to-get-ready-for-your-first-ski-mountaineering-race/"},
+          {text:"Test your layering system across the full range \u2014 you'll run hot on the uphill and cold fast on the descent", url:"https://uphillathlete.com/training-plans/16-week-basic-skimo-racing-training-plan/"},
+          {text:"Practice with your beacon, shovel, and probe until you're genuinely competent, not just equipped", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"}
+        ]
+      }
+    },
+    questionsByEventType:{
+      ultra:[
+        {q:"Have you reviewed and packed your event's mandatory or recommended gear list?",
+         opts:["Yes, fully — everything is checked off and tested","Mostly — a couple items still need attention","I've glanced at it but haven't packed","I haven't checked the gear list"]},
+        {q:"Have you used your key gear (trekking poles, headlamp, hydration vest, pack, or backpack) extensively before now?",
+         opts:["Yes — all of it, on long training days","Most of it","Only briefly, or just one or two items","No — this is new gear I haven't tested"]},
+        {q:"Are your shoes or boots broken in and matched to the terrain?",
+         opts:["Yes, well broken in and terrain-appropriate","Broken in, but not ideal for this terrain","Fairly new, limited miles on them","Brand new or untested for this distance/terrain"]},
+        {q:"Do you have backup/contingency gear (spare batteries, extra layers, backup navigation)?",
+         opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
+        {q:"If your event involves moving after dark, how comfortable are you on this terrain with a headlamp?",
+         opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"], naIndex:4},
+        {q:"If your event spans multiple days or nights, is your shelter and sleep system (tent, bag or quilt, pad) tested and adequate for expected conditions?",
+         opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"], naIndex:4}
+      ],
+      hike:[
+        {q:"Have you reviewed and packed your event's mandatory or recommended gear list?",
+         opts:["Yes, fully — everything is checked off and tested","Mostly — a couple items still need attention","I've glanced at it but haven't packed","I haven't checked the gear list"]},
+        {q:"Have you used your key gear (trekking poles, headlamp, hydration vest, pack, or backpack) extensively before now?",
+         opts:["Yes — all of it, on long training days","Most of it","Only briefly, or just one or two items","No — this is new gear I haven't tested"]},
+        {q:"Are your shoes or boots broken in and matched to the terrain?",
+         opts:["Yes, well broken in and terrain-appropriate","Broken in, but not ideal for this terrain","Fairly new, limited miles on them","Brand new or untested for this distance/terrain"]},
+        {q:"Do you have backup/contingency gear (spare batteries, extra layers, backup navigation)?",
+         opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
+        {q:"If your event involves moving after dark, how comfortable are you on this terrain with a headlamp?",
+         opts:["Very comfortable — extensive night training","Comfortable, some night practice","Not tested much","Not tested at all, and it's likely I'll be out after dark","Not applicable — my event won't require moving after dark"], naIndex:4},
+        {q:"If your event spans multiple days or nights, is your shelter and sleep system (tent, bag or quilt, pad) tested and adequate for expected conditions?",
+         opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","No shelter/sleep system sorted yet, and I'll need one","Not applicable — my event is single-day with no overnight stops"], naIndex:4}
+      ],
+      mountaineering:[
+        {q:"Have you reviewed and packed your objective's required technical gear \u2014 harness, rope, protection, ice axe, crampons \u2014 matched to the route's actual demands?",
+         opts:["Yes, fully — everything is checked, tested, and matched to the route","Mostly — a couple items still need attention","I've glanced at the list but haven't packed","I haven't worked out what technical gear this route requires"]},
+        {q:"Are you genuinely competent with your technical gear \u2014 ice axe self-arrest, crampon technique, rope systems \u2014 not just carrying it?",
+         opts:["Yes — practiced and confident with all of it","Comfortable with most of it","Only briefly practiced, or just one or two skills","No — this is gear I haven't practiced with"]},
+        {q:"Are your mountaineering boots broken in and properly fitted to your crampons (no heel lift, secure fit)?",
+         opts:["Yes, well broken in and crampons fit perfectly","Broken in, but crampon fit hasn't been tested","Fairly new, limited use","Brand new or untested with crampons"]},
+        {q:"Do you have backup/contingency gear (headlamp batteries, a repair kit, extra layers) for critical gear failures?",
+         opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
+        {q:"Is your layering system tested for the actual wind, cold, and precipitation you'll face at this objective's elevation?",
+         opts:["Yes, tested in similar conditions","Tested, but not in conditions this extreme","Untested, or borrowed/brand-new gear","Not sorted yet"]},
+        {q:"If your route involves glacier travel or crevasse hazard, do you have crevasse rescue gear and know how to use it?",
+         opts:["Yes, gear packed and I'm practiced with the systems","Gear packed, but rescue systems are rusty","Gear packed, but I don't really know the systems","No crevasse rescue plan despite the hazard","Not applicable — no glacier travel or crevasse hazard on this route"], naIndex:4}
+      ],
+      skimo:[
+        {q:"Have you reviewed and packed your race's mandatory or recommended gear list (transceiver, shovel, probe, helmet, etc.)?",
+         opts:["Yes, fully — everything is checked off and tested","Mostly — a couple items still need attention","I've glanced at it but haven't packed","I haven't checked the gear list"]},
+        {q:"Are you genuinely comfortable and practiced on your actual race setup \u2014 skis, boots, bindings, skins \u2014 not just a general touring setup?",
+         opts:["Yes — trained extensively on my actual race gear","Mostly, with a few sessions on race gear","Only briefly tested my race gear","No — planning to use it for the first time on race day"]},
+        {q:"Are your race boots properly fitted for both the uphill (walk mode) and downhill (ski mode) demands?",
+         opts:["Yes, dialed in for both modes","Good in one mode, untested in the other","Fairly new, limited testing","Brand new or untested"]},
+        {q:"Do you have backup/contingency gear (extra skin glue or straps, a spare pole basket, layers for changing conditions)?",
+         opts:["Yes, fully stocked and packed","Some backups packed","Minimal backups","None"]},
+        {q:"Is your layering system tested for the temperature swings between uphill effort and downhill descent?",
+         opts:["Yes, tested and dialed in","Tested, but not across the full range","Untested, or borrowed/brand-new gear","Not sorted yet"]},
+        {q:"Do you know how to use your avalanche safety gear (transceiver, shovel, probe) competently, not just carry it?",
+         opts:["Yes — practiced companion rescue scenarios","Comfortable with the basics","Own it, but haven't really practiced","No real competency with this gear"]}
+      ]
+    }
   },
   {
     id:'nutrition', name:'Nutrition & Hydration', short:'Nutrition',
@@ -713,7 +796,9 @@ const CATEGORIES = [
         {q:"Do you have a clear, pre-decided turnaround plan and the discipline to use it, regardless of how close you are to the summit?",
          opts:["Yes, specific turnaround criteria decided in advance","General idea, nothing specific","No real plan \u2014 I'll decide in the moment","I tend to push on regardless of warning signs"]},
         {q:"Do you have wilderness first aid training (yours or a partner's), given how far this objective may be from professional help?",
-         opts:["Yes, WFA/WFR trained (me or my partner)","Basic first aid only, nothing wilderness-specific","No formal training at all","Haven't thought about this"]}
+         opts:["Yes, WFA/WFR trained (me or my partner)","Basic first aid only, nothing wilderness-specific","No formal training at all","Haven't thought about this"]},
+        {q:"Do you know how to read mountain weather \u2014 both pre-trip forecasts and in-field signs like cloud buildup, wind shifts, and pressure changes \u2014 well enough to make a real go/no-go call?",
+         opts:["Yes \u2014 I check detailed forecasts beforehand and can read field signs to know when to turn back","I check forecasts beforehand, but wouldn't catch changing conditions in the field","Some general weather awareness, but nothing specific to this route or season","No real weather knowledge beyond a basic app forecast"]}
       ],
       remediationActions:[
         {text:"Build your aerobic base first \u2014 roughly 85% of training volume should stay below your aerobic threshold, with intensity added only once that base is built", url:"https://uphillathlete.com/aerobic-training/"},
@@ -724,7 +809,8 @@ const CATEGORIES = [
         {text:"Get avalanche safety training (AIARE Level 1) and practice with your beacon, shovel, and probe until it's second nature, if your route crosses avalanche terrain", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"},
         {text:"Line up a partner with matching skills for roped sections \u2014 technical terrain is a team sport, and a mismatched partner is its own risk factor", url:"https://www.redbull.com/us-en/beginner-guide-how-to-do-mountaineering"},
         {text:"Decide your turnaround criteria before you leave, not on the mountain \u2014 the turnaround call is consistently cited as the hardest and most important decision in mountaineering", url:"https://globalsummitguide.com/complete-guide-essential-mountaineering-skills/"},
-        {text:"Get wilderness first aid training, or make sure someone on your team has it \u2014 you may be hours or days from professional help", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"}
+        {text:"Get wilderness first aid training, or make sure someone on your team has it \u2014 you may be hours or days from professional help", url:"https://aukcliff.com/blogs/news/beginner-mountaineering-guide"},
+        {text:"Learn to read mountain weather \u2014 cloud buildup, wind shifts, pressure changes \u2014 so you can make a real go/no-go call instead of just hoping the forecast holds", url:"https://www.wta.org/go-outside/trail-smarts/how-to/what-can-clouds-tell-you-while-hiking"}
       ],
       resources:{
         article:{title:"How to Train for Alpinism: Building the Fitness for Long, Technical Mountain Days", source:"Uphill Athlete", url:"https://uphillathlete.com/alpinism/how-to-train-for-alpinism/"},
@@ -752,7 +838,9 @@ const CATEGORIES = [
         {q:"Do you have real competency with mandatory avalanche safety gear \u2014 beacon, shovel, probe \u2014 not just ownership of it?",
          opts:["Yes, genuinely practiced and competent","Own the gear, but rusty on using it","Borrowed/rented gear, minimal practice","No real competency with this gear"]},
         {q:"Do you understand the actual race format and course structure \u2014 transitions, mandatory gear checks, marked route \u2014 so race day isn't your first exposure to how it works?",
-         opts:["Yes, researched the format and course structure","General idea of what to expect","Not really, planning to figure it out on the day","No idea what the race format actually involves"]}
+         opts:["Yes, researched the format and course structure","General idea of what to expect","Not really, planning to figure it out on the day","No idea what the race format actually involves"]},
+        {q:"Do you know how to read mountain weather signs \u2014 cloud buildup, wind shifts, temperature changes \u2014 well enough to make good calls about training days and backcountry conditions?",
+         opts:["Yes \u2014 I actively read forecasts and field signs to inform my decisions","I check forecasts, but don't have strong field-reading skills","Some general awareness, but not specific to how weather affects snow and visibility","No real weather knowledge beyond a basic app forecast"]}
       ],
       remediationActions:[
         {text:"Build your aerobic base first, the same principle behind all Uphill Athlete training \u2014 race-pace intensity only pays off once that foundation is there", url:"https://uphillathlete.com/aerobic-training/"},
@@ -762,7 +850,8 @@ const CATEGORIES = [
         {text:"Practice transitions \u2014 skins off, boots to ski mode \u2014 until they're automatic; fumbled transitions cost more time than most people expect", url:"http://www.skintrack.com/tips-tricks-advice/6-tips-to-get-ready-for-your-first-ski-mountaineering-race/"},
         {text:"Plan your recovery as deliberately as your training, especially around back-to-back race weekends \u2014 fatigue management is part of the program, not an afterthought", url:"https://uphillathlete.com/product/training-for-the-uphill-athlete-book/"},
         {text:"Practice with your beacon, shovel, and probe until you're genuinely competent, not just equipped \u2014 many races require this gear for a reason", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
-        {text:"Read up on the actual race format beforehand \u2014 transition zones, mandatory gear checks, how the course is marked \u2014 so none of it is a surprise on race morning", url:"https://www.microcosm-coaching.com/microblog/guide-to-ski-mountaineering-skimo-racing/"}
+        {text:"Read up on the actual race format beforehand \u2014 transition zones, mandatory gear checks, how the course is marked \u2014 so none of it is a surprise on race morning", url:"https://www.microcosm-coaching.com/microblog/guide-to-ski-mountaineering-skimo-racing/"},
+        {text:"Learn to read mountain weather signs \u2014 cloud buildup, wind shifts, temperature swings \u2014 that affect snow stability and visibility on training days", url:"https://www.wta.org/go-outside/trail-smarts/how-to/what-can-clouds-tell-you-while-hiking"}
       ],
       resources:{
         article:{title:"16-Week Basic Skimo Racing Training Plan", source:"Uphill Athlete", url:"https://uphillathlete.com/training-plans/16-week-basic-skimo-racing-training-plan/"},
@@ -932,17 +1021,22 @@ function currentExtra(cat){
 }
 function getQuestions(ci){
   const cat = CATEGORIES[ci];
-  const base = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
+  let base;
+  if(cat.questionsByEventType) base = cat.questionsByEventType[state.eventType] || cat.questionsByEventType.ultra;
+  else base = cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions;
   const extra = currentExtra(cat);
   return extra ? [...base, ...extra.questions] : base;
 }
 function getTagline(ci){
   const cat = CATEGORIES[ci];
+  if(cat.taglineByEventType) return cat.taglineByEventType[state.eventType] || cat.taglineByEventType.ultra;
   return cat.taglineByPhase ? cat.taglineByPhase[state.phase] : cat.tagline;
 }
 function getRemediation(ci){
   const cat = CATEGORIES[ci];
-  const base = cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
+  let base;
+  if(cat.remediationByEventType) base = cat.remediationByEventType[state.eventType] || cat.remediationByEventType.ultra;
+  else base = cat.remediationByPhase ? cat.remediationByPhase[state.phase] : cat.remediation;
   const extra = currentExtra(cat);
   return extra ? { summary: base.summary, actions:[...base.actions, ...extra.remediationActions] } : base;
 }
@@ -1058,8 +1152,22 @@ const RESOURCES = {
     video:{title:'Mountaineering 101: High Altitude & Acclimatization', url:'https://www.youtube.com/watch?v=T_DLqHYafko'}
   },
   gear:{
-    article:{title:'4 Running Pole Techniques Trail and Ultrarunners Should Master', source:'Jason Koop / CTS', url:'https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/'},
-    video:{title:'How to Use Poles in Trail Running — The Ultimate Guide', url:'https://www.youtube.com/watch?v=ljr5WltXKnM'}
+    ultra:{
+      article:{title:'4 Running Pole Techniques Trail and Ultrarunners Should Master', source:'Jason Koop / CTS', url:'https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/'},
+      video:{title:'How to Use Poles in Trail Running — The Ultimate Guide', url:'https://www.youtube.com/watch?v=ljr5WltXKnM'}
+    },
+    hike:{
+      article:{title:'4 Running Pole Techniques Trail and Ultrarunners Should Master', source:'Jason Koop / CTS', url:'https://trainright.com/4-running-pole-techniques-trail-and-ultrarunners-should-master/'},
+      video:{title:'How to Use Poles in Trail Running — The Ultimate Guide', url:'https://www.youtube.com/watch?v=ljr5WltXKnM'}
+    },
+    mountaineering:{
+      article:{title:'How to Use an Ice Axe for Mountaineering', source:'REI Expert Advice', url:'https://www.rei.com/learn/expert-advice/how-to-use-an-ice-axe-for-mountaineering.html'},
+      video:{title:'Ice Axe Arrest / Self Arrest (Glenmore Lodge)', url:'https://www.youtube.com/watch?v=94QFImjdEAo'}
+    },
+    skimo:{
+      article:{title:"A Beginner's Guide to Skimo Racing", source:'Voile', url:'https://www.voile.com/blog/a-beginners-guide-to-skimo-racing/'},
+      video:{title:'Fast Transition from Skiing to Skinning (Mike Foote / Uphill Athlete)', url:'https://www.youtube.com/watch?v=DIfaLT6MW8E'}
+    }
   },
   nutrition:{
     article:{title:'Fueling for an Ultramarathon: A Complete Guide to Race Day Nutrition', source:'Relentless Forward Commotion', url:'https://relentlessforwardcommotion.com/fueling-for-an-ultramarathon-a-complete-guide-to-race-day-nutrition/'},
@@ -1101,7 +1209,9 @@ function getResources(ci){
   const extra = currentExtra(cat);
   if(extra) return extra.resources;
   const r = RESOURCES[cat.id];
-  return (r && r.build) ? r[state.phase] : r;
+  if(!r) return r;
+  if(cat.questionsByEventType) return r[state.eventType] || r.ultra;
+  return r.build ? r[state.phase] : r;
 }
 
 /* =========================================================
@@ -1115,7 +1225,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '2.0';
+const QUESTIONNAIRE_VERSION = '2.2';
 
 /* =========================================================
    LICENSE
@@ -1907,7 +2017,9 @@ function renderStepper(){
   const phaseLabel = cat.questionsByPhase ? phaseCopy(state.phase).label : null;
 
   const dText = daysUntilText(state.eventDate);
-  const baseLen = (cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions).length;
+  const baseLen = cat.questionsByEventType
+    ? (cat.questionsByEventType[state.eventType] || cat.questionsByEventType.ultra).length
+    : (cat.questionsByPhase ? cat.questionsByPhase[state.phase] : cat.questions).length;
   const extraActive = currentExtra(cat);
   const extraSplit = extraActive ? baseLen : -1;
   const extraLabel = EVENT_TYPE_LABEL[state.eventType];
