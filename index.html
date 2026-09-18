@@ -2093,7 +2093,7 @@ function renderStepper(){
       </div>
 
       <div style="margin-top:22px;">
-        <button type="button" class="upload-switch" id="feedbackBtn" style="color:var(--ink-soft);">Something off with this question? Send feedback &rarr;</button>
+        <button type="button" class="upload-switch" id="feedbackBtn" style="color:var(--ink-soft);">Notice something off? Help fix it for everyone &rarr;</button>
       </div>
     </div>
   </section>
@@ -2301,6 +2301,14 @@ function renderResults(){
         <a class="btn" href="${featuredCoach.url}" target="_blank" rel="noopener">Visit ${escapeHtml(featuredCoach.url.replace(/^https?:\/\//,''))} &rarr;</a>
       </div>
 
+      <div class="built-by-coach">
+        <div class="copy">
+          <h3>Built with the community, not just for it</h3>
+          <p>This gets better every time someone flags a wrong link, a confusing question, or a discipline it doesn't cover well yet. Whatever you noticed, say something \u2014 it helps every ultrarunner, hiker, and mountain athlete who uses this after you.</p>
+        </div>
+        <button type="button" class="btn" id="feedbackFromResultsBtn">Share Feedback &rarr;</button>
+      </div>
+
       <h2 class="section-title">Find a coach</h2>
       <p class="section-sub">${coachIntro}</p>
       <div class="coach-grid">
@@ -2447,7 +2455,7 @@ function renderFooter(){
     <span class="footer-dot">\u00b7</span>
     <button type="button" id="licenseBtn">License</button>
     <span class="footer-dot">\u00b7</span>
-    <button type="button" id="feedbackBtn">Feedback</button>
+    <button type="button" id="feedbackBtn">Help Improve This</button>
   </div>`;
 }
 
@@ -2494,8 +2502,8 @@ function renderFeedbackModal(){
     <div class="modal-box">
       <button class="modal-close" id="feedbackModalClose" aria-label="Close">&times;</button>
       <div class="modal-sub">Feedback</div>
-      <h2 style="font-size:22px;">Something wrong, or something missing?</h2>
-      <p style="font-size:14px;color:var(--ink-soft);margin:10px 0 20px;">Bug reports and content issues go straight to the person who built this \u2014 takes a minute.</p>
+      <h2 style="font-size:22px;">Help make this better for everyone</h2>
+      <p style="font-size:14px;color:var(--ink-soft);margin:10px 0 20px;">This tool improves every time someone flags a wrong link, a confusing question, or a gap in what it covers. Takes a minute, and it helps every ultrarunner, hiker, and mountain athlete who uses this after you \u2014 not just you.</p>
 
       <div id="feedbackStatus" class="modal-status" hidden>Thanks \u2014 that's sent. I appreciate you flagging it.</div>
 
@@ -2595,19 +2603,24 @@ function attachEvents(){
   }
 
   const feedbackBtn = document.getElementById('feedbackBtn');
+  const feedbackFromResultsBtn = document.getElementById('feedbackFromResultsBtn');
   const feedbackModal = document.getElementById('feedbackModal');
+  function openFeedbackModal(){
+    document.getElementById('fb-ctx-event-type').value = state.eventType;
+    document.getElementById('fb-ctx-first-event').value = state.isFirstEvent ? 'yes' : 'no';
+    document.getElementById('fb-ctx-screen').value = state.screen + (state.screen==='stepper' ? ' (step '+(state.step+1)+' of '+CATEGORIES.length+', '+CATEGORIES[state.step].name+')' : '');
+    document.getElementById('fb-ctx-url').value = window.location.href;
+    const nextField = document.getElementById('fb-next');
+    if(nextField) nextField.value = window.location.origin + window.location.pathname + '?feedbackSent=true';
+    feedbackModal.classList.add('open');
+  }
   if(feedbackBtn && feedbackModal){
-    feedbackBtn.addEventListener('click', ()=>{
-      document.getElementById('fb-ctx-event-type').value = state.eventType;
-      document.getElementById('fb-ctx-first-event').value = state.isFirstEvent ? 'yes' : 'no';
-      document.getElementById('fb-ctx-screen').value = state.screen + (state.screen==='stepper' ? ' (step '+(state.step+1)+' of '+CATEGORIES.length+', '+CATEGORIES[state.step].name+')' : '');
-      document.getElementById('fb-ctx-url').value = window.location.href;
-      const nextField = document.getElementById('fb-next');
-      if(nextField) nextField.value = window.location.origin + window.location.pathname + '?feedbackSent=true';
-      feedbackModal.classList.add('open');
-    });
+    feedbackBtn.addEventListener('click', openFeedbackModal);
     document.getElementById('feedbackModalClose').addEventListener('click', ()=> feedbackModal.classList.remove('open'));
     feedbackModal.addEventListener('click', e=>{ if(e.target===feedbackModal) feedbackModal.classList.remove('open'); });
+  }
+  if(feedbackFromResultsBtn && feedbackModal){
+    feedbackFromResultsBtn.addEventListener('click', openFeedbackModal);
   }
   if(window.location.search.includes('feedbackSent=true')){
     if(feedbackModal){
