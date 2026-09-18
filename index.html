@@ -393,6 +393,26 @@
     font-size:22px; line-height:1; color:var(--ink-soft); cursor:pointer; padding:4px;
   }
   .modal-close:hover{color:var(--accent);}
+
+  /* Forms inside modals sit on a light background — .field from
+     theme.css assumes dark, so flip it locally here. */
+  .modal-box .field{margin-bottom:14px;}
+  .modal-box .field label{color:var(--ink-soft);}
+  .modal-box .field input, .modal-box .field textarea, .modal-box .field select{
+    background:var(--paper);border:1px solid var(--line);color:var(--ink);
+  }
+  .modal-box .field input::placeholder, .modal-box .field textarea::placeholder{color:var(--ink-soft);opacity:0.7;}
+  .modal-box .field input:focus, .modal-box .field textarea:focus, .modal-box .field select:focus{
+    outline:none;border-color:var(--accent);
+  }
+  .modal-box .field select{
+    font-family:'Source Serif 4', serif;font-size:15px;padding:10px 12px;
+    border-radius:var(--radius);width:100%;cursor:pointer;
+  }
+  .modal-status{
+    background:var(--low-bg);border:1px solid var(--low);color:var(--ink);
+    padding:12px 16px;margin-bottom:18px;font-size:13.5px;
+  }
   .license-tier{border:1px solid var(--line-soft); padding:16px 18px; margin-bottom:14px;}
   .license-tier h3{font-size:15px;font-family:'Big Shoulders Display';text-transform:uppercase;letter-spacing:0.02em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;}
   .license-tier .price{font-family:'IBM Plex Mono';color:var(--accent);font-size:13px;}
@@ -1984,7 +2004,8 @@ function renderHero(){
       ${renderFooter()}
     </div>
   </section>
-  ${renderLicenseModal()}`;
+  ${renderLicenseModal()}
+  ${renderFeedbackModal()}`;
 }
 
 /* =========================================================
@@ -2070,8 +2091,13 @@ function renderStepper(){
         <span class="nav-hint" id="navHint"></span>
         <button class="btn" id="nextBtn">${ci===CATEGORIES.length-1 ? 'See My Readiness Profile →' : 'Next Waypoint →'}</button>
       </div>
+
+      <div style="margin-top:22px;">
+        <button type="button" class="upload-switch" id="feedbackBtn" style="color:var(--ink-soft);">Something off with this question? Send feedback &rarr;</button>
+      </div>
     </div>
-  </section>`;
+  </section>
+  ${renderFeedbackModal()}`;
 }
 
 /* =========================================================
@@ -2301,6 +2327,7 @@ function renderResults(){
     </div>
   </section>
   ${renderLicenseModal()}
+  ${renderFeedbackModal()}
   ${renderResourcesModal()}`;
 }
 
@@ -2407,7 +2434,8 @@ function renderCompare(){
       ${renderFooter()}
     </div>
   </section>
-  ${renderLicenseModal()}`;
+  ${renderLicenseModal()}
+  ${renderFeedbackModal()}`;
 }
 
 function renderFooter(){
@@ -2418,6 +2446,8 @@ function renderFooter(){
     <span>v${QUESTIONNAIRE_VERSION}</span>
     <span class="footer-dot">\u00b7</span>
     <button type="button" id="licenseBtn">License</button>
+    <span class="footer-dot">\u00b7</span>
+    <button type="button" id="feedbackBtn">Feedback</button>
   </div>`;
 }
 
@@ -2455,6 +2485,53 @@ function renderResourcesModal(){
       <button class="modal-close" id="resourcesModalClose" aria-label="Close">&times;</button>
       <div class="modal-sub">Learn more</div>
       <div id="resourcesModalBody"></div>
+    </div>
+  </div>`;
+}
+function renderFeedbackModal(){
+  return `
+  <div class="modal-overlay" id="feedbackModal">
+    <div class="modal-box">
+      <button class="modal-close" id="feedbackModalClose" aria-label="Close">&times;</button>
+      <div class="modal-sub">Feedback</div>
+      <h2 style="font-size:22px;">Something wrong, or something missing?</h2>
+      <p style="font-size:14px;color:var(--ink-soft);margin:10px 0 20px;">Bug reports and content issues go straight to the person who built this \u2014 takes a minute.</p>
+
+      <div id="feedbackStatus" class="modal-status" hidden>Thanks \u2014 that's sent. I appreciate you flagging it.</div>
+
+      <form id="feedbackForm" action="https://formspree.io/f/mqpakvzl" method="POST">
+        <div class="field">
+          <label for="fb-category">What kind of feedback is this?</label>
+          <select id="fb-category" name="category" required>
+            <option value="">Choose one</option>
+            <option value="Bug">Bug \u2014 something's broken</option>
+            <option value="Assessment issue">Assessment issue \u2014 wrong question, link, or score</option>
+            <option value="Feature suggestion">Feature suggestion</option>
+            <option value="General feedback">General feedback</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fb-message">Details</label>
+          <textarea id="fb-message" name="message" required placeholder="What happened, or what would you like to see? The more specific, the easier it is to track down."></textarea>
+        </div>
+        <div class="field">
+          <label for="fb-email">Email (optional, if you'd like a reply)</label>
+          <input type="email" id="fb-email" name="email">
+        </div>
+
+        <!-- Auto-captured context, so a bug report arrives with the
+             detail needed to actually reproduce it. -->
+        <input type="hidden" name="event_type" id="fb-ctx-event-type">
+        <input type="hidden" name="first_event_checked" id="fb-ctx-first-event">
+        <input type="hidden" name="screen" id="fb-ctx-screen">
+        <input type="hidden" name="page_url" id="fb-ctx-url">
+        <input type="hidden" name="tool_version" value="${QUESTIONNAIRE_VERSION}">
+        <input type="hidden" name="_subject" value="UERA Feedback">
+        <input type="hidden" name="_next" id="fb-next">
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+        <button type="submit" class="btn">Send Feedback &rarr;</button>
+      </form>
     </div>
   </div>`;
 }
@@ -2515,6 +2592,32 @@ function attachEvents(){
     licenseBtn.addEventListener('click', ()=> licenseModal.classList.add('open'));
     document.getElementById('licenseModalClose').addEventListener('click', ()=> licenseModal.classList.remove('open'));
     licenseModal.addEventListener('click', e=>{ if(e.target===licenseModal) licenseModal.classList.remove('open'); });
+  }
+
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  const feedbackModal = document.getElementById('feedbackModal');
+  if(feedbackBtn && feedbackModal){
+    feedbackBtn.addEventListener('click', ()=>{
+      document.getElementById('fb-ctx-event-type').value = state.eventType;
+      document.getElementById('fb-ctx-first-event').value = state.isFirstEvent ? 'yes' : 'no';
+      document.getElementById('fb-ctx-screen').value = state.screen + (state.screen==='stepper' ? ' (step '+(state.step+1)+' of '+CATEGORIES.length+', '+CATEGORIES[state.step].name+')' : '');
+      document.getElementById('fb-ctx-url').value = window.location.href;
+      const nextField = document.getElementById('fb-next');
+      if(nextField) nextField.value = window.location.origin + window.location.pathname + '?feedbackSent=true';
+      feedbackModal.classList.add('open');
+    });
+    document.getElementById('feedbackModalClose').addEventListener('click', ()=> feedbackModal.classList.remove('open'));
+    feedbackModal.addEventListener('click', e=>{ if(e.target===feedbackModal) feedbackModal.classList.remove('open'); });
+  }
+  if(window.location.search.includes('feedbackSent=true')){
+    if(feedbackModal){
+      feedbackModal.classList.add('open');
+      const status = document.getElementById('feedbackStatus');
+      const form = document.getElementById('feedbackForm');
+      if(status) status.hidden = false;
+      if(form) form.hidden = true;
+    }
+    history.replaceState(null, '', window.location.pathname);
   }
 
   const resourcesModal = document.getElementById('resourcesModal');
