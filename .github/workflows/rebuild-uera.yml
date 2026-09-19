@@ -1,1 +1,56 @@
+name: Rebuild UERA from CSV
 
+# Runs whenever the CSV changes. On any branch, this validates the CSV and
+# rebuilds the tool as a check (useful on pull requests, before merging).
+# On main specifically, if everything passes, it commits the rebuilt
+# index.html back to the repo — which is what actually updates the live
+# site, since GitHub Pages deploys from main.
+on:
+  push:
+    paths:
+      - 'questions-and-learning-links.csv'
+  pull_request:
+    paths:
+      - 'questions-and-learning-links.csv'
+
+jobs:
+  rebuild-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install test dependencies
+        run: npm install jsdom jspdf@4.2.1 pdf-parse --no-save
+
+      - name: Parse CSV (fails the build on malformed data)
+        run: python3 csv_to_json.py questions-and-learning-links.csv parsed.json
+
+      - name: Rebuild the tool from the parsed data
+        run: node rebuild_from_csv.js index.html parsed.json index.html.rebuilt
+
+      - name: Run full regression suite against the rebuilt tool
+        run: node test_tool.js index.html.rebuilt theme.css theme.js
+
+      - name: Replace index.html with the rebuilt, tested version
+        run: mv index.html.rebuilt index.html
+
+      - name: Commit and push (main only)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config user.name "uera-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git diff --quiet index.html && echo "No changes to commit." && exit 0
+          git add index.html
+          git commit -m "Rebuild tool from questions-and-learning-links.csv [automated]"
+          git push
