@@ -1997,6 +1997,11 @@ function renderHero(){
         The Training &amp; Fitness Readiness checkpoint automatically adjusts based on your start date above — everything else stays the same.
       </div>
 
+      <div class="timing-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1" stroke="#c8b190"/><path d="M5.5 7V4.8a2.5 2.5 0 0 1 5 0V7" stroke="#c8b190" stroke-width="1.2"/></svg>
+        Nothing you enter here is stored or sent anywhere. Your answers stay on your device — private to you, until and unless you choose to export or share a PDF yourself.
+      </div>
+
       <div class="checkpoint-list">
         ${CATEGORIES.map((c,i)=>`<div><span class="n mono">${String(i+1).padStart(2,'0')}</span>${c.short}</div>`).join('')}
       </div>
@@ -2420,6 +2425,7 @@ function renderCompare(){
       <div class="eyebrow">Compare Progress</div>
       <h1 style="font-size:clamp(32px,6vw,52px);line-height:0.95;">See What's<br><em>Changed</em></h1>
       <p class="lead" style="font-size:16px;margin-top:16px;">Upload an earlier assessment PDF (exported by this tool) to see how your risk profile has shifted.</p>
+      <p style="font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:#c8b190; margin-top:18px; max-width:56ch;">Both PDFs are read locally, right here in your browser — nothing is uploaded to a server to make this comparison work.</p>
     </div>
   </section>
   <section class="compare-body">
@@ -2479,6 +2485,7 @@ function renderLicenseModal(){
       <p class="fine-print">
         <strong>${copyrightLine()}</strong><br><br>
         <strong>Personal use</strong> means using this tool yourself, for your own training. <strong>Commercial/coaching use</strong> means using it with anyone you coach, train, or advise professionally or for payment, or distributing it as part of a paid product or service.<br><br>
+        <strong>Your data isn't stored.</strong> This runs entirely in your browser — there's no server collecting or storing your answers, scores, or PDF comparisons. It's private to you, and you decide who ever sees it, if anyone. The one exception is the feedback form, which sends what you type to me directly, only if you choose to submit it.<br><br>
         This tool is an independent project and isn't affiliated with, endorsed by, or sponsored by UESCA, Uphill Athlete, The Trek, or TrainingPeaks.<br><br>
         Provided "as is," without warranty. It's a self-assessment aid, not medical advice \u2014 see the disclaimer on the results page.
       </p>
