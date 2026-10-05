@@ -67,6 +67,9 @@ def main(csv_path, out_path):
         elif row_type == 'Learn More - Video':
             b['video'] = {'title': r['Text'].strip(), 'url': r['URL'].strip()}
 
+        elif row_type == 'Research Evidence':
+            pass  # shown on the website questions page only; not part of the tool's data model
+
         elif row_type == 'Calculation Formula':
             pass  # explanatory only, not part of the editable data model
 
