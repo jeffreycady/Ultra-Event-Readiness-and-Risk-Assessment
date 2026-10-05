@@ -492,16 +492,82 @@ const CATEGORIES = [
   {
     id:'terrain', name:'Terrain & Route Profile', short:'Terrain',
     tagline:"How the ground ahead matches what you've actually trained on.",
-    remediation:{
-      summary:"Close the gap between your training terrain and what's actually ahead.",
-      actions:[
+    remediationByEventType:{
+      ultra:{
+        summary:"Close the gap between your training terrain and what's actually ahead.",
+        actions:[
         {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
         {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
       ]
+      },
+      hike:{
+        summary:"Close the gap between your training terrain and what's actually ahead.",
+        actions:[
+        {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
+        {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
+      ]
+      },
+      mountaineering:{
+        summary:"Close the gap between your training terrain and what's actually ahead.",
+        actions:[
+        {text:"Learn the Yosemite Decimal System class ratings and read your route's description against your actual experience", url:"https://climber.org/data/decimal.html"},
+        {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Practice the specific technical skills the route demands (ice axe self-arrest, crampon technique, rope work)", url:"https://www.rei.com/learn/expert-advice/how-to-use-crampons.html"}
+      ]
+      },
+      skimo:{
+        summary:"Close the gap between your training terrain and what's actually ahead.",
+        actions:[
+        {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
+        {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
+      ]
+      }
     },
-    questions:[
+    questionsByEventType:{
+      ultra:[
+      {q:"What best describes the terrain you'll be covering?",
+       opts:["Mostly flat, non-technical (road, gravel, buffed trail)","Rolling hills, mostly runnable or easily walkable trail","Mountainous, with sustained climbs and descents","Highly technical — scrambling, loose rock, exposed ridgelines, or route-finding required"]},
+      {q:"Roughly how much elevation gain/loss does the route have?",
+       opts:["Under 50 ft of gain per mile (~9 m/km, flat)","50–150 ft per mile (~9–28 m/km, rolling)","150–300 ft per mile (~28–57 m/km, mountainous)","Over 300 ft per mile (~57+ m/km), or sustained steep grades"]},
+      {q:"How much training have you done on terrain that matches the route?",
+       opts:["Extensive — most long efforts mimic this terrain","Some — a few key sessions on similar terrain","Limited — mostly different terrain than what's ahead","None — this will be my first time on this type of terrain"]},
+      {q:"How familiar are you with the actual route?",
+       opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
+      {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+    ],
+      hike:[
+      {q:"What best describes the terrain you'll be covering?",
+       opts:["Mostly flat, non-technical (road, gravel, buffed trail)","Rolling hills, mostly runnable or easily walkable trail","Mountainous, with sustained climbs and descents","Highly technical — scrambling, loose rock, exposed ridgelines, or route-finding required"]},
+      {q:"Roughly how much elevation gain/loss does the route have?",
+       opts:["Under 50 ft of gain per mile (~9 m/km, flat)","50–150 ft per mile (~9–28 m/km, rolling)","150–300 ft per mile (~28–57 m/km, mountainous)","Over 300 ft per mile (~57+ m/km), or sustained steep grades"]},
+      {q:"How much training have you done on terrain that matches the route?",
+       opts:["Extensive — most long efforts mimic this terrain","Some — a few key sessions on similar terrain","Limited — mostly different terrain than what's ahead","None — this will be my first time on this type of terrain"]},
+      {q:"How familiar are you with the actual route?",
+       opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
+      {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+    ],
+      mountaineering:[
+      {q:"What best describes the terrain you'll be covering?",
+       opts:["Trail or non-technical walk-up (YDS Class 1–2) — no rope, ice axe, or crampons needed","Hands-on scrambling (Class 3) or easy snow slopes that need an ice axe — rope usually not needed","Exposed Class 4 climbing, steeper snow or ice, or glacier travel with crevasse hazard — rope and technical gear expected","Technical alpine climbing (Class 5 rock, steep ice, or mixed terrain) — roped pitches, protection, and demanding route-finding"]},
+      {q:"Roughly how much elevation gain/loss does the route have?",
+       opts:["Under 50 ft of gain per mile (~9 m/km, flat)","50–150 ft per mile (~9–28 m/km, rolling)","150–300 ft per mile (~28–57 m/km, mountainous)","Over 300 ft per mile (~57+ m/km), or sustained steep grades"]},
+      {q:"How much training have you done on terrain that matches the route?",
+       opts:["Extensive — most long efforts mimic this terrain","Some — a few key sessions on similar terrain","Limited — mostly different terrain than what's ahead","None — this will be my first time on this type of terrain"]},
+      {q:"How familiar are you with the actual route?",
+       opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
+      {q:"How confident are you in the technical skills this route demands (scrambling, ice axe and crampon use, rope work, route-finding)?",
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+    ],
+      skimo:[
       {q:"What best describes the terrain you'll be covering?",
        opts:["Mostly flat, non-technical (road, gravel, buffed trail)","Rolling hills, mostly runnable or easily walkable trail","Mountainous, with sustained climbs and descents","Highly technical — scrambling, loose rock, exposed ridgelines, or route-finding required"]},
       {q:"Roughly how much elevation gain/loss does the route have?",
@@ -513,6 +579,7 @@ const CATEGORIES = [
       {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
        opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
     ]
+    }
   },
   {
     id:'environment', name:'Environment & Climate', short:'Environment',
@@ -902,16 +969,90 @@ const CATEGORIES = [
   {
     id:'medical', name:'Medical & Injury History', short:'Medical',
     tagline:"The factors that make an ordinary rough patch turn serious.",
-    remediation:{
-      summary:"Get ahead of anything that could turn a rough patch serious.",
-      actions:[
+    remediationByEventType:{
+      ultra:{
+        summary:"Get ahead of anything that could turn a rough patch serious.",
+        actions:[
         {text:"Discuss any pre-existing condition with a doctor before you go", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
         {text:"Make sure needed medications are packed and accessible, and anyone with you knows how to help", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
         {text:"If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
         {text:"Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own", url:"https://www.youtube.com/watch?v=aDIvspLzj1g"}
       ]
+      },
+      hike:{
+        summary:"Get ahead of anything that could turn a rough patch serious.",
+        actions:[
+        {text:"Discuss any pre-existing condition with a doctor before you go", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Make sure needed medications are packed and accessible, and anyone with you knows how to help", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own", url:"https://www.youtube.com/watch?v=aDIvspLzj1g"}
+      ]
+      },
+      mountaineering:{
+        summary:"Get ahead of anything that could turn a rough patch serious.",
+        actions:[
+        {text:"Discuss any pre-existing condition with a doctor before you go", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Make sure needed medications are packed and accessible, and anyone with you knows how to help", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own", url:"https://www.youtube.com/watch?v=aDIvspLzj1g"},
+        {text:"If you have ever had HAPE, HACE, or severe altitude sickness, talk to a doctor experienced in altitude medicine before the trip — a past episode puts you at high risk again, however slowly you go", url:"https://www.aafp.org/afp/2020/0415/p505.html"},
+        {text:"Learn the early signs of AMS, HAPE, and HACE, and agree with your team beforehand that descent is the response — descend until symptoms resolve, don't push on", url:"https://www.aafp.org/afp/2020/0415/p505.html"},
+        {text:"Build a gradual ascent profile — limit gains in sleeping altitude and add rest days — instead of a fast one-day push to a high camp", url:"https://www.aafp.org/afp/2020/0415/p505.html"}
+      ]
+      },
+      skimo:{
+        summary:"Get ahead of anything that could turn a rough patch serious.",
+        actions:[
+        {text:"Discuss any pre-existing condition with a doctor before you go", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Make sure needed medications are packed and accessible, and anyone with you knows how to help", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"If you have a history of heat illness, hyponatremia, hypernatremia, or rhabdomyolysis, build a specific prevention plan", url:"https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/"},
+        {text:"Address any injury or pain from the past 6 months that isn't fully resolved, rather than hoping it clears up on its own", url:"https://www.youtube.com/watch?v=aDIvspLzj1g"}
+      ]
+      }
     },
-    questions:[
+    questionsByEventType:{
+      ultra:[
+      {q:"Do you have any pre-existing medical conditions relevant to sustained endurance effort (heart, respiratory, metabolic, etc.)?",
+       opts:["None","Yes, well-managed and cleared by a doctor for this event","Yes, and I haven't discussed this event with a doctor","Yes, and it's a known risk factor I haven't addressed"]},
+      {q:"Have you had any injury or pain issues in the past 6 months, and are they fully resolved?",
+       opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
+      {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
+       opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
+      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
+       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
+       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]}
+    ],
+      hike:[
+      {q:"Do you have any pre-existing medical conditions relevant to sustained endurance effort (heart, respiratory, metabolic, etc.)?",
+       opts:["None","Yes, well-managed and cleared by a doctor for this event","Yes, and I haven't discussed this event with a doctor","Yes, and it's a known risk factor I haven't addressed"]},
+      {q:"Have you had any injury or pain issues in the past 6 months, and are they fully resolved?",
+       opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
+      {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
+       opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
+      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
+       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
+       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]}
+    ],
+      mountaineering:[
+      {q:"Do you have any pre-existing medical conditions relevant to sustained endurance effort (heart, respiratory, metabolic, etc.)?",
+       opts:["None","Yes, well-managed and cleared by a doctor for this event","Yes, and I haven't discussed this event with a doctor","Yes, and it's a known risk factor I haven't addressed"]},
+      {q:"Have you had any injury or pain issues in the past 6 months, and are they fully resolved?",
+       opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
+      {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
+       opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
+      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
+       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
+       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]},
+      {q:"Have you ever had high-altitude pulmonary edema (HAPE), cerebral edema (HACE), or severe acute mountain sickness?",
+       opts:["No — and I've spent time at comparable altitude without problems", "No — but I haven't been to an altitude like this before", "Mild altitude sickness in the past (headache, nausea), and I know how I responded", "Yes — HAPE, HACE, or severe altitude illness, and I've worked out a plan with a doctor", "Yes — HAPE, HACE, or severe altitude illness, and I haven't addressed it for this trip"]},
+      {q:"Have you and your team agreed in advance that signs of altitude illness mean descending, and who makes that call?",
+       opts:["Yes — we've agreed on the triggers and who makes the call, and it's non-negotiable", "Agreed in general, but not on specific triggers or who decides", "We'd decide on the day", "Haven't discussed it, or I'm going solo with no plan"]},
+      {q:"Does your itinerary build altitude gradually (limiting how much higher you sleep each day, with rest days), or does it go up quickly?",
+       opts:["Gradual — I limit gains in sleeping altitude and have built in rest days", "Fairly gradual, but with little slack if anyone feels unwell", "Fast — big jumps in sleeping altitude with few or no rest days", "A one-day ascent to a sleeping altitude above about 11,500 ft (3,500 m)"]}],
+      skimo:[
       {q:"Do you have any pre-existing medical conditions relevant to sustained endurance effort (heart, respiratory, metabolic, etc.)?",
        opts:["None","Yes, well-managed and cleared by a doctor for this event","Yes, and I haven't discussed this event with a doctor","Yes, and it's a known risk factor I haven't addressed"]},
       {q:"Have you had any injury or pain issues in the past 6 months, and are they fully resolved?",
@@ -923,60 +1064,223 @@ const CATEGORIES = [
       {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
        opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]}
     ]
+    }
   },
   {
     id:'safety', name:'Safety & Emergency Preparedness', short:'Safety',
     tagline:"What happens if something goes wrong, and whether you'd recognize it in time.",
-    remediation:{
-      summary:"Make sure someone knows your plan, and you know the warning signs.",
-      actions:[
-        {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
-        {text:"Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
-        {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
-        {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
-        {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
-        {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"}
-      ]
+    remediationByEventType:{
+      ultra:{
+        summary:"Make sure someone knows your plan, and you know the warning signs.",
+        actions:[
+          {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Learn the early signs of altitude illness — AMS, HAPE, and HACE — and that descent is the treatment", url:"https://www.msdmanuals.com/home/injuries-and-poisoning/altitude-illness/acute-altitude-illness"},
+          {text:"Read the UIAA Medical Commission's field guide to recognizing and managing AMS, HAPE, and HACE", url:"https://theuiaa.org/documents/mountainmedicine/English_UIAA_MedCom_Rec_No_2_AMS_HAPE_HACE_2012_V3.3.pdf"},
+          {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"},
+          {text:"Take a wilderness first aid course (typically 16–20 hours) so you can assess a patient and make evacuation decisions when help is hours away", url:"https://www.nols.edu/en/wilderness-medicine/"},
+          {text:"Read what wilderness first aid training covers, from basic WFA to the 80-hour WFR", url:"https://backcountryaccess.com/en-fr/blog/p/why-take-wilderness-first-aid-course"}
+        ]
+      },
+      hike:{
+        summary:"Make sure someone knows your plan, and you know the warning signs.",
+        actions:[
+          {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Look up the ranger stations or land-management offices along your route, the trailheads and road crossings you could evacuate from, and the nearest hospital — and save the emergency numbers", url:"https://www.nps.gov/articles/gtgemergencyplan.htm"},
+          {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Learn the early signs of altitude illness — AMS, HAPE, and HACE — and that descent is the treatment", url:"https://www.msdmanuals.com/home/injuries-and-poisoning/altitude-illness/acute-altitude-illness"},
+          {text:"Read the UIAA Medical Commission's field guide to recognizing and managing AMS, HAPE, and HACE", url:"https://theuiaa.org/documents/mountainmedicine/English_UIAA_MedCom_Rec_No_2_AMS_HAPE_HACE_2012_V3.3.pdf"},
+          {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"},
+          {text:"Take a wilderness first aid course (typically 16–20 hours) so you can assess a patient and make evacuation decisions when help is hours away", url:"https://www.nols.edu/en/wilderness-medicine/"},
+          {text:"Read what wilderness first aid training covers, from basic WFA to the 80-hour WFR", url:"https://backcountryaccess.com/en-fr/blog/p/why-take-wilderness-first-aid-course"}
+        ]
+      },
+      mountaineering:{
+        summary:"Make sure someone knows your plan, and you know the warning signs.",
+        actions:[
+          {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Find out whether rangers or a patrol cover your route, where the nearest ranger station and trailhead are, and where the nearest hospital is — and save the emergency numbers", url:"https://www.nps.gov/articles/gtgemergencyplan.htm"},
+          {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Learn the early signs of altitude illness — AMS, HAPE, and HACE — and that descent is the treatment", url:"https://www.msdmanuals.com/home/injuries-and-poisoning/altitude-illness/acute-altitude-illness"},
+          {text:"Read the UIAA Medical Commission's field guide to recognizing and managing AMS, HAPE, and HACE", url:"https://theuiaa.org/documents/mountainmedicine/English_UIAA_MedCom_Rec_No_2_AMS_HAPE_HACE_2012_V3.3.pdf"},
+          {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"},
+          {text:"Take a wilderness first aid course (typically 16–20 hours) so you can assess a patient and make evacuation decisions when help is hours away", url:"https://www.nols.edu/en/wilderness-medicine/"},
+          {text:"Read what wilderness first aid training covers, from basic WFA to the 80-hour WFR", url:"https://backcountryaccess.com/en-fr/blog/p/why-take-wilderness-first-aid-course"}
+        ]
+      },
+      skimo:{
+        summary:"Make sure someone knows your plan, and you know the warning signs.",
+        actions:[
+          {text:"Share your trip plan and expected finish/return window with someone", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Look up on-course medical support and the nearest hospital or urgent care, and save the event's emergency number if one exists", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Carry basic ID and medical information on you", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Review the early warning signs of heat illness, hyponatremia, and hypothermia", url:"https://www.youtube.com/watch?v=gSnyIpeuR50"},
+          {text:"Learn the early signs of altitude illness — AMS, HAPE, and HACE — and that descent is the treatment", url:"https://www.msdmanuals.com/home/injuries-and-poisoning/altitude-illness/acute-altitude-illness"},
+          {text:"Read the UIAA Medical Commission's field guide to recognizing and managing AMS, HAPE, and HACE", url:"https://theuiaa.org/documents/mountainmedicine/English_UIAA_MedCom_Rec_No_2_AMS_HAPE_HACE_2012_V3.3.pdf"},
+          {text:"Learn the symptoms and immediate response for the full range of exertional emergencies — heat illness, hypothermia, hyponatremia, hypernatremia, and rhabdomyolysis", url:"https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth"},
+          {text:"Confirm your backup navigation/communication plan for remote sections", url:"https://www.outdoorgearlab.com/topics/camping-and-hiking/best-personal-locator-beacon"},
+          {text:"Take a wilderness first aid course (typically 16–20 hours) so you can assess a patient and make evacuation decisions when help is hours away", url:"https://www.nols.edu/en/wilderness-medicine/"},
+          {text:"Read what wilderness first aid training covers, from basic WFA to the 80-hour WFR", url:"https://backcountryaccess.com/en-fr/blog/p/why-take-wilderness-first-aid-course"}
+        ]
+      }
     },
-    questions:[
+    questionsByEventType:{
+      ultra:[
       {q:"Have you told someone your trip plan and expected finish or return window?",
-       opts:["Yes, someone knows my plan and check-in points","Yes, in general terms","No, but I plan to","No","Not applicable — organized event with registration, bib tracking, and check-ins already in place"], naIndex:4},
+       opts:["Yes, someone knows my plan and check-in points", "Yes, in general terms", "No, but I plan to", "No", "Not applicable — organized event with registration, bib tracking, and check-ins already in place"], naIndex:4},
       {q:"Do you know where to find medical help — on-course aid stations and EMS, plus the nearest hospital or urgent care off-course — and the event's emergency contact number, if any?",
-       opts:["Yes — I know on-course medical support, the nearest hospital/urgent care, and have any event emergency number saved","I know the on-course aid stations, but haven't looked into off-course hospitals, urgent care, or an emergency number","I have a rough idea, but haven't confirmed any of this","I haven't looked into this at all","Not applicable — organized event with on-course medical staff and established emergency protocols"], naIndex:4},
+       opts:["Yes — I know on-course medical support, the nearest hospital/urgent care, and have any event emergency number saved", "I know the on-course aid stations, but haven't looked into off-course hospitals, urgent care, or an emergency number", "I have a rough idea, but haven't confirmed any of this", "I haven't looked into this at all", "Not applicable — organized event with on-course medical staff and established emergency protocols"], naIndex:4},
       {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
-       opts:["Always","Usually","Rarely","Never"]},
-      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, or hypothermia in yourself?",
-       opts:["Very confident — I know the signs and what to do","Somewhat familiar","Vague idea","Not familiar at all"]},
+       opts:["Always", "Usually", "Rarely", "Never"]},
+      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, hypothermia, and — if you'll be at altitude — altitude illness (AMS, HAPE, HACE) in yourself?",
+       opts:["Very confident — I know the signs and what to do", "Somewhat familiar", "Vague idea", "Not familiar at all"]},
       {q:"For remote sections of the route, do you have a backup navigation/communication plan (map, charged phone, whistle, PLB)?",
-       opts:["Yes, fully equipped","Partially equipped","Relying only on trail markings/signage","No backup plan"]},
+       opts:["Yes, fully equipped", "Partially equipped", "Relying only on trail markings/signage", "No backup plan"]},
       {q:"Do you know what to do if you or someone with you needs emergency help mid-event?",
-       opts:["Yes, clearly","Roughly","Not really","No idea"]},
+       opts:["Yes, clearly", "Roughly", "Not really", "No idea"]},
       {q:"How familiar are you with serious exertion-related conditions (rhabdomyolysis, hyperthermia, hypothermia, hypernatremia, hyponatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
-       opts:["Very familiar — I know the symptoms and the exact steps to take for each","Familiar with the common ones, less sure on rarer ones like rhabdomyolysis","Vague general awareness — wouldn't know the exact steps","Not familiar with these at all"]}
-    ]
+       opts:["Very familiar — I know the symptoms and the exact steps to take for each", "Familiar with the common ones, less sure on rarer ones like rhabdomyolysis", "Vague general awareness — wouldn't know the exact steps", "Not familiar with these at all"]}
+      ],
+      hike:[
+      {q:"Have you told someone your trip plan and expected finish or return window?",
+       opts:["Yes, someone knows my plan and check-in points", "Yes, in general terms", "No, but I plan to", "No"]},
+      {q:"Do you know where to find help along your route — ranger stations or land-management offices, the trailheads and road crossings you could evacuate from, and the nearest hospital — and have the emergency numbers saved?",
+       opts:["Yes — I know where the ranger stations, evacuation points and nearest hospital are, and have emergency numbers saved", "I know where the ranger stations or road crossings are, but not the nearest hospital or emergency numbers", "I have a rough idea, but haven't confirmed any of this", "I haven't looked into this at all"]},
+      {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
+       opts:["Always", "Usually", "Rarely", "Never"]},
+      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, hypothermia, and — if you'll be at altitude — altitude illness (AMS, HAPE, HACE) in yourself?",
+       opts:["Very confident — I know the signs and what to do", "Somewhat familiar", "Vague idea", "Not familiar at all"]},
+      {q:"For remote sections of the route, do you have a backup navigation/communication plan (map, charged phone, whistle, PLB)?",
+       opts:["Yes, fully equipped", "Partially equipped", "Relying only on trail markings/signage", "No backup plan"]},
+      {q:"Do you know what to do if you or someone with you needs emergency help mid-hike?",
+       opts:["Yes, clearly", "Roughly", "Not really", "No idea"]},
+      {q:"How familiar are you with serious exertion-related conditions (rhabdomyolysis, hyperthermia, hypothermia, hypernatremia, hyponatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
+       opts:["Very familiar — I know the symptoms and the exact steps to take for each", "Familiar with the common ones, less sure on rarer ones like rhabdomyolysis", "Vague general awareness — wouldn't know the exact steps", "Not familiar with these at all"]}
+      ],
+      mountaineering:[
+      {q:"Have you told someone your trip plan and expected finish or return window?",
+       opts:["Yes, someone knows my plan and check-in points", "Yes, in general terms", "No, but I plan to", "No"]},
+      {q:"Do you know where to find help near your objective — whether rangers or a patrol cover the route, the nearest ranger station and trailhead, local search and rescue, and the nearest hospital — and have the emergency numbers saved?",
+       opts:["Yes — I know who covers the route, where the nearest ranger station, trailhead and hospital are, and have emergency numbers saved", "I know where the ranger station or trailhead is, but not who covers the route or the nearest hospital", "I have a rough idea, but haven't confirmed any of this", "I haven't looked into this at all"]},
+      {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
+       opts:["Always", "Usually", "Rarely", "Never"]},
+      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, hypothermia, and altitude illness (AMS, HAPE, HACE) in yourself?",
+       opts:["Very confident — I know the signs and what to do", "Somewhat familiar", "Vague idea", "Not familiar at all"]},
+      {q:"For remote sections of the route, do you have a backup navigation/communication plan (map, charged phone, whistle, PLB)?",
+       opts:["Yes, fully equipped", "Partially equipped", "Relying only on trail markings/signage", "No backup plan"]},
+      {q:"Do you know what to do if you or someone with you needs emergency help mid-climb?",
+       opts:["Yes, clearly", "Roughly", "Not really", "No idea"]},
+      {q:"How familiar are you with serious exertion-related conditions (rhabdomyolysis, hyperthermia, hypothermia, hypernatremia, hyponatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
+       opts:["Very familiar — I know the symptoms and the exact steps to take for each", "Familiar with the common ones, less sure on rarer ones like rhabdomyolysis", "Vague general awareness — wouldn't know the exact steps", "Not familiar with these at all"]}
+      ],
+      skimo:[
+      {q:"Have you told someone your trip plan and expected finish or return window?",
+       opts:["Yes, someone knows my plan and check-in points", "Yes, in general terms", "No, but I plan to", "No", "Not applicable — organized event with registration, bib tracking, and check-ins already in place"], naIndex:4},
+      {q:"Do you know where to find medical help — on-course aid stations and EMS, plus the nearest hospital or urgent care off-course — and the event's emergency contact number, if any?",
+       opts:["Yes — I know on-course medical support, the nearest hospital/urgent care, and have any event emergency number saved", "I know the on-course aid stations, but haven't looked into off-course hospitals, urgent care, or an emergency number", "I have a rough idea, but haven't confirmed any of this", "I haven't looked into this at all", "Not applicable — organized event with on-course medical staff and established emergency protocols"], naIndex:4},
+      {q:"Do you carry ID/medical information (Road ID, medical bracelet, emergency contacts) while out there?",
+       opts:["Always", "Usually", "Rarely", "Never"]},
+      {q:"How confident are you recognizing the early warning signs of heat illness, hyponatremia, hypothermia, and — if you'll be at altitude — altitude illness (AMS, HAPE, HACE) in yourself?",
+       opts:["Very confident — I know the signs and what to do", "Somewhat familiar", "Vague idea", "Not familiar at all"]},
+      {q:"For remote sections of the route, do you have a backup navigation/communication plan (map, charged phone, whistle, PLB)?",
+       opts:["Yes, fully equipped", "Partially equipped", "Relying only on trail markings/signage", "No backup plan"]},
+      {q:"Do you know what to do if you or someone with you needs emergency help mid-race or mid-tour?",
+       opts:["Yes, clearly", "Roughly", "Not really", "No idea"]},
+      {q:"How familiar are you with serious exertion-related conditions (rhabdomyolysis, hyperthermia, hypothermia, hypernatremia, hyponatremia, etc.) and exactly what to do if you or someone with you starts showing symptoms?",
+       opts:["Very familiar — I know the symptoms and the exact steps to take for each", "Familiar with the common ones, less sure on rarer ones like rhabdomyolysis", "Vague general awareness — wouldn't know the exact steps", "Not familiar with these at all"]}
+      ]
+    }
   },
   {
     id:'logistics', name:'Event Logistics & Support', short:'Logistics',
     tagline:"Support, resupply, and cutoffs — the machinery around the miles.",
-    remediation:{
-      summary:"Get the machinery around the miles locked in.",
-      actions:[
-        {text:"Brief your crew, pacer, or hiking partner on the plan", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"},
-        {text:"Finalize and pack drop bags or resupply boxes", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"},
-        {text:"Map your expected pace against cutoffs or daily mileage targets", url:"https://www.youtube.com/watch?v=FClpCNWjzcM"},
-        {text:"Set clear check-in points with anyone supporting you", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"}
-      ]
+    remediationByEventType:{
+      ultra:{
+        summary:"Get the machinery around the miles locked in.",
+        actions:[
+          {text:"Brief your crew and pacer on the plan", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"},
+          {text:"Finalize and pack drop bags", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"},
+          {text:"Map your expected pace against the checkpoint and aid-station cutoffs", url:"https://www.youtube.com/watch?v=FClpCNWjzcM"},
+          {text:"Set clear check-in points with anyone supporting you", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"}
+        ]
+      },
+      hike:{
+        summary:"Get the machinery around the miles locked in.",
+        actions:[
+          {text:"Brief your hiking partner or support person on the plan", url:"https://www.nps.gov/articles/gtgemergencyplan.htm"},
+          {text:"Finalize and pack drop bags or resupply boxes", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"},
+          {text:"Mark your bailout points, with mileage and elevation, and your daily mileage targets on your map", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
+          {text:"Set clear check-in points with anyone supporting you", url:"https://www.nps.gov/articles/gtgemergencyplan.htm"}
+        ]
+      },
+      mountaineering:{
+        summary:"Get the machinery around the miles locked in.",
+        actions:[
+          {text:"Agree the plan, roles, and turnaround with your climbing partner or team, and make sure everyone can handle partner rescue", url:"https://globalsummitguide.com/complete-guide-essential-mountaineering-skills/"},
+          {text:"Work out the food, fuel, and water you'll carry for the whole climb, and where you can restock or refill", url:"https://www.alpineinstitute.com/?p=137191"},
+          {text:"Mark your turnaround and bailout points — altitude, distance, and a turnaround time — before you go, and decide the turnaround call in advance", url:"https://globalsummitguide.com/complete-guide-essential-mountaineering-skills/"},
+          {text:"Set clear check-in points with anyone supporting you", url:"https://www.nps.gov/articles/gtgemergencyplan.htm"}
+        ]
+      },
+      skimo:{
+        summary:"Get the machinery around the miles locked in.",
+        actions:[
+          {text:"Brief any race partner or support person on the plan", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
+          {text:"Finalize and pack drop bags", url:"https://relentlessforwardcommotion.com/the-beginners-guide-to-packing-an-ultramarathon-drop-bag/"},
+          {text:"Map your expected pace against the checkpoint and aid-station cutoffs", url:"https://www.youtube.com/watch?v=FClpCNWjzcM"},
+          {text:"Set clear check-in points with anyone supporting you", url:"https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/"}
+        ]
+      }
     },
-    questions:[
-      {q:"Do you have a support plan in place — crew, pacer, or hiking partner, if applicable?",
-       opts:["Yes, briefed and confirmed","Yes, but not fully briefed","Loosely planned","No plan, or haven't thought about it"]},
-      {q:"Do you have a drop bag or resupply strategy?",
-       opts:["Yes, packed and planned by stop","Partially planned","Vague idea","No plan / not packed"]},
-      {q:"How familiar are you with checkpoints, aid stations, or resupply points along the way, and any cutoffs or mileage targets?",
-       opts:["Very familiar — I've mapped my pace against cutoffs/targets","Generally familiar","Only vaguely aware","Not familiar at all"]},
+    questionsByEventType:{
+      ultra:[
+      {q:"Do you have a crew and pacer lined up (if your race allows them), and have you briefed them on your plan?",
+       opts:["Yes, briefed and confirmed", "Yes, but not fully briefed", "Loosely planned", "No plan, or haven't thought about it"]},
+      {q:"Do you have a drop bag strategy — what goes in each bag and at which stop?",
+       opts:["Yes, packed and planned by stop", "Partially planned", "Vague idea", "No plan / not packed"]},
+      {q:"How familiar are you with the checkpoints and aid stations along the course, and their cutoff times?",
+       opts:["Very familiar — I've mapped my pace against the cutoffs", "Generally familiar", "Only vaguely aware", "Not familiar at all"]},
       {q:"Do you have a communication/check-in plan with anyone supporting you?",
-       opts:["Yes, clear check-in points","General plan","Loose or unclear","No plan"]}
-    ]
+       opts:["Yes, clear check-in points", "General plan", "Loose or unclear", "No plan"]}
+      ],
+      hike:[
+      {q:"Do you have a hiking partner or support person lined up, and have you agreed on the plan with them?",
+       opts:["Yes, briefed and confirmed", "Yes, but not fully briefed", "Loosely planned", "No plan, or haven't thought about it"]},
+      {q:"Do you have a drop bag or resupply strategy?",
+       opts:["Yes, packed and planned by stop", "Partially planned", "Vague idea", "No plan / not packed"]},
+      {q:"How familiar are you with your bailout points and resupply points — the mileage and elevation to each — and your daily mileage targets?",
+       opts:["Very familiar — I've mapped my bailout points, distances and altitudes against my plan", "Generally familiar", "Only vaguely aware", "Not familiar at all"]},
+      {q:"Do you have a communication/check-in plan with anyone supporting you?",
+       opts:["Yes, clear check-in points", "General plan", "Loose or unclear", "No plan"]}
+      ],
+      mountaineering:[
+      {q:"Do you have a climbing partner or team confirmed, and have you agreed on the plan, roles, and turnaround with them?",
+       opts:["Yes, briefed and confirmed", "Yes, but not fully briefed", "Loosely planned", "No plan, or haven't thought about it"]},
+      {q:"Do you have a resupply plan — how much food, fuel, and water you'll carry, and where you can restock or refill?",
+       opts:["Yes, calculated and packed for the full trip", "Partially planned", "Vague idea", "No plan / not packed"]},
+      {q:"How familiar are you with your turnaround and bailout points — the altitude and distance to each, a turnaround time, and where you can resupply?",
+       opts:["Very familiar — I've mapped my bailout points, distances and altitudes against my plan", "Generally familiar", "Only vaguely aware", "Not familiar at all"]},
+      {q:"Do you have a communication/check-in plan with anyone supporting you?",
+       opts:["Yes, clear check-in points", "General plan", "Loose or unclear", "No plan"]}
+      ],
+      skimo:[
+      {q:"Do you have a support plan in place — a race partner or team (if your race has one) and anyone helping with gear or transitions?",
+       opts:["Yes, briefed and confirmed", "Yes, but not fully briefed", "Loosely planned", "No plan, or haven't thought about it"]},
+      {q:"Do you have a drop bag strategy — what goes in each bag and at which stop?",
+       opts:["Yes, packed and planned by stop", "Partially planned", "Vague idea", "No plan / not packed"]},
+      {q:"How familiar are you with the checkpoints and aid stations along the course, and their cutoff times?",
+       opts:["Very familiar — I've mapped my pace against the cutoffs", "Generally familiar", "Only vaguely aware", "Not familiar at all"]},
+      {q:"Do you have a communication/check-in plan with anyone supporting you?",
+       opts:["Yes, clear check-in points", "General plan", "Loose or unclear", "No plan"]}
+      ]
+    }
   },
   {
     id:'mental', name:'Mental Readiness & Pacing', short:'Mental',
@@ -1184,8 +1488,22 @@ const COACH_LINKS = [
 ========================================================= */
 const RESOURCES = {
   terrain:{
-    article:{title:'An Introduction to Downhill Trail Running Techniques', source:'iRunFar', url:'https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques'},
-    video:{title:'Run Fast Downhill | How to Run Technical Trails', url:'https://www.youtube.com/watch?v=EIJ_4g4S6vA'}
+    ultra:{
+      article:{title:'An Introduction to Downhill Trail Running Techniques', source:'iRunFar', url:'https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques'},
+      video:{title:'Run Fast Downhill | How to Run Technical Trails', url:'https://www.youtube.com/watch?v=EIJ_4g4S6vA'}
+    },
+    hike:{
+      article:{title:'An Introduction to Downhill Trail Running Techniques', source:'iRunFar', url:'https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques'},
+      video:{title:'Run Fast Downhill | How to Run Technical Trails', url:'https://www.youtube.com/watch?v=EIJ_4g4S6vA'}
+    },
+    mountaineering:{
+      article:{title:'The Yosemite Decimal System', source:'Climber.org', url:'https://climber.org/data/decimal.html'},
+      video:{title:'Ice Axe Arrest / Self Arrest (Glenmore Lodge)', url:'https://www.youtube.com/watch?v=94QFImjdEAo'}
+    },
+    skimo:{
+      article:{title:'An Introduction to Downhill Trail Running Techniques', source:'iRunFar', url:'https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques'},
+      video:{title:'Run Fast Downhill | How to Run Technical Trails', url:'https://www.youtube.com/watch?v=EIJ_4g4S6vA'}
+    }
   },
   environment:{
     article:{title:'Handle the Heat: Heat Acclimation for Endurance Running', source:'iRunFar', url:'https://www.irunfar.com/handle-the-heat-heat-acclimation-for-endurance-running'},
@@ -1224,16 +1542,58 @@ const RESOURCES = {
     }
   },
   medical:{
-    article:{title:'Warning Signs: Rhabdomyolysis in Trail Runners', source:'Trail Runner Magazine', url:'https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/'},
-    video:{title:'How Much Workout Is Too Much? — Rhabdomyolysis', url:'https://www.youtube.com/watch?v=aDIvspLzj1g'}
+    ultra:{
+      article:{title:'Warning Signs: Rhabdomyolysis in Trail Runners', source:'Trail Runner Magazine', url:'https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/'},
+      video:{title:'How Much Workout Is Too Much? — Rhabdomyolysis', url:'https://www.youtube.com/watch?v=aDIvspLzj1g'}
+    },
+    hike:{
+      article:{title:'Warning Signs: Rhabdomyolysis in Trail Runners', source:'Trail Runner Magazine', url:'https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/'},
+      video:{title:'How Much Workout Is Too Much? — Rhabdomyolysis', url:'https://www.youtube.com/watch?v=aDIvspLzj1g'}
+    },
+    mountaineering:{
+      article:{title:"Acute Altitude Illness: Updated Prevention and Treatment Guidelines from the Wilderness Medical Society", source:"American Family Physician", url:"https://www.aafp.org/afp/2020/0415/p505.html"},
+      video:{title:"Mountaineering 101: High Altitude & Acclimatization", url:"https://www.youtube.com/watch?v=T_DLqHYafko"}
+    },
+    skimo:{
+      article:{title:'Warning Signs: Rhabdomyolysis in Trail Runners', source:'Trail Runner Magazine', url:'https://www.trailrunnermag.com/nutrition/race-day-nutrition-nutrition/warning-signs/'},
+      video:{title:'How Much Workout Is Too Much? — Rhabdomyolysis', url:'https://www.youtube.com/watch?v=aDIvspLzj1g'}
+    }
   },
   safety:{
-    article:{title:'Exercise-Associated Hyponatremia: The (Not So) Salty Truth', source:'iRunFar', url:'https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth'},
-    video:{title:'Recognizing and Treating Heat Illness and Heat Stroke', url:'https://www.youtube.com/watch?v=gSnyIpeuR50'}
+    ultra:{
+      article:{title:'Exercise-Associated Hyponatremia: The (Not So) Salty Truth', source:'iRunFar', url:'https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth'},
+      video:{title:'Recognizing and Treating Heat Illness and Heat Stroke', url:'https://www.youtube.com/watch?v=gSnyIpeuR50'}
+    },
+    hike:{
+      article:{title:'Exercise-Associated Hyponatremia: The (Not So) Salty Truth', source:'iRunFar', url:'https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth'},
+      video:{title:'Recognizing and Treating Heat Illness and Heat Stroke', url:'https://www.youtube.com/watch?v=gSnyIpeuR50'}
+    },
+    mountaineering:{
+      article:{title:'Emergency Field Management of Acute Mountain Sickness, High Altitude Pulmonary Edema, and High Altitude Cerebral Edema', source:'UIAA Medical Commission', url:'https://theuiaa.org/documents/mountainmedicine/English_UIAA_MedCom_Rec_No_2_AMS_HAPE_HACE_2012_V3.3.pdf'},
+      video:{title:'Mountaineering 101: High Altitude & Acclimatization', url:'https://www.youtube.com/watch?v=T_DLqHYafko'}
+    },
+    skimo:{
+      article:{title:'Exercise-Associated Hyponatremia: The (Not So) Salty Truth', source:'iRunFar', url:'https://www.irunfar.com/exercise-associated-hyponatremia-the-not-so-salty-truth'},
+      video:{title:'Recognizing and Treating Heat Illness and Heat Stroke', url:'https://www.youtube.com/watch?v=gSnyIpeuR50'}
+    }
   },
   logistics:{
-    article:{title:'How to Crew Ultra Runners: A Complete Guide for Crew Members', source:'TrainingPeaks', url:'https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/'},
-    video:{title:'10 Tips for Crewing an Ultra Marathon', url:'https://www.youtube.com/watch?v=FClpCNWjzcM'}
+    ultra:{
+      article:{title:'How to Crew Ultra Runners: A Complete Guide for Crew Members', source:'TrainingPeaks', url:'https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/'},
+      video:{title:'10 Tips for Crewing an Ultra Marathon', url:'https://www.youtube.com/watch?v=FClpCNWjzcM'}
+    },
+    hike:{
+      article:{title:'How to Crew Ultra Runners: A Complete Guide for Crew Members', source:'TrainingPeaks', url:'https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/'},
+      video:{title:'10 Tips for Crewing an Ultra Marathon', url:'https://www.youtube.com/watch?v=FClpCNWjzcM'}
+    },
+    mountaineering:{
+      article:{title:"Backcountry Meal Planning Guide", source:"American Alpine Institute", url:"https://www.alpineinstitute.com/?p=137191"},
+      video:{title:"Mountaineering 101: High Altitude & Acclimatization", url:"https://www.youtube.com/watch?v=T_DLqHYafko"}
+    },
+    skimo:{
+      article:{title:'How to Crew Ultra Runners: A Complete Guide for Crew Members', source:'TrainingPeaks', url:'https://www.trainingpeaks.com/blog/crewing-for-ultramarathon/'},
+      video:{title:'10 Tips for Crewing an Ultra Marathon', url:'https://www.youtube.com/watch?v=FClpCNWjzcM'}
+    }
   },
   mental:{
     article:{title:'Ultramarathon Pacing Strategies: Why Staying in the Moment Works', source:'Jason Koop / CTS', url:'https://trainright.com/ultramarathon-pacing-strategies-staying-in-the-moment/'},
@@ -1265,7 +1625,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '2.3';
+const QUESTIONNAIRE_VERSION = '2.7';
 
 /* =========================================================
    LICENSE
