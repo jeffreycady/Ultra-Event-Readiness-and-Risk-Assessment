@@ -499,7 +499,11 @@ const CATEGORIES = [
         {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
         {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
-        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"},
+        {text:"Learn how to scout and cross moving water: choose the widest, shallowest section, do the stick test, cross facing upstream (with poles or a stick if you have one), and unfasten your vest or pack straps so you can shed it if you fall", url:""},
+        {text:"Set your rule before you get there: avoid water above your knees in current, wait or turn back if it looks too risky, and know where the course offers bailout or aid and what the race does if a crossing becomes unsafe — you often can't pick the time of day in a race", url:""},
+        {text:"Check the forecast for rain upstream as well as overhead — flash floods can arrive under a clear sky from storms miles away — and note whether washes earlier on the course were running; if one was, expect the next ones may be too", url:""},
+        {text:"If a wash is running, stop: don't cross moving water or flooded trails above your knees, move to higher ground, and wait — flooding may subside within hours. Study the map beforehand for high ground and bailout points", url:""}
       ]
       },
       hike:{
@@ -508,7 +512,9 @@ const CATEGORIES = [
         {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
         {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
-        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"},
+        {text:"Learn how to scout and cross moving water: choose the widest, shallowest section, do the stick test, cross facing upstream with a staff or poles, and unfasten your pack's hip belt and sternum strap so you can shed it if you fall", url:""},
+        {text:"Set your rule before you get there: cross early in the day when levels are lowest, avoid water above your knees in current, and wait or turn back if it looks too risky — build spare time into the itinerary", url:""}
       ]
       },
       mountaineering:{
@@ -517,7 +523,9 @@ const CATEGORIES = [
         {text:"Learn the Yosemite Decimal System class ratings and read your route's description against your actual experience", url:"https://climber.org/data/decimal.html"},
         {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
-        {text:"Practice the specific technical skills the route demands (ice axe self-arrest, crampon technique, rope work)", url:"https://www.rei.com/learn/expert-advice/how-to-use-crampons.html"}
+        {text:"Practice the specific technical skills the route demands (ice axe self-arrest, crampon technique, rope work)", url:"https://www.rei.com/learn/expert-advice/how-to-use-crampons.html"},
+        {text:"Learn how to scout and cross moving water: judge depth by the shortest person, toss a stick to gauge speed, check downstream hazards, use the mutual-support method as a group, and loosen your waist and sternum straps so you can shed your pack", url:""},
+        {text:"Plan for snowmelt- and glacier-fed water: cross early when flows are lowest, expect very cold water and a hypothermia risk, keep dry clothing, and be willing to wait or turn back", url:""}
       ]
       },
       skimo:{
@@ -526,7 +534,9 @@ const CATEGORIES = [
         {text:"Add training sessions on terrain that matches the route's technicality and grade", url:"https://www.irunfar.com/an-introduction-to-downhill-trail-running-techniques"},
         {text:"Study the elevation profile and route maps in detail", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
         {text:"Cover key sections of the actual route in training or recon, if possible", url:"https://nolimitsendurance.com/how-to-read-an-elevation-profile/"},
-        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"}
+        {text:"Practice the specific technical skills the route demands (descending, scrambling, route-finding)", url:"https://www.youtube.com/watch?v=EIJ_4g4S6vA"},
+        {text:"Learn the signs of water hidden under snow — a sag or depression, discolored snow, the sound of running water — probe ahead with a pole, spread out, and cross suspect spots one at a time with the crosser in clear view", url:""},
+        {text:"Know the ski-specific rules: on a snow bridge, release ski safety straps and take your hands out of pole straps, and before entering open water remove your skis, wear boots, and loosen your pack straps so you can shed it", url:""}
       ]
       }
     },
@@ -541,7 +551,11 @@ const CATEGORIES = [
       {q:"How familiar are you with the actual route?",
        opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
       {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
-       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]},
+      {q:"How prepared are you for fast-moving stream or river crossings on the course — scouting a safe spot, handling your vest and shoes, and having a rule for when you'd wait or turn back — given that in a race you often can't choose the time of day?",
+       opts:["Very prepared — I've practiced crossing moving water, know how to scout a crossing, and have a rule for when I'd wait or turn back","I know the general principles, but haven't practiced them","I'd work it out on the day, or I assume I could just wade through","I haven't thought about stream or river crossings","Not applicable — I've confirmed there are no stream or river crossings on this route"], naIndex:4},
+      {q:"If your course crosses desert washes or canyon bottoms, how prepared are you for flash-flood water — watching the forecast for rain upstream (not just overhead), noting whether washes earlier on the course were running, and having a rule to stop and wait on high ground rather than cross moving water?",
+       opts:["Very prepared — I've checked the forecast for upstream rain, I'll note the state of earlier washes as I go, and I have a rule to wait on high ground rather than cross moving water","I know a wash can flood, but I don't have specifics for how I'd respond","I'd judge it on the day, or I assume I could wade through a shallow wash","I haven't thought about flash floods","Not applicable — the course has no washes, canyons or dry drainages"], naIndex:4}
     ],
       hike:[
       {q:"What best describes the terrain you'll be covering?",
@@ -553,7 +567,9 @@ const CATEGORIES = [
       {q:"How familiar are you with the actual route?",
        opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
       {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
-       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]},
+      {q:"How prepared are you for fast-moving stream or river crossings on the route — scouting a safe spot, handling your pack and footwear, and having a rule for when you'd wait or turn back?",
+       opts:["Very prepared — I've practiced crossing moving water, know how to scout a crossing, and have a rule for when I'd wait or turn back","I know the general principles, but haven't practiced them","I'd work it out on the day, or I assume I could just wade through","I haven't thought about stream or river crossings","Not applicable — I've confirmed there are no stream or river crossings on this route"], naIndex:4}
     ],
       mountaineering:[
       {q:"What best describes the terrain you'll be covering?",
@@ -565,7 +581,9 @@ const CATEGORIES = [
       {q:"How familiar are you with the actual route?",
        opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
       {q:"How confident are you in the technical skills this route demands (scrambling, ice axe and crampon use, rope work, route-finding)?",
-       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]},
+      {q:"How prepared are you for stream and river crossings on the approach and descent — including cold, glacier- or snowmelt-fed water that can run higher later in the day — with a plan for scouting, timing, pack handling, and when to wait or turn back?",
+       opts:["Very prepared — I've practiced crossing moving water, understand how snowmelt and glacial flow change with the time of day, and have a rule for when I'd wait or turn back","I know the general principles, but haven't practiced them","I'd work it out on the day, or I assume I could just wade through","I haven't thought about stream or river crossings","Not applicable — I've confirmed there are no stream or river crossings on this route"], naIndex:4}
     ],
       skimo:[
       {q:"What best describes the terrain you'll be covering?",
@@ -577,7 +595,9 @@ const CATEGORIES = [
       {q:"How familiar are you with the actual route?",
        opts:["I've covered all or most of it in training or recon","I've studied the elevation profile and maps closely","I've glanced at the route info briefly","I know almost nothing about the specific route"]},
       {q:"How confident are you in the technical skills this route demands (descending loose footing, scrambling, stream crossings, route-finding)?",
-       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]}
+       opts:["Very confident — I've practiced these specifically","Comfortable, with some practice","A little rusty or untested","Not confident, or never practiced"]},
+      {q:"How prepared are you for winter water hazards on the route — creeks hidden under snow, snow bridges, and open streams — including probing ahead, crossing one at a time, being ready to shed skis and pack, and knowing how you'd warm up if you got wet?",
+       opts:["Very prepared — I know the signs of a hidden creek or weak snow bridge, I'd probe and cross one at a time, and I've planned how I'd warm up and change if I got wet","I know the general risks, but haven't practiced them or planned for getting wet","I'd work it out on the day, or I assume snow-covered ground is solid","I haven't thought about water under the snow","Not applicable — I've confirmed the route has no stream crossings or snow-covered creeks"], naIndex:4}
     ]
     }
   },
@@ -1646,7 +1666,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '2.9';
+const QUESTIONNAIRE_VERSION = '3.1';
 
 /* =========================================================
    LICENSE
