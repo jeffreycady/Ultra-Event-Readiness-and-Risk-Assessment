@@ -1666,7 +1666,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '3.1';
+const QUESTIONNAIRE_VERSION = '3.2';
 
 /* =========================================================
    LICENSE
@@ -1957,7 +1957,7 @@ function generatePDF(){
   const scoresById = {};
   catScores.forEach(c=> scoresById[c.id] = c.score);
   const embedPayload = JSON.stringify({
-    t:'uera_v1', qv:QUESTIONNAIRE_VERSION,
+    t:'uera_v1', qv:QUESTIONNAIRE_VERSION, et:state.eventType,
     event:state.eventName||'', date:state.eventDate||'', phase:state.phase,
     overall, scores:scoresById
   });
@@ -1976,6 +1976,7 @@ function compareFilename(before, after){
 }
 
 function generateComparePDF(before, after){
+  ({before, after} = harmonizeForCompare(before, after));
   if(typeof window.jspdf === 'undefined'){
     alert("The PDF library hasn't finished loading (needs an internet connection). Try again in a moment, or use the Print button instead.");
     return;
@@ -2141,16 +2142,27 @@ async function parseUeraPdf(file){
   }catch(e){
     return {ok:false, error:"That doesn't look like a valid PDF."};
   }
-  const match = fullText.match(/UERA_DATA_V1:(\{.*?\})(?:\s|$)/);
+  const match = fullText.match(/UERA_DATA_V\d+:(\{.*?\})(?:\s|$)/);
   if(!match){
     return {ok:false, error:"This PDF doesn't contain the data this tool needs. Only PDFs exported by this tool's \u201cExport PDF\u201d button work here \u2014 try re-exporting a fresh copy if you still have access to that assessment."};
   }
   let data;
   try{ data = JSON.parse(match[1]); }
   catch(e){ return {ok:false, error:"Found this tool's data in that PDF, but couldn't read it \u2014 the file may be damaged."}; }
-  if(!data || data.t!=='uera_v1' || !data.scores){
+  // Accept any uera_vN payload: older exports may lack newer fields (qv, et,
+  // overall) and may cover fewer checkpoints; harmonizeForCompare() handles that.
+  if(!data || typeof data!=='object' || !/^uera_v\d+$/.test(String(data.t)) || !data.scores || typeof data.scores!=='object'){
     return {ok:false, error:"Found data in that PDF, but not in a format this version understands."};
   }
+  const cleanScores = {};
+  Object.keys(data.scores).forEach(k=>{
+    const v = Number(data.scores[k]);
+    if(isFinite(v) && v>=0 && v<=100) cleanScores[k] = Math.round(v);
+  });
+  if(!Object.keys(cleanScores).length){
+    return {ok:false, error:"Found data in that PDF, but it has no readable scores."};
+  }
+  data.scores = cleanScores;
   return {ok:true, data};
 }
 
@@ -2159,14 +2171,16 @@ function getLiveAssessmentData(){
   const scores = {};
   CATEGORIES.forEach((c,i)=> scores[c.id] = categoryScore(i));
   return {
-    t:'uera_v1', qv:QUESTIONNAIRE_VERSION,
+    t:'uera_v1', qv:QUESTIONNAIRE_VERSION, et:state.eventType,
     event:state.eventName||'', date:state.eventDate||'', phase:state.phase,
     overall:overallScore(), scores
   };
 }
 
 function comparisonRadarSVG(beforeData, afterData){
-  const n = CATEGORIES.length;
+  const CATS = afterData.commonIds ? CATEGORIES.filter(c=>afterData.commonIds.includes(c.id)) : CATEGORIES;
+  if(CATS.length < 3) return '';
+  const n = CATS.length;
   const W = 480, H = 460, cx = 240, cy = 232, R = 152, RINGS = 4;
   const angle = i => -Math.PI/2 + (i*2*Math.PI)/n;
   const pt = (i, r) => [cx + r*Math.cos(angle(i)), cy + r*Math.sin(angle(i))];
@@ -2192,11 +2206,11 @@ function comparisonRadarSVG(beforeData, afterData){
     let dy = '0.35em';
     if(s < -0.35) dy='0em';
     if(s > 0.35) dy='0.85em';
-    axisLabels += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" dy="${dy}" font-size="11.5" font-family="IBM Plex Mono" fill="var(--ink-soft)">${CATEGORIES[i].short}</text>`;
+    axisLabels += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" dy="${dy}" font-size="11.5" font-family="IBM Plex Mono" fill="var(--ink-soft)">${CATS[i].short}</text>`;
   }
 
   function shapePoints(assessmentData){
-    return CATEGORIES.map((c,i)=>{
+    return CATS.map((c,i)=>{
       const score = assessmentData.scores[c.id];
       const readiness = 100 - (typeof score==='number' ? score : 50);
       return pt(i, (R*readiness)/100);
@@ -2209,7 +2223,7 @@ function comparisonRadarSVG(beforeData, afterData){
 
   let afterVertices = '';
   afterPts.forEach((p,i)=>{
-    const t = tierOf(afterData.scores[CATEGORIES[i].id]);
+    const t = tierOf(afterData.scores[CATS[i].id]);
     afterVertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="#F1EEE1" stroke-width="1.5"/>`;
   });
   let beforeVertices = '';
@@ -2227,6 +2241,34 @@ function comparisonRadarSVG(beforeData, afterData){
     ${afterVertices}
     ${axisLabels}
   </svg>`;
+}
+
+/* Make two assessments safely comparable, including ones exported by older
+   versions: compare only checkpoints present in both, recompute the overall
+   over those same checkpoints if the sets differ, and collect notes about
+   anything that could make the comparison less like-for-like. The exported
+   marker keeps t:'uera_v1' so older copies of the tool can still read new PDFs. */
+function harmonizeForCompare(before, after){
+  const b = Object.assign({}, before), a = Object.assign({}, after);
+  const ids = CATEGORIES.map(c=>c.id).filter(id=> typeof b.scores[id]==='number' && typeof a.scores[id]==='number');
+  const mean = (s)=> Math.round(ids.reduce((t,id)=>t+s[id],0)/ids.length);
+  const notes = [];
+  if(ids.length < CATEGORIES.length){
+    const missing = CATEGORIES.filter(c=>!ids.includes(c.id)).map(c=>c.name);
+    notes.push(`One of these assessments has no score for ${missing.join(', ')}, so the overall numbers and the chart cover only the ${ids.length} checkpoints both have.`);
+  }
+  if(ids.length && (ids.length < CATEGORIES.length || typeof b.overall!=='number' || typeof a.overall!=='number')){
+    b.overall = mean(b.scores); a.overall = mean(a.scores);
+  }
+  if(!b.qv || !a.qv || b.qv !== a.qv){
+    const lab = (q)=> q ? 'v'+q : 'an older version';
+    notes.push(`These assessments used different question sets (${lab(b.qv)} and ${lab(a.qv)}). Questions have been added, reworded, or split by discipline since, so part of any change may come from the questions rather than from your readiness. Treat small differences with caution.`);
+  }
+  if(b.et && a.et && b.et !== a.et){
+    notes.push(`These were taken for different disciplines (${EVENT_TYPE_NAME[b.et]||b.et} and ${EVENT_TYPE_NAME[a.et]||a.et}), so the questions differed.`);
+  }
+  a.compatNotes = notes; a.commonIds = ids;
+  return {before:b, after:a};
 }
 
 function generateInsights(beforeData, afterData){
@@ -2267,6 +2309,7 @@ function generateInsights(beforeData, afterData){
   }
 
   const stillWeak = deltas.filter(d=> d.after>=34).sort((a,b)=>b.after-a.after);
+  (afterData.compatNotes||[]).forEach(n=> insights.push('Note: '+n));
   return { insights, deltas: sorted, stillWeak };
 }
 
@@ -2807,6 +2850,7 @@ function renderAfterSlot(cmp, liveData){
 }
 
 function renderComparisonResults(before, after){
+  ({before, after} = harmonizeForCompare(before, after));
   const { insights, stillWeak } = generateInsights(before, after);
   return `
   <h2 class="section-title">What's changed</h2>
