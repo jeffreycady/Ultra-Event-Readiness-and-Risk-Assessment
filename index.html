@@ -616,7 +616,7 @@ const CATEGORIES = [
         {text:"Add dedicated heat, humidity, or altitude-specific sessions in the time you have left", url:"https://www.irunfar.com/handle-the-heat-heat-acclimation-for-endurance-running"},
         {text:"If traveling to altitude, arrive at least a week early — or as close to start time as possible if that's not feasible", url:"https://www.youtube.com/watch?v=T_DLqHYafko"},
         {text:"Test cold or wet-weather gear and your layering system in similar conditions", url:"https://trailrunner.com/trail-news/what-should-i-wear-how-to-layer-for-cold-weather-trail-runs/"},
-        {text:"Pack a weather contingency plan for temperature swings, rain, or wind", url:"https://trailrunner.com/trail-news/what-should-i-wear-how-to-layer-for-cold-weather-trail-runs/"}
+        {text:"Pack a weather contingency plan for temperature swings, rain, or wind, and decide in advance the conditions at which you'll stop or turn back", url:"https://trailrunner.com/trail-news/what-should-i-wear-how-to-layer-for-cold-weather-trail-runs/"}
       ]
     },
     questions:[
@@ -628,8 +628,8 @@ const CATEGORIES = [
        opts:["Yes, a dedicated block of heat training","Some sessions in the heat or humidity","I've thought about it but haven't done it","No — and it will be much hotter or more humid than my training"]},
       {q:"If cold, wet, or highly variable weather is possible, have you trained and tested gear in those conditions?",
        opts:["Yes, extensively — I know how my body and gear respond","Some exposure and testing","Minimal — a session or two","None, and conditions could be extreme"]},
-      {q:"How prepared are you for weather swings on the days ahead (temperature, rain, wind)?",
-       opts:["I have layers and a plan for multiple scenarios","General plan, but haven't tested every piece","One setup packed, hoping for the best","Haven't thought about it"]}
+      {q:"How prepared are you for a sudden weather change: layers you'd actually wear, a way to warm up, and a point at which you'd stop or turn back?",
+       opts:["Layers, a way to warm up, and a stop/turn-back point are all decided","Layers and a general plan, but no firm stop/turn-back point","One setup packed, hoping for the best","Haven't thought about it"]}
     ]
   },
   {
@@ -679,7 +679,8 @@ const CATEGORIES = [
           {text:"Fit-test your race boots in both walk mode and ski mode before race day, not for the first time at the start line", url:"https://www.voile.com/blog/a-beginners-guide-to-skimo-racing/"},
           {text:"Pack backups \u2014 extra skin glue or straps, a spare pole basket, layers for changing conditions", url:"http://www.skintrack.com/tips-tricks-advice/6-tips-to-get-ready-for-your-first-ski-mountaineering-race/"},
           {text:"Test your layering system across the full range \u2014 you'll run hot on the uphill and cold fast on the descent", url:"https://www.switchbacktravel.com/info/layer-backcountry-skiing"},
-          {text:"Practice with your beacon, shovel, and probe until you're genuinely competent, not just equipped", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"}
+          {text:"Practice with your beacon, shovel, and probe until you're genuinely competent, not just equipped", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"},
+          {text:"Run a timed transceiver, probe, and shovel rescue drill with your partner this season, then repeat it", url:"https://www.usaskimo.org/what-to-expect-in-your-first-skimo-race/"}
         ]
       }
     },
@@ -738,7 +739,9 @@ const CATEGORIES = [
         {q:"Is your layering system tested for the temperature swings between uphill effort and downhill descent?",
          opts:["Yes, tested and dialed in","Tested, but not across the full range","Untested, or borrowed/brand-new gear","Not sorted yet"]},
         {q:"Do you know how to use your avalanche safety gear (transceiver, shovel, probe) competently, not just carry it?",
-         opts:["Yes — practiced companion rescue scenarios","Comfortable with the basics","Own it, but haven't really practiced","No real competency with this gear"]}
+         opts:["Yes — confident with the transceiver, probe, and shovel","Comfortable with the basics","Own it, but haven't really practiced","No real competency with this gear"]},
+        {q:"Have you practiced a full companion-rescue search (transceiver, probe, shovel) with your partner this season, including under time pressure?",
+         opts:["Yes, this season, timed, and we reviewed what went wrong","Yes, but not this season or not timed","Once, as a walk-through only","Never"]}
       ]
     }
   },
@@ -755,7 +758,7 @@ const CATEGORIES = [
       ]
     },
     questions:[
-      {q:"Have you trained your on-trail fueling plan under conditions similar to what's ahead (heat, altitude, humidity)?",
+      {q:"Have you trained your on-trail fueling plan (the same foods and amounts per hour) under conditions similar to what's ahead (heat, altitude, humidity)?",
        opts:["Yes, repeatedly, matching expected conditions","Somewhat, though not in matching conditions","I have a plan but haven't tested it","I don't have a tested fueling plan"]},
       {q:"Have you established and tested a fueling rate (calories or carbs per hour) for sustained effort?",
        opts:["Yes, tested and tolerated on long training days","I have a target with limited testing","Rough idea, not really tested","No plan"]},
@@ -1051,10 +1054,10 @@ const CATEGORIES = [
        opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
       {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
        opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
-      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
-       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Going into this event, do any of these apply to you: a recent illness or fever, being dehydrated at the start, or a plan to start faster than you can sustain?",
+       opts:["None of these apply","One or more apply, and I've planned for them (pacing, hydration, cooling, or adjusting the start)","One or more apply, and I haven't planned for them","Not sure / haven't considered it"]},
       {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
-       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]},
+       opts:["No","Yes, and I've changed my approach (pacing, cooling, acclimatization, warning signs)","Yes, but I haven't changed my approach"]},
       {q:"Have you ever had high-altitude pulmonary edema (HAPE), cerebral edema (HACE), or severe acute mountain sickness?",
        opts:["No — and I've spent time at comparable altitude without problems","No — but I haven't been to an altitude like this before","Mild altitude sickness in the past (headache, nausea), and I know how I responded","Yes — HAPE, HACE, or severe altitude illness, and I've worked out a plan with a doctor","Yes — HAPE, HACE, or severe altitude illness, and I haven't addressed it for this event","Not applicable — this stays below about 8,000 ft (2,500 m)"], naIndex:5},
       {q:"Have you decided in advance that signs of altitude illness mean dropping to lower elevation or out of the event, and who makes that call (you, your crew or pacer, or race medical)?",
@@ -1067,10 +1070,10 @@ const CATEGORIES = [
        opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
       {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
        opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
-      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
-       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Going into this event, do any of these apply to you: a recent illness or fever, being dehydrated at the start, or a plan to start faster than you can sustain?",
+       opts:["None of these apply","One or more apply, and I've planned for them (pacing, hydration, cooling, or adjusting the start)","One or more apply, and I haven't planned for them","Not sure / haven't considered it"]},
       {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
-       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]},
+       opts:["No","Yes, and I've changed my approach (pacing, cooling, acclimatization, warning signs)","Yes, but I haven't changed my approach"]},
       {q:"Have you ever had high-altitude pulmonary edema (HAPE), cerebral edema (HACE), or severe acute mountain sickness?",
        opts:["No — and I've spent time at comparable altitude without problems","No — but I haven't been to an altitude like this before","Mild altitude sickness in the past (headache, nausea), and I know how I responded","Yes — HAPE, HACE, or severe altitude illness, and I've worked out a plan with a doctor","Yes — HAPE, HACE, or severe altitude illness, and I haven't addressed it for this trip","Not applicable — this stays below about 8,000 ft (2,500 m)"], naIndex:5},
       {q:"Have you and your hiking partners agreed in advance that signs of altitude illness mean descending, and who makes that call?",
@@ -1085,10 +1088,10 @@ const CATEGORIES = [
        opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
       {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
        opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
-      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
-       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Going into this event, do any of these apply to you: a recent illness or fever, being dehydrated at the start, or a plan to start faster than you can sustain?",
+       opts:["None of these apply","One or more apply, and I've planned for them (pacing, hydration, cooling, or adjusting the start)","One or more apply, and I haven't planned for them","Not sure / haven't considered it"]},
       {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
-       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]},
+       opts:["No","Yes, and I've changed my approach (pacing, cooling, acclimatization, warning signs)","Yes, but I haven't changed my approach"]},
       {q:"Have you ever had high-altitude pulmonary edema (HAPE), cerebral edema (HACE), or severe acute mountain sickness?",
        opts:["No — and I've spent time at comparable altitude without problems", "No — but I haven't been to an altitude like this before", "Mild altitude sickness in the past (headache, nausea), and I know how I responded", "Yes — HAPE, HACE, or severe altitude illness, and I've worked out a plan with a doctor", "Yes — HAPE, HACE, or severe altitude illness, and I haven't addressed it for this trip"]},
       {q:"Have you and your team agreed in advance that signs of altitude illness mean descending, and who makes that call?",
@@ -1102,10 +1105,10 @@ const CATEGORIES = [
        opts:["No injury or pain issues in the past 6 months","Had an issue, but it's fully resolved now","Ongoing issue, partially resolved or being managed","Current, unresolved injury or pain"]},
       {q:"Do you take medications or have allergies that need special consideration out on the trail (e.g. exercise-induced asthma, anaphylaxis)?",
        opts:["No","Yes, and I carry what I need, and anyone with me knows how to help","Yes, but I haven't planned for it during the event","Yes, and I don't have my medication with me during the event"]},
-      {q:"Do you fall into a higher-risk age group for heat illness (under 15 or over 65), or have other age-related risk factors?",
-       opts:["No","Yes, but I've accounted for it in pacing/cooling strategy","Yes, and I haven't adjusted my plan","Not sure / haven't considered it"]},
+      {q:"Going into this event, do any of these apply to you: a recent illness or fever, being dehydrated at the start, or a plan to start faster than you can sustain?",
+       opts:["None of these apply","One or more apply, and I've planned for them (pacing, hydration, cooling, or adjusting the start)","One or more apply, and I haven't planned for them","Not sure / haven't considered it"]},
       {q:"Have you had a serious heat illness, hyponatremia, hypernatremia, rhabdomyolysis, or similar medical event during a long effort before?",
-       opts:["No","Yes, mild, and I know my warning signs now","Yes, moderate to serious, and I have a plan to prevent it recurring","Yes, serious, and I haven't changed my approach"]},
+       opts:["No","Yes, and I've changed my approach (pacing, cooling, acclimatization, warning signs)","Yes, but I haven't changed my approach"]},
       {q:"Have you ever had high-altitude pulmonary edema (HAPE), cerebral edema (HACE), or severe acute mountain sickness?",
        opts:["No — and I've spent time at comparable altitude without problems","No — but I haven't been to an altitude like this before","Mild altitude sickness in the past (headache, nausea), and I know how I responded","Yes — HAPE, HACE, or severe altitude illness, and I've worked out a plan with a doctor","Yes — HAPE, HACE, or severe altitude illness, and I haven't addressed it for this event","Not applicable — this stays below about 8,000 ft (2,500 m)"], naIndex:5},
       {q:"Have you decided in advance that signs of altitude illness mean dropping to lower elevation or out of the event, and who makes that call (you, your crew or pacer, or race medical)?",
@@ -1348,8 +1351,8 @@ const CATEGORIES = [
        opts:["Yes, extensively","Some exposure","Limited","None — this is a big step up in distance/duration for me"]},
       {q:"Have you defined your own turn-around or stopping criteria ahead of time (what would make you call it)?",
        opts:["Yes, clearly defined","Roughly in mind","Not really thought about it","No"]},
-      {q:"How much experience do you have managing the mental low points of a long effort (night hours, low motivation stretches)?",
-       opts:["Significant experience, know my strategies","Some experience","Limited","None"]}
+      {q:"Have you practiced specific strategies for the mental low points of a long effort (night hours, low-motivation stretches) in training or past races?",
+       opts:["Yes \u2014 I have specific strategies I've tested in long efforts","I have some strategies, but they're untested","Only a vague idea of what I'd do","None"]}
     ]
   },
   {
@@ -1370,7 +1373,7 @@ const CATEGORIES = [
       {q:"Do you have a plan for addressing any injury or issue that comes up during the event, afterward?",
        opts:["Yes — I know when/how I'd seek medical follow-up","General idea","Vague","No plan"]},
       {q:"Do you have a realistic return-to-training timeline planned post-event?",
-       opts:["Yes, planned with a gradual return","Rough idea","No real plan","I plan to jump back into hard training immediately"]},
+       opts:["Yes \u2014 a gradual, staged return that doesn't depend only on how I feel","Rough idea","No real plan","I plan to jump back into hard training immediately"]},
       {q:"Do you typically debrief or reflect on big efforts to capture lessons for next time?",
        opts:["Yes, consistently","Sometimes","Rarely","Never"]}
     ]
@@ -1672,7 +1675,7 @@ function getResources(ci){
    Simple scheme: 1.0, 1.1, 1.2... bump the first number only
    for a major overhaul (e.g. a whole new category).
 ========================================================= */
-const QUESTIONNAIRE_VERSION = '3.2';
+const QUESTIONNAIRE_VERSION = '3.3';
 
 /* =========================================================
    LICENSE
