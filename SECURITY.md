@@ -1,21 +1,34 @@
-# Security Policy
+Security Policy
+Supported versions
 
-## Supported Versions
+Only the latest version on the main branch is supported. Fixes are released there; older copies are not patched.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Reporting a vulnerability
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+Please report suspected vulnerabilities privately. Do not open a public issue.
 
-## Reporting a Vulnerability
+Preferred: use GitHub's "Report a vulnerability" button on this repository's Security tab (private vulnerability reporting).
+Alternative: email Jeff Cady (JCady LLC) at YOUR-ADDRESS-HERE, subject line "Security: <repository name>".
 
-Use this section to tell people how to report a vulnerability.
+Please include what you found, where (file, page, or URL), steps to reproduce, and the impact you think it has. Proof-of-concept code is welcome but not required.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+What to expect
+Acknowledgement within 5 business days.
+An initial assessment within 10 business days.
+Fixes for confirmed issues as soon as practical, with credit in the release notes if you want it.
+
+This is a solo-maintained project, so these are good-faith targets, not guarantees.
+
+Scope
+
+In scope: this repository's code, the live site(s) it publishes, and its GitHub Actions workflows.
+
+Out of scope: third-party services and libraries (please report those upstream), social engineering, denial-of-service testing, and anything that requires physical access.
+
+Privacy by design
+
+This tool runs in your browser. It does not store or transmit your answers, and there is no account or backend. A report showing otherwise is a security issue and I want to hear about it.
+
+Safe harbor
+
+If you act in good faith, stay within scope, avoid accessing or changing other people's data, and give me reasonable time to fix the issue before disclosing it, I will not pursue legal action over your research.
