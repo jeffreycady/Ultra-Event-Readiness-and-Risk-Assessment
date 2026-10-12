@@ -1,4 +1,20 @@
 #!/usr/bin/env node
+function plainScripts(src) {
+  // Plain <script> blocks (no attributes), found with string search rather than a regex.
+  const out = [];
+  let pos = 0;
+  for (;;) {
+    const open = src.indexOf('<script>', pos);
+    if (open === -1) break;
+    const bodyStart = open + '<script>'.length;
+    const closeStart = src.toLowerCase().indexOf('</script', bodyStart);
+    if (closeStart === -1) break;
+    const closeEnd = src.indexOf('>', closeStart) + 1;
+    out.push([src.slice(open, closeEnd), src.slice(bodyStart, closeStart)]);
+    pos = closeEnd;
+  }
+  return out;
+}
 /**
  * test_tool.js — automated regression suite for ultra-event-readiness-check.html
  *
@@ -148,8 +164,7 @@ async function main() {
 
   console.log('Syntax check:');
   try {
-    const scripts = [...rawHtml.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script\b[^>]*>/g)];
-    const inline = scripts.filter(m => !m[0].startsWith('<script src') && !m[0].startsWith('<script type'));
+    const inline = plainScripts(rawHtml);
     new Function(inline[inline.length - 1][1]);
     check('Inline script parses as valid JavaScript', true);
   } catch (e) {

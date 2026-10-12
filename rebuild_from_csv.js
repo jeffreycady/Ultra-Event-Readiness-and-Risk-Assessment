@@ -21,8 +21,23 @@ if (!srcPath || !jsonPath || !outPath) {
 }
 
 const html = fs.readFileSync(srcPath, 'utf8');
-const scripts = [...html.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script\b[^>]*>/g)];
-const inlineMatch = scripts.find(m => !m[0].startsWith('<script src') && !m[0].startsWith('<script type'));
+function plainScripts(src) {
+  // Plain <script> blocks (no attributes), found with string search rather than a regex.
+  const out = [];
+  let pos = 0;
+  for (;;) {
+    const open = src.indexOf('<script>', pos);
+    if (open === -1) break;
+    const bodyStart = open + '<script>'.length;
+    const closeStart = src.toLowerCase().indexOf('</script', bodyStart);
+    if (closeStart === -1) break;
+    const closeEnd = src.indexOf('>', closeStart) + 1;
+    out.push([src.slice(open, closeEnd), src.slice(bodyStart, closeStart)]);
+    pos = closeEnd;
+  }
+  return out;
+}
+const inlineMatch = plainScripts(html)[0];
 if (!inlineMatch) { console.error('Could not find the inline script block.'); process.exit(1); }
 const js = inlineMatch[1];
 
