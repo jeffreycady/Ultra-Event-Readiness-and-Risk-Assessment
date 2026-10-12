@@ -21,7 +21,7 @@ if (!srcPath || !jsonPath || !outPath) {
 }
 
 const html = fs.readFileSync(srcPath, 'utf8');
-const scripts = [...html.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script>/g)];
+const scripts = [...html.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script\b[^>]*>/g)];
 const inlineMatch = scripts.find(m => !m[0].startsWith('<script src') && !m[0].startsWith('<script type'));
 if (!inlineMatch) { console.error('Could not find the inline script block.'); process.exit(1); }
 const js = inlineMatch[1];

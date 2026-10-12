@@ -33,7 +33,7 @@ function check(label, condition) {
 }
 
 function loadDom(rawHtml) {
-  let html = rawHtml.replace(/<script type="module">[\s\S]*?<\/script>/, '');
+  let html = rawHtml.replace(/<script type="module">[\s\S]*?<\/script\b[^>]*>/, '');
   const themeCss = fs.readFileSync(cssPath, 'utf8');
   const themeJs = fs.readFileSync(jsPath, 'utf8');
   html = html.replace('<link rel="stylesheet" href="theme.css">', '<style>' + themeCss + '</style>');
@@ -103,10 +103,10 @@ async function runPdfSmokeTest(rawHtml) {
     require.resolve('jspdf/dist/jspdf.umd.min.js'), 'utf8'
   );
   let html = rawHtml.replace(
-    /<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/[^"]*"><\/script>/,
+    /<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/[^"]*"><\/script\b[^>]*>/,
     ''
   );
-  html = html.replace(/<script type="module">[\s\S]*?<\/script>/, '');
+  html = html.replace(/<script type="module">[\s\S]*?<\/script\b[^>]*>/, '');
   const themeCss = fs.readFileSync(cssPath, 'utf8');
   const themeJs = fs.readFileSync(jsPath, 'utf8');
   html = html.replace('<link rel="stylesheet" href="theme.css">', '<style>' + themeCss + '</style>');
@@ -148,7 +148,7 @@ async function main() {
 
   console.log('Syntax check:');
   try {
-    const scripts = [...rawHtml.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script>/g)];
+    const scripts = [...rawHtml.matchAll(/<script(?: src="[^"]*")?>([\s\S]*?)<\/script\b[^>]*>/g)];
     const inline = scripts.filter(m => !m[0].startsWith('<script src') && !m[0].startsWith('<script type'));
     new Function(inline[inline.length - 1][1]);
     check('Inline script parses as valid JavaScript', true);
