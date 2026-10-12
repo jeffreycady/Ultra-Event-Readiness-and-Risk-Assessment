@@ -1,5 +1,4 @@
-Security Policy
-Supported versions
+Security Policy Supported versions
 
 Only the latest version on the main branch is supported. Fixes are released there; older copies are not patched.
 
@@ -7,15 +6,11 @@ Reporting a vulnerability
 
 Please report suspected vulnerabilities privately. Do not open a public issue.
 
-Preferred: use GitHub's "Report a vulnerability" button on this repository's Security tab (private vulnerability reporting).
-Alternative: email Jeff Cady (JCady LLC) at YOUR-ADDRESS-HERE, subject line "Security: <repository name>".
+Preferred: use GitHub's "Report a vulnerability" button on this repository's Security tab (private vulnerability reporting). Alternative: email Jeff Cady (JCady LLC) at jeff@jcady.org, subject line "Security: ".
 
 Please include what you found, where (file, page, or URL), steps to reproduce, and the impact you think it has. Proof-of-concept code is welcome but not required.
 
-What to expect
-Acknowledgement within 5 business days.
-An initial assessment within 10 business days.
-Fixes for confirmed issues as soon as practical, with credit in the release notes if you want it.
+What to expect Acknowledgement within 5 business days. An initial assessment within 10 business days. Fixes for confirmed issues as soon as practical, with credit in the release notes if you want it.
 
 This is a solo-maintained project, so these are good-faith targets, not guarantees.
 
