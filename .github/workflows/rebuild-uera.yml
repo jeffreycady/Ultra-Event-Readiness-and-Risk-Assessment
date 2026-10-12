@@ -12,7 +12,8 @@ on:
   pull_request:
     paths:
       - 'questions-and-learning-links.csv'
-
+permissions:
+   contents: write
 jobs:
   rebuild-and-test:
     runs-on: ubuntu-latest
