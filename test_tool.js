@@ -114,7 +114,7 @@ async function runBoundary(rawHtml, radioValue, checkBox, strategy) {
   return { score, expected, jsErrors };
 }
 
-async function runPdfSmokeTest(rawHtml) {
+async function runPdfSmokeTest(rawHtml, url, inspect) {
   const jsPdfSrc = fs.readFileSync(
     require.resolve('jspdf/dist/jspdf.umd.min.js'), 'utf8'
   );
@@ -129,7 +129,7 @@ async function runPdfSmokeTest(rawHtml) {
   html = html.replace('<script src="theme.js"></script>', '<script>' + themeJs + '</script>');
   const vc = new VirtualConsole();
   vc.on('jsdomError', () => {});
-  const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole: vc });
+  const dom = new JSDOM(html, Object.assign({ runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole: vc }, url ? { url } : {}));
   const win = dom.window, doc = win.document;
   win.eval(jsPdfSrc);
   let capturedBlob = null;
@@ -152,6 +152,7 @@ async function runPdfSmokeTest(rawHtml) {
     doc.getElementById('nextBtn').click();
     await wait(6);
   }
+  if (inspect) inspect(doc);
   doc.getElementById('exportPdfBtn').click();
   await wait(90);
   if (!capturedBlob) return false;
@@ -196,6 +197,63 @@ async function main() {
     check('PDF export produces a valid, non-trivial PDF', ok);
   } catch (e) {
     check('PDF export produces a valid, non-trivial PDF (threw: ' + e.message + ')', false);
+  }
+
+  console.log('Coach registry and partner branding:');
+  try {
+    const { dom: rd } = loadDom(rawHtml);
+    await wait(100);
+    const reg = rd.window.eval('JSON.stringify(COACH_REGISTRY)');
+    const defSlug = rd.window.eval('DEFAULT_COACH_SLUG');
+    const registry = JSON.parse(reg);
+    check('Default coach exists in the registry', !!registry[defSlug]);
+    let regOk = true; const regProblems = [];
+    for (const [slug, c] of Object.entries(registry)) {
+      if (!/^[a-z][a-z0-9-]{1,30}$/.test(slug)) { regOk = false; regProblems.push(slug + ': bad slug'); }
+      if (!c.name || !/^https:\/\//.test(c.url || '')) { regOk = false; regProblems.push(slug + ': needs name and https url'); }
+      if (!c.blurb) { regOk = false; regProblems.push(slug + ': needs blurb'); }
+      if (c.logo) {
+        if (!/^partners\/[a-z0-9-]+\.(png|svg|webp|jpe?g)$/.test(c.logo)) { regOk = false; regProblems.push(slug + ': logo must be partners/<name>.<png|svg|webp|jpg>'); }
+        else if (!fs.existsSync(path.join(path.dirname(htmlPath), c.logo))) { regOk = false; regProblems.push(slug + ': logo file missing: ' + c.logo); }
+        else if (fs.statSync(path.join(path.dirname(htmlPath), c.logo)).size > 300 * 1024) { regOk = false; regProblems.push(slug + ': logo over 300 KB'); }
+      }
+    }
+    if (regProblems.length) console.log('    ' + regProblems.join('\n    '));
+    check('Every registry entry is valid (slug, https url, blurb, logo file present and under 300 KB)', regOk);
+    const noProto = ['constructor', '__proto__', 'toString'].every(sl => {
+      const { dom: d2 } = loadDom(rawHtml);
+      return d2.window.eval(`hasCoach(${JSON.stringify(sl)})`) === false;
+    });
+    check('Prototype names such as "constructor" are not treated as partners', noProto);
+
+    const withPartner = rawHtml
+      .replace("  // Example of a licensed coach", "  testpartner:{isCreator:false,name:'Test <b>Coach</b>',url:'https://example.com',logo:'https://evil.example/x.png',blurb:'Shared by a test coach.'},\n  // Example of a licensed coach")
+      .replace("let's talk.\"\n  }\n", "let's talk.\"\n  },\n");
+    check('Test partner injected for the partner checks', withPartner.includes('testpartner:'));
+    let seenHero = false, seenResults = false;
+    const ok = await runPdfSmokeTest(withPartner, 'https://uera.jcady.org/?coach=testpartner', doc => {
+      const card = doc.querySelector('.coach-top');
+      seenResults = !!card && card.textContent.includes('Shared by a test coach.') && !doc.querySelector('.coach-top img');
+    });
+    check('Results page shows the partner card at the top; an outside logo URL is ignored', seenResults);
+    check('PDF still builds with a partner coach (header band, no logo file)', ok);
+    const { dom: hd } = loadDom(withPartner);
+    await wait(100);
+    const hdoc = hd.window.document;
+    // load hero with the partner via a fresh DOM that has the query string
+    const vc2 = new VirtualConsole(); vc2.on('jsdomError', () => {});
+    let h2 = withPartner.replace(/<script type="module">[\s\S]*?<\/script\b[^>]*>/, '')
+      .replace('<link rel="stylesheet" href="theme.css">', '<style>' + fs.readFileSync(cssPath, 'utf8') + '</style>')
+      .replace('<script src="theme.js"></script>', '<script>' + fs.readFileSync(jsPath, 'utf8') + '</script>');
+    const d3 = new JSDOM(h2, { url: 'https://uera.jcady.org/?coach=testpartner', runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole: vc2 });
+    await wait(150);
+    const bar = d3.window.document.querySelector('.partner-bar');
+    seenHero = !!bar && bar.textContent.includes('Shared by Test <b>Coach</b>') && !bar.querySelector('b') && !!bar.querySelector('a[href*="partners.html"]');
+    check('Start page shows "Shared by <partner>" with the name escaped and a Coach? link', seenHero);
+    const bar0 = hdoc.querySelector('.partner-bar');
+    check('Default start page shows the creator line and the Coach? link', !!bar0 && bar0.textContent.includes('Built by') && !!bar0.querySelector('a[href*="partners.html"]'));
+  } catch (e) {
+    check('Partner branding checks (threw: ' + e.message + ')', false);
   }
 
   printSummaryAndExit();

@@ -361,6 +361,18 @@
 
   .coach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;background:var(--line-soft);border:1px solid var(--line-soft);margin-bottom:8px;}
 
+  .partner-bar{
+    display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#c8b190;
+    border-bottom:1px solid rgba(200,177,144,0.25);padding-bottom:14px;margin-bottom:26px;
+  }
+  .partner-bar a{color:var(--cream);text-underline-offset:3px;}
+  .partner-bar a:hover{color:var(--accent);}
+  .partner-bar .pb-id{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .partner-bar .pb-links{display:flex;gap:18px;flex-wrap:wrap;}
+  .partner-logo{max-height:34px;max-width:140px;width:auto;height:auto;display:block;background:var(--cream);padding:4px 8px;border-radius:2px;}
+  .coach-top{margin-bottom:36px;}
+  .coach-top .coach-logo{max-height:48px;max-width:160px;width:auto;height:auto;display:block;background:var(--cream);padding:6px 10px;border-radius:2px;margin-bottom:12px;}
   .built-by-coach{
     background:var(--pine-2);color:var(--cream);
     padding:28px 26px;margin-bottom:36px;
@@ -1487,18 +1499,33 @@ const COACH_REGISTRY = {
     blurb:"Hi, I'm Jeff Cady \u2014 the UESCA certified ultrarunning coach who built this tool. If you'd rather have a training plan built around your real risk factors than figure it out solo, let's talk."
   }
   // Example of a licensed coach — copy this shape, uncomment,
-  // and give them the matching ?coach=sarah link:
+  // and give them the matching ?coach=sarah link. Put their logo file
+  // in the partners/ folder next to this page (see partners/README.md).
   // sarah:{
   //   isCreator:false,
   //   name:'Sarah Smith',
   //   url:'https://sarahsmithcoaching.com',
+  //   logo:'partners/sarah.png',   // optional; PNG, SVG, WebP or JPG in partners/
   //   blurb:"This assessment was shared with you by Sarah Smith, a certified coach. Want help turning these results into an actual plan? Get in touch."
   // }
 };
+const PARTNERS_URL = 'https://jcady.org/partners.html';
+function hasCoach(slug){
+  return typeof slug === 'string' && Object.prototype.hasOwnProperty.call(COACH_REGISTRY, slug);
+}
+// Logos are only ever loaded from this site's own partners/ folder, never from a URL
+// passed in the link, so a shared link cannot pull in an outside image.
+function coachLogoPath(coach){
+  return (coach && typeof coach.logo === 'string' && /^partners\/[a-z0-9-]+\.(png|svg|webp|jpe?g)$/.test(coach.logo)) ? coach.logo : null;
+}
+function coachLogoImg(coach, cls){
+  const p = coachLogoPath(coach);
+  return p ? `<img class="${cls}" src="${p}" alt="${escapeHtml(coach.name)} logo" onerror="this.remove()">` : '';
+}
 function getFeaturedCoach(){
   let slug = null;
   try{ slug = new URLSearchParams(window.location.search).get('coach'); }catch(e){}
-  if(slug && COACH_REGISTRY[slug]) return COACH_REGISTRY[slug];
+  if(hasCoach(slug)) return COACH_REGISTRY[slug];
 
   try{
     if(document.referrer){
@@ -1704,6 +1731,28 @@ const LICENSE_TIERS = [
     link:'https://buy.stripe.com/00wfZj7Qa8KJ1N4cE17bW02' }
 ];
 
+// Partner logos converted to PNG once at load (same-origin only), so the PDF can embed them.
+const COACH_LOGO_CACHE = {};
+function preloadCoachLogos(){
+  const c = getFeaturedCoach();
+  const p = coachLogoPath(c);
+  if(!p || COACH_LOGO_CACHE[p]) return;
+  try{
+    const img = new Image();
+    img.onload = function(){
+      try{
+        const w = img.naturalWidth || 300, h = img.naturalHeight || 100;
+        const cv = document.createElement('canvas');
+        const scale = Math.min(1, 600 / w);
+        cv.width = Math.max(1, Math.round(w*scale)); cv.height = Math.max(1, Math.round(h*scale));
+        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+        COACH_LOGO_CACHE[p] = { data: cv.toDataURL('image/png'), w: cv.width, h: cv.height };
+      }catch(e){}
+    };
+    img.src = p;
+  }catch(e){}
+}
+
 /* =========================================================
    PDF EXPORT
    Builds the report directly with jsPDF's vector/text API
@@ -1770,28 +1819,48 @@ function generatePDF(){
 
   // ---- header block ----
   doc.setFillColor(PDF_COLORS.pine);
-  doc.rect(0,0,pageW,118,'F');
+  const pdfCoach = getFeaturedCoach();
+  const hb = pdfCoach.isCreator ? 0 : 30;   // extra header band for a partner coach
+  doc.rect(0,0,pageW,118+hb,'F');
+  if(hb){
+    doc.setFillColor('#2a3d2e');
+    doc.rect(0,0,pageW,hb,'F');
+    let tx = margin;
+    const lg = COACH_LOGO_CACHE[coachLogoPath(pdfCoach)];
+    if(lg && lg.data){
+      const lh = 20, lw = Math.min(110, lh * lg.w / lg.h), lhh = lw * lg.h / lg.w;
+      try{
+        doc.setFillColor('#F7F2E7'); doc.rect(tx-3, (hb-lhh)/2-2, lw+6, lhh+4, 'F');
+        doc.addImage(lg.data, 'PNG', tx, (hb-lhh)/2, lw, lhh);
+        tx += lw + 14;
+      }catch(e){}
+    }
+    doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.dim);
+    doc.text('SHARED BY ' + pdfCoach.name.toUpperCase(), tx, hb/2 + 3);
+    doc.setTextColor(PDF_COLORS.cream);
+    doc.textWithLink(pdfCoach.url.replace(/^https?:\/\//,''), pageW-margin, hb/2 + 3, { url: pdfCoach.url, align:'right' });
+  }
 
   doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
-  doc.text(`ULTRA EVENT READINESS & RISK ASSESSMENT \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, 34);
+  doc.text(`ULTRA EVENT READINESS & RISK ASSESSMENT \u00b7 v${QUESTIONNAIRE_VERSION}`, margin, 34+hb);
 
   const maxTitleW = contentW - 150;
   const titleRaw = (state.eventName || 'Your Event') + (dateStr ? '  \u00b7  '+dateStr : '');
   const titleLines = doc.splitTextToSize(titleRaw, maxTitleW);
   doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(PDF_COLORS.cream);
-  doc.text(titleLines[0] + (titleLines.length>1 ? '\u2026' : ''), margin, 58);
+  doc.text(titleLines[0] + (titleLines.length>1 ? '\u2026' : ''), margin, 58+hb);
 
   doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(PDF_COLORS.dim);
-  doc.text(phaseLabel + (dText ? '  \u00b7  '+dText : ''), margin, 76);
+  doc.text(phaseLabel + (dText ? '  \u00b7  '+dText : ''), margin, 76+hb);
 
   doc.setFont('helvetica','bold'); doc.setFontSize(32); doc.setTextColor(overallColor);
-  doc.text(String(overall), pageW-margin, 60, {align:'right'});
+  doc.text(String(overall), pageW-margin, 60+hb, {align:'right'});
   doc.setFont('courier','normal'); doc.setFontSize(8.5); doc.setTextColor(PDF_COLORS.dim);
-  doc.text('/ 100 OVERALL RISK', pageW-margin, 74, {align:'right'});
+  doc.text('/ 100 OVERALL RISK', pageW-margin, 74+hb, {align:'right'});
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(overallColor);
-  doc.text(overallTierLabel.toUpperCase()+' RISK', pageW-margin, 92, {align:'right'});
+  doc.text(overallTierLabel.toUpperCase()+' RISK', pageW-margin, 92+hb, {align:'right'});
 
-  y = 118 + 30;
+  y = 118 + hb + 30;
 
   // ---- full breakdown ----
   sectionHeader('Full Breakdown', 'All ten checkpoints, ranked by risk.');
@@ -2405,10 +2474,31 @@ function allAnswered(ci){
 /* =========================================================
    RENDER: HERO
 ========================================================= */
+function partnerBarHTML(){
+  const c = getFeaturedCoach();
+  const url = escapeHtml(c.url);
+  const name = escapeHtml(c.name);
+  const coachLink = `<a href="${escapeHtml(PARTNERS_URL)}" target="_blank" rel="noopener">Coach? Get a branded link</a>`;
+  if(c.isCreator){
+    return `<div class="partner-bar no-print"><span class="pb-id">Built by <a href="${url}" target="_blank" rel="noopener">${name}</a>, UESCA Certified Ultrarunning Coach</span><span class="pb-links"><a href="${url}" target="_blank" rel="noopener">Work with a coach &rarr;</a>${coachLink}</span></div>`;
+  }
+  return `<div class="partner-bar no-print"><span class="pb-id">${coachLogoImg(c,'partner-logo')}<span>Shared by <a href="${url}" target="_blank" rel="noopener">${name}</a></span></span><span class="pb-links"><a href="${url}" target="_blank" rel="noopener">Work with ${name} &rarr;</a>${coachLink}</span></div>`;
+}
+function coachTopCardHTML(c){
+  return `<div class="built-by-coach coach-top">
+        <div class="copy">
+          ${coachLogoImg(c,'coach-logo')}
+          <h3>${c.isCreator ? 'Built by a coach' : 'Your coach'}</h3>
+          <p>${escapeHtml(c.blurb)}</p>
+        </div>
+        <a class="btn" href="${escapeHtml(c.url)}" target="_blank" rel="noopener">Visit ${escapeHtml(c.url.replace(/^https?:\/\//,''))} &rarr;</a>
+      </div>`;
+}
 function renderHero(){
   return `
   <section class="hero">
     <div class="wrap">
+      ${partnerBarHTML()}
       <div class="eyebrow">Ultra Event Readiness &amp; Risk Assessment</div>
       <h1>Ultra Event<br><em>Readiness &amp; Risk Assessment</em></h1>
       <p class="lead">Ten checkpoints covering terrain, environment, gear, fueling, training, safety, and more — built for ultra races and multi-day hikes alike. Take it in the final stretch before you go, while there's still time to fix gear, tighten logistics, or adjust your plan.</p>
@@ -2721,6 +2811,8 @@ function renderResults(){
   <section class="results-body">
     <div class="wrap">
 
+      ${coachTopCardHTML(featuredCoach)}
+
       <h2 class="section-title">Risk skyline</h2>
       <p class="section-sub">Each peak is one checkpoint. Taller and redder means more risk — that's where a rough patch is most likely to start.</p>
       <div class="skyline-wrap">${skylineSVG(catScores)}</div>
@@ -2774,14 +2866,6 @@ function renderResults(){
             <div class="breakdown-score mono" style="color:${t.color}">${c.score}</div>
           </div>`;
         }).join('')}
-      </div>
-
-      <div class="built-by-coach">
-        <div class="copy">
-          <h3>${featuredCoach.isCreator ? 'Built by a coach' : 'Your coach'}</h3>
-          <p>${escapeHtml(featuredCoach.blurb)}</p>
-        </div>
-        <a class="btn" href="${featuredCoach.url}" target="_blank" rel="noopener">Visit ${escapeHtml(featuredCoach.url.replace(/^https?:\/\//,''))} &rarr;</a>
       </div>
 
       <div class="built-by-coach">
@@ -3248,6 +3332,7 @@ function attachEvents(){
 }
 
 render();
+preloadCoachLogos();
 </script>
 
 <script data-goatcounter="https://uera.goatcounter.com/count"
