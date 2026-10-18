@@ -1515,6 +1515,32 @@ function hasCoach(slug){
 }
 // Logos are only ever loaded from this site's own partners/ folder, never from a URL
 // passed in the link, so a shared link cannot pull in an outside image.
+// Partner list: partners/partners.json (same folder as this page). Loaded after start-up and
+// merged into COACH_REGISTRY. Every field is re-validated here; a bad entry is skipped.
+async function loadPartnerRegistry(){
+  try{
+    if(!window.fetch) return;
+    const r = await fetch('partners/partners.json', {cache:'no-cache'});
+    if(!r.ok) return;
+    const data = await r.json();
+    const list = data && data.partners;
+    if(!list || typeof list !== 'object') return;
+    for(const slug of Object.keys(list)){
+      const c = list[slug];
+      if(!/^[a-z][a-z0-9-]{1,30}$/.test(slug) || hasCoach(slug)) continue;
+      if(!c || typeof c.name !== 'string' || !c.name.trim() || !/^https:\/\//.test(c.url || '') || typeof c.blurb !== 'string') continue;
+      const entry = { isCreator:false, name:c.name.slice(0,80), url:c.url, blurb:c.blurb.slice(0,300) };
+      if(coachLogoPath(c)) entry.logo = c.logo;
+      COACH_REGISTRY[slug] = entry;
+    }
+    let wanted = null;
+    try{ wanted = new URLSearchParams(window.location.search).get('coach'); }catch(e){}
+    if(hasCoach(wanted) && wanted !== DEFAULT_COACH_SLUG){
+      preloadCoachLogos();
+      render(false);   // re-draw the start page with the partner's branding
+    }
+  }catch(e){}
+}
 function coachLogoPath(coach){
   return (coach && typeof coach.logo === 'string' && /^partners\/[a-z0-9-]+\.(png|svg|webp|jpe?g)$/.test(coach.logo)) ? coach.logo : null;
 }
@@ -3333,6 +3359,7 @@ function attachEvents(){
 
 render();
 preloadCoachLogos();
+loadPartnerRegistry();
 </script>
 
 <script data-goatcounter="https://uera.goatcounter.com/count"

@@ -252,6 +252,59 @@ async function main() {
     check('Start page shows "Shared by <partner>" with the name escaped and a Coach? link', seenHero);
     const bar0 = hdoc.querySelector('.partner-bar');
     check('Default start page shows the creator line and the Coach? link', !!bar0 && bar0.textContent.includes('Built by') && !!bar0.querySelector('a[href*="partners.html"]'));
+
+    // partners/partners.json: the shared partner list, validated from disk
+    const pjPath = path.join(path.dirname(htmlPath), 'partners', 'partners.json');
+    let pjOk = true; const pjProblems = [];
+    if (!fs.existsSync(pjPath)) { pjOk = false; pjProblems.push('partners/partners.json is missing'); }
+    else {
+      let pj = null;
+      try { pj = JSON.parse(fs.readFileSync(pjPath, 'utf8')); } catch (e) { pjOk = false; pjProblems.push('invalid JSON: ' + e.message); }
+      if (pj) {
+        if (!pj.partners || typeof pj.partners !== 'object') { pjOk = false; pjProblems.push('needs a "partners" object'); }
+        else for (const [slug, c] of Object.entries(pj.partners)) {
+          if (!/^[a-z][a-z0-9-]{1,30}$/.test(slug)) { pjOk = false; pjProblems.push(slug + ': bad slug'); }
+          if (slug === defSlug) { pjOk = false; pjProblems.push(slug + ': cannot reuse the default coach slug'); }
+          if (!c.name || !/^https:\/\//.test(c.url || '') || !c.blurb) { pjOk = false; pjProblems.push(slug + ': needs name, https url and blurb'); }
+          if (c.logo) {
+            if (!/^partners\/[a-z0-9-]+\.(png|svg|webp|jpe?g)$/.test(c.logo)) { pjOk = false; pjProblems.push(slug + ': bad logo path'); }
+            else if (!fs.existsSync(path.join(path.dirname(htmlPath), c.logo))) { pjOk = false; pjProblems.push(slug + ': logo file missing'); }
+            else if (fs.statSync(path.join(path.dirname(htmlPath), c.logo)).size > 300 * 1024) { pjOk = false; pjProblems.push(slug + ': logo over 300 KB'); }
+          }
+          if (c.listed !== undefined && typeof c.listed !== 'boolean') { pjOk = false; pjProblems.push(slug + ': listed must be true or false'); }
+        }
+      }
+    }
+    if (pjProblems.length) console.log('    ' + pjProblems.join('\n    '));
+    check('partners/partners.json is valid (slugs, https urls, blurbs, logo files)', pjOk);
+
+    // Runtime loading of the partner list (fetch stubbed): good entry applied, bad ones skipped
+    const fixture = JSON.parse('{"partners":{"__proto__":{"name":"Proto","url":"https://proto.example","blurb":"x"}}}');
+    Object.assign(fixture.partners, {
+      good: { name: 'Good Coach', url: 'https://good.example', blurb: 'Hello from Good Coach.' },
+      plainhttp: { name: 'Plain', url: 'http://plain.example', blurb: 'x' },
+      evillogo: { name: 'Evil Logo', url: 'https://evil.example', blurb: 'x', logo: 'https://evil.example/a.png' }
+    });
+    async function loadWith(query) {
+      const vc3 = new VirtualConsole(); vc3.on('jsdomError', () => {});
+      const h3 = rawHtml.replace(/<script type="module">[\s\S]*?<\/script\b[^>]*>/, '')
+        .replace('<link rel="stylesheet" href="theme.css">', '<style>' + fs.readFileSync(cssPath, 'utf8') + '</style>')
+        .replace('<script src="theme.js"></script>', '<script>' + fs.readFileSync(jsPath, 'utf8') + '</script>');
+      const d = new JSDOM(h3, { url: 'https://uera.jcady.org/' + query, runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole: vc3,
+        beforeParse(w) { w.fetch = async () => ({ ok: true, json: async () => fixture }); } });
+      await wait(250);
+      return d;
+    }
+    const dGood = await loadWith('?coach=good');
+    const barGood = dGood.window.document.querySelector('.partner-bar');
+    check('Partner list is loaded at start-up and the partner is shown on the start page', !!barGood && barGood.textContent.includes('Shared by Good Coach'));
+    const dBad = await loadWith('?coach=plainhttp');
+    check('Entries with a non-https URL are ignored (falls back to the default coach)', dBad.window.document.querySelector('.partner-bar').textContent.includes('Built by'));
+    const dEvil = await loadWith('?coach=evillogo');
+    const eb = dEvil.window.document.querySelector('.partner-bar');
+    check('A partner with an outside logo URL still loads, but without the logo', eb.textContent.includes('Shared by Evil Logo') && !eb.querySelector('img'));
+    const dProto = await loadWith('?coach=__proto__');
+    check('A "__proto__" key in the partner list is rejected', dProto.window.document.querySelector('.partner-bar').textContent.includes('Built by'));
   } catch (e) {
     check('Partner branding checks (threw: ' + e.message + ')', false);
   }
