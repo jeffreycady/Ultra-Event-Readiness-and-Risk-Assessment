@@ -185,3 +185,10 @@ footer.site-footer-full p.lead-f{color:#d9d2c0;font-size:15.5px;max-width:50ch;m
   font-family:'IBM Plex Mono', monospace;font-size:11px;color:#a99b7d;
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
 }
+
+/* ---------- SITE MARK ----------
+   The JCady LLC cairn at the top of a page's hero, linking home. Copy cairn.svg and favicon.svg with theme.css, and add
+   <link rel="icon" href="favicon.svg" type="image/svg+xml"> to <head>. */
+.site-mark{display:block;width:max-content;line-height:0;margin:0 0 18px;border-radius:6px}
+.site-mark img{width:44px;height:44px;display:block}
+.site-mark:focus-visible{outline:2px solid var(--accent);outline-offset:4px}

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ultra Event Readiness & Risk Assessment</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -2521,10 +2522,12 @@ function coachTopCardHTML(c){
       </div>`;
 }
 function renderHero(){
+  // The JCady cairn on Jeff's own copy only; a coach's branded link shows their logo instead.
+  const mark = getFeaturedCoach().isCreator ? '<a class="site-mark" href="https://www.jcady.org/" aria-label="jcady.org home"><img src="cairn.svg" alt="" width="44" height="44"></a>' : '';
   return `
   <section class="hero">
     <div class="wrap">
-      ${partnerBarHTML()}
+      ${mark}${partnerBarHTML()}
       <div class="eyebrow">Ultra Event Readiness &amp; Risk Assessment</div>
       <h1>Ultra Event<br><em>Readiness &amp; Risk Assessment</em></h1>
       <p class="lead">Ten checkpoints covering terrain, environment, gear, fueling, training, safety, and more — built for ultra races and multi-day hikes alike. Take it in the final stretch before you go, while there's still time to fix gear, tighten logistics, or adjust your plan.</p>
