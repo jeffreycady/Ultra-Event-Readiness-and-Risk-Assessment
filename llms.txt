@@ -1,0 +1,10 @@
+# Ultra Event Readiness & Risk Assessment (UERA)
+
+> A free readiness and risk assessment for ultramarathons and multi-day hikes: ten checkpoints covering terrain, environment, gear, fueling, training, safety and more, with a score and a PDF report. Take it in the final stretch before an event, while there's still time to fix gear, tighten logistics or adjust the plan. By Jeff Cady, UESCA certified ultrarunning coach.
+
+## Pages
+
+- [Take the assessment](https://uera.jcady.org/)
+- [How it's scored, and the sources](https://www.jcady.org/framework.html)
+- [Every question and answer](https://www.jcady.org/questions.html)
+- [Branded links for coaches](https://www.jcady.org/partners.html)

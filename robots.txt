@@ -1,0 +1,7 @@
+# uera.jcady.org (Ultra Event Readiness & Risk Assessment). Search and AI crawlers are welcome.
+# Content signals (https://contentsignals.org): search, AI answers and AI training are all allowed.
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+Sitemap: https://uera.jcady.org/sitemap.xml
