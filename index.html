@@ -529,6 +529,17 @@
     .skyline-wrap, .radar-wrap, .priority-card, .breakdown-row, .coach-card{break-inside:avoid;}
     *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
+  /* ---------- Rounded corners for the boxes that were still square ----------
+     Same scale as the rest of the site family: 8px controls, 12px cards and
+     panels, 14px dialogs. :where() keeps these at zero specificity so they can
+     never override a radius set anywhere else. Grid cells inside a rounded
+     grid (.coach-card) stay square and are clipped by the grid; the score bars
+     (.breakdown-bar-*) are chart marks and stay square. */
+  :root{--radius-sm:8px;--radius-md:12px;--radius-lg:14px;--radius-pill:999px;}
+  :where(.skyline-wrap,.radar-wrap,.priority-card,.on-track-strip,.built-by-coach,.upload-slot,.license-tier,.modal-status){border-radius:var(--radius-md);}
+  :where(.coach-grid){border-radius:var(--radius-md);overflow:hidden;}
+  :where(.modal-box){border-radius:var(--radius-lg);}
+  :where(.modal-box .field input:not([type=checkbox]):not([type=radio]),.modal-box .field textarea){border-radius:var(--radius-sm);}
 </style>
 </head>
 <body>
