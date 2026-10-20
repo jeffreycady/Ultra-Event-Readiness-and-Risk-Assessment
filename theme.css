@@ -255,3 +255,14 @@ footer.site-footer-full p.lead-f{color:#d9d2c0;font-size:15.5px;max-width:50ch;m
 :root[data-theme="dark"] .theme-toggle .ic-sun{display:block;}
 :root[data-theme="dark"] .theme-toggle .ic-moon{display:none;}
 @media print{.theme-toggle{display:none !important;}}
+
+/* ---------- Rounded corners ----------
+   One radius scale for the site family: --radius-sm for inputs, selects and
+   textareas, --radius-md for cards, panels and callouts, --radius-lg for
+   dialogs, --radius-pill for pill shapes. --radius (2px, used by .btn) is
+   unchanged. These rules use :where(), so they have zero specificity and only
+   reach elements that had no radius of their own; anything a page already
+   rounds keeps its radius. */
+:root{--radius-sm:8px;--radius-md:12px;--radius-lg:14px;--radius-pill:999px;}
+:where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]),select,textarea){border-radius:var(--radius-sm);}
+:where(.card){border-radius:var(--radius-md);}
