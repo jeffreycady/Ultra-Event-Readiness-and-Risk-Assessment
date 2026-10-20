@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#DEDACB">
+<script id="theme-init">(function(){var t=null;try{t=localStorage.getItem('uera-theme');}catch(e){}if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#121612':'#DEDACB');})();</script>
 <title>Ultra Event Readiness & Risk Assessment</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +45,7 @@
   .framework-callout .copy p{ font-size:13.5px; line-height:1.5; color:#d9d2c0; margin:0; max-width:52ch; }
   .framework-callout a{
     font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:600; letter-spacing:0.02em;
-    color:var(--accent); text-decoration:underline; text-decoration-color:rgba(203,90,40,0.4);
+    color:var(--accent-on-dark); text-decoration:underline; text-decoration-color:rgba(232,133,93,0.5);
     white-space:nowrap; flex-shrink:0;
   }
   .framework-callout a:hover{ text-decoration-color:var(--accent); }
@@ -59,7 +62,7 @@
   .countdown-hint{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
-    color:var(--accent);
+    color:var(--accent-on-dark);
     min-height:14px;
   }
   .timing-note{
@@ -132,7 +135,7 @@
     align-items:center;
     gap:8px;
   }
-  .checkpoint-list span.n{color:var(--accent);}
+  .checkpoint-list span.n{color:var(--accent-on-dark);}
 
   /* ---------- STEPPER ---------- */
   .stepper-header{
@@ -183,7 +186,7 @@
   .first-ultra-divider .line{flex:1;height:1px;background:var(--accent);opacity:0.4;}
   .first-ultra-divider .label{
     font-family:'IBM Plex Mono', monospace;font-size:11.5px;letter-spacing:0.08em;
-    text-transform:uppercase;color:var(--accent);white-space:nowrap;
+    text-transform:uppercase;color:var(--accent-text);white-space:nowrap;
   }
 
   .question{
@@ -199,7 +202,7 @@
   }
   .q-num{
     font-family:'IBM Plex Mono', monospace;
-    color:var(--accent);
+    color:var(--accent-text);
     margin-right:8px;
   }
   .info-tag{
@@ -229,7 +232,7 @@
   .opt:hover{border-color:var(--accent);}
   .opt input{margin-top:3px;accent-color:var(--accent);flex-shrink:0;}
   .opt label{font-size:15.5px;cursor:pointer;}
-  .opt.selected{border-color:var(--accent);background:#fbf1e9;}
+  .opt.selected{border-color:var(--accent);background:var(--accent-tint);}
 
   .stepper-nav{
     display:flex;justify-content:space-between;align-items:center;
@@ -244,6 +247,10 @@
   .score-block{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-top:18px;}
   .score-num{font-family:'Big Shoulders Display';font-size:clamp(70px,14vw,120px);font-weight:800;line-height:0.85;}
   .score-suffix{font-family:'IBM Plex Mono';font-size:20px;color:#c8b190;padding-bottom:14px;}
+  /* tier-pill colour is set inline from tier.strong */
+  .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  #app h1:focus,#app h2:focus{outline:none;}
+  .partner-bar{padding-right:56px;}
   .tier-pill{
     font-family:'IBM Plex Mono';font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
     padding:8px 16px;border-radius:20px;display:inline-block;margin-top:14px;
@@ -274,7 +281,7 @@
   .upload-error{font-size:13px;color:var(--high);margin:0;}
   .file-label{
     display:inline-flex;align-items:center;gap:8px;
-    font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--accent);cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--accent-text);cursor:pointer;
     border:1px solid var(--accent);padding:8px 14px;border-radius:var(--radius);width:fit-content;
     margin-top:auto;
   }
@@ -284,7 +291,7 @@
     font-family:'IBM Plex Mono', monospace;font-size:11.5px;color:var(--ink-soft);
     text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;text-align:left;
   }
-  .upload-switch:hover{color:var(--accent);}
+  .upload-switch:hover{color:var(--accent-text);}
   .compare-hint{color:var(--ink-soft);font-style:italic;font-size:14.5px;margin:20px 0 40px;}
   .compare-meta{font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--ink-soft);margin-bottom:20px;}
   .insight-list{list-style:none;padding:0;margin:0 0 44px;display:flex;flex-direction:column;gap:12px;}
@@ -312,7 +319,7 @@
 
   .info-btn{
     width:22px;height:22px;border-radius:50%;
-    border:1.5px solid var(--accent);background:transparent;color:var(--accent);
+    border:1.5px solid var(--accent);background:transparent;color:var(--accent-text);
     font-family:'IBM Plex Mono';font-size:12px;font-weight:600;line-height:1;cursor:pointer;
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
     margin-left:auto;
@@ -325,12 +332,12 @@
   .resource-link:first-of-type{border-top:none;}
   .resource-link .kind{
     font-family:'IBM Plex Mono';font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-    color:var(--accent);width:52px;flex-shrink:0;padding-top:2px;
+    color:var(--accent-text);width:52px;flex-shrink:0;padding-top:2px;
   }
   .resource-link .body a{
     font-size:15px;color:var(--ink);text-decoration:none;font-weight:600;
   }
-  .resource-link .body a:hover{color:var(--accent);text-decoration:underline;}
+  .resource-link .body a:hover{color:var(--accent-text);text-decoration:underline;}
   .resource-link .body .src{
     display:block;font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-soft);margin-top:3px;
   }
@@ -344,7 +351,7 @@
     flex-shrink:0;margin-left:auto;padding-left:10px;
     display:inline-flex;align-items:center;gap:3px;white-space:nowrap;
     font-size:12.5px;font-family:'IBM Plex Mono', monospace;font-weight:500;letter-spacing:0.01em;
-    color:var(--accent);text-decoration:underline;text-decoration-color:rgba(203,90,40,0.45);
+    color:var(--accent-text);text-decoration:underline;text-decoration-color:rgba(203,90,40,0.45);
     text-underline-offset:2px;line-height:1.4;
   }
   .item-link:hover{text-decoration-color:var(--accent);}
@@ -368,7 +375,7 @@
     border-bottom:1px solid rgba(200,177,144,0.25);padding-bottom:14px;margin-bottom:26px;
   }
   .partner-bar a{color:var(--cream);text-underline-offset:3px;}
-  .partner-bar a:hover{color:var(--accent);}
+  .partner-bar a:hover{color:var(--accent-on-dark);}
   .partner-bar .pb-id{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .partner-bar .pb-links{display:flex;gap:18px;flex-wrap:wrap;}
   .partner-logo{max-height:34px;max-width:140px;width:auto;height:auto;display:block;background:var(--cream);padding:4px 8px;border-radius:2px;}
@@ -387,7 +394,7 @@
   .coach-card p{font-size:13.5px;color:var(--ink-soft);flex:1;}
   .coach-card a{
     font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.05em;text-transform:uppercase;
-    color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+    color:var(--accent-text);text-decoration:none;display:inline-flex;align-items:center;gap:6px;
   }
   .coach-card a:hover{text-decoration:underline;}
 
@@ -401,10 +408,10 @@
     background:none;border:none;color:var(--ink-soft);text-decoration:underline;
     font-family:'IBM Plex Mono', monospace;font-size:11px;cursor:pointer;padding:0;
   }
-  .site-footer button:hover{color:var(--accent);}
+  .site-footer button:hover{color:var(--accent-text);}
   .hero .site-footer{color:#a99b7d;}
   .hero .site-footer button{color:#a99b7d;}
-  .hero .site-footer button:hover{color:var(--accent);}
+  .hero .site-footer button:hover{color:var(--accent-on-dark);}
   .results-body .site-footer{padding-top:0;}
 
   .modal-overlay{
@@ -422,7 +429,7 @@
     position:absolute; top:20px; right:20px; background:none; border:none;
     font-size:22px; line-height:1; color:var(--ink-soft); cursor:pointer; padding:4px;
   }
-  .modal-close:hover{color:var(--accent);}
+  .modal-close:hover{color:var(--accent-text);}
 
   /* Forms inside modals sit on a light background — .field from
      theme.css assumes dark, so flip it locally here. */
@@ -445,7 +452,7 @@
   }
   .license-tier{border:1px solid var(--line-soft); padding:16px 18px; margin-bottom:14px;}
   .license-tier h3{font-size:15px;font-family:'Big Shoulders Display';text-transform:uppercase;letter-spacing:0.02em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;}
-  .license-tier .price{font-family:'IBM Plex Mono';color:var(--accent);font-size:13px;}
+  .license-tier .price{font-family:'IBM Plex Mono';color:var(--accent-text);font-size:13px;}
   .license-tier p{font-size:13.5px;color:var(--ink-soft);}
   .modal-box .fine-print{font-size:12px;color:var(--ink-soft);margin-top:18px;line-height:1.6;}
   .modal-box .fine-print strong{color:var(--ink);}
@@ -456,7 +463,7 @@
     padding:14px 0;border-bottom:1px solid var(--line-soft);
   }
   .breakdown-name{width:220px;flex-shrink:0;font-size:14.5px;font-weight:600;font-family:'Source Serif 4';}
-  .breakdown-bar-track{flex:1;height:10px;background:rgba(0,0,0,0.06);position:relative;}
+  .breakdown-bar-track{flex:1;height:10px;background:var(--track);position:relative;}
   .breakdown-bar-fill{height:100%;}
   .breakdown-score{
     width:70px;text-align:right;font-family:'IBM Plex Mono';font-size:13px;flex-shrink:0;
@@ -488,6 +495,11 @@
 </head>
 <body>
 
+<button type="button" class="theme-toggle no-print" id="themeToggle" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode">
+  <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
+<div id="a11yStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="app"></div>
 
 <script>
@@ -2295,12 +2307,12 @@ function comparisonRadarSVG(beforeData, afterData){
     const r = (R*t)/RINGS;
     const pts = [];
     for(let i=0;i<n;i++) pts.push(pt(i,r).map(v=>v.toFixed(1)).join(','));
-    rings += `<polygon points="${pts.join(' ')}" fill="none" stroke="${t===RINGS?'#A79C82':'#ded6bf'}" stroke-width="1"/>`;
+    rings += `<polygon points="${pts.join(' ')}" fill="none" stroke="${t===RINGS?'var(--line)':'var(--chart-grid)'}" stroke-width="1"/>`;
   }
   let spokes = '';
   for(let i=0;i<n;i++){
     const [x,y] = pt(i,R);
-    spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ded6bf" stroke-width="1"/>`;
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--chart-grid)" stroke-width="1"/>`;
   }
   let axisLabels = '';
   for(let i=0;i<n;i++){
@@ -2329,15 +2341,16 @@ function comparisonRadarSVG(beforeData, afterData){
   let afterVertices = '';
   afterPts.forEach((p,i)=>{
     const t = tierOf(afterData.scores[CATS[i].id]);
-    afterVertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="#F1EEE1" stroke-width="1.5"/>`;
+    afterVertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="var(--paper-2)" stroke-width="1.5"/>`;
   });
   let beforeVertices = '';
   beforePts.forEach((p)=>{
-    beforeVertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="#F1EEE1" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+    beforeVertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="var(--paper-2)" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
   });
 
+  const cmpDesc = 'Readiness out of 100 per checkpoint, before and after: ' + CATS.map(c=>c.short+' '+(100-(typeof beforeData.scores[c.id]==='number'?beforeData.scores[c.id]:50))+' to '+(100-(typeof afterData.scores[c.id]==='number'?afterData.scores[c.id]:50))).join(', ') + '.';
   return `
-  <svg viewBox="0 0 ${W} ${H}">
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHtml(cmpDesc)}">
     ${rings}
     ${spokes}
     <polygon points="${beforeStr}" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
@@ -2486,9 +2499,10 @@ function categoryScore(ci){
   return count ? Math.round((total/count)*100) : 0;
 }
 function tierOf(score){
-  if(score < 34) return {label:'Low', color:'var(--low)', bg:'var(--low-bg)'};
-  if(score < 67) return {label:'Moderate', color:'var(--mid)', bg:'var(--mid-bg)'};
-  return {label:'High', color:'var(--high)', bg:'var(--high-bg)'};
+  // color: fills, charts, borders. ink: small text. strong: fill behind white text.
+  if(score < 34) return {label:'Low', color:'var(--low)', ink:'var(--low-ink)', strong:'var(--low-strong)', onDark:'#7DB381', bg:'var(--low-bg)'};
+  if(score < 67) return {label:'Moderate', color:'var(--mid)', ink:'var(--mid-ink)', strong:'var(--mid-strong)', onDark:'#D8A84A', bg:'var(--mid-bg)'};
+  return {label:'High', color:'var(--high)', ink:'var(--high-ink)', strong:'var(--high-strong)', onDark:'#E8745F', bg:'var(--high-bg)'};
 }
 function overallScore(){
   const scores = CATEGORIES.map((c,i)=>categoryScore(i));
@@ -2557,8 +2571,8 @@ function renderHero(){
         <div class="phase-indicator${state.eventDate ? '' : ' muted'}">${phaseStatusText()}</div>
       </div>
 
-      <div class="event-type-field">
-        <div class="event-type-legend mono">What kind of event is this?</div>
+      <div class="event-type-field" role="radiogroup" aria-labelledby="eventTypeLegend">
+        <div class="event-type-legend mono" id="eventTypeLegend">What kind of event is this?</div>
         <label>
           <input type="radio" name="eventType" value="ultra" ${state.eventType==='ultra' ? 'checked' : ''}>
           Ultramarathon
@@ -2590,12 +2604,12 @@ function renderHero(){
       </div>
 
       <div class="timing-note">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#c8b190"/><path d="M8 4v4l2.5 2.5" stroke="#c8b190" stroke-width="1.2"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" stroke="#c8b190"/><path d="M8 4v4l2.5 2.5" stroke="#c8b190" stroke-width="1.2"/></svg>
         The Training &amp; Fitness Readiness checkpoint automatically adjusts based on your start date above — everything else stays the same.
       </div>
 
       <div class="timing-note">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1" stroke="#c8b190"/><path d="M5.5 7V4.8a2.5 2.5 0 0 1 5 0V7" stroke="#c8b190" stroke-width="1.2"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="3.5" y="7" width="9" height="6.5" rx="1" stroke="#c8b190"/><path d="M5.5 7V4.8a2.5 2.5 0 0 1 5 0V7" stroke="#c8b190" stroke-width="1.2"/></svg>
         Nothing you enter here is stored or sent anywhere. Your answers stay on your device — private to you, until and unless you choose to export or share a PDF yourself.
       </div>
 
@@ -2623,7 +2637,7 @@ function trailSVG(){
   const currentFrac = state.step/(n-1);
   const doneLen = currentFrac * pathLen;
   return `
-  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <path class="track" d="${path}" />
     <path class="track-done" d="${path}" stroke-dasharray="${doneLen} ${w}" />
     ${pts.map((p,i)=>{
@@ -2661,7 +2675,7 @@ function renderStepper(){
   <section class="stepper-body">
     <div class="wrap">
       <div class="cat-eyebrow">
-        <span class="cat-icon">${waypointIcon(color)}</span>
+        <span class="cat-icon" aria-hidden="true">${waypointIcon(color)}</span>
         ${cat.short}${phaseLabel ? ` · ${phaseLabel}` : ''}
       </div>
       <h2>${cat.name}</h2>
@@ -2676,8 +2690,8 @@ function renderStepper(){
           </div>
         ` : ''}
         <div class="question">
-          <p class="q"><span class="q-num mono">${String(qi+1).padStart(2,'0')}</span>${escapeHtml(q.q)}${q.info ? ' <span class="info-tag mono">FOR YOUR COACH \u2014 DOESN\u2019T AFFECT YOUR SCORE</span>' : ''}</p>
-          <div class="options">
+          <p class="q" id="q${ci}_${qi}_label"><span class="q-num mono">${String(qi+1).padStart(2,'0')}</span>${escapeHtml(q.q)}${q.info ? ' <span class="info-tag mono">FOR YOUR COACH \u2014 DOESN\u2019T AFFECT YOUR SCORE</span>' : ''}</p>
+          <div class="options" role="radiogroup" aria-labelledby="q${ci}_${qi}_label">
             ${q.opts.map((opt,oi)=>`
               <label class="opt ${state.answers[ci][qi]===oi?'selected':''}">
                 <input type="radio" name="q${ci}_${qi}" value="${oi}" ${state.answers[ci][qi]===oi?'checked':''} data-ci="${ci}" data-qi="${qi}">
@@ -2690,7 +2704,7 @@ function renderStepper(){
 
       <div class="stepper-nav">
         <button class="btn ghost" id="backBtn" ${ci===0?'disabled':''}>← Back</button>
-        <span class="nav-hint" id="navHint"></span>
+        <span class="nav-hint" id="navHint" role="status" aria-live="polite"></span>
         <button class="btn" id="nextBtn">${ci===CATEGORIES.length-1 ? 'See My Readiness Profile →' : 'Next Waypoint →'}</button>
       </div>
 
@@ -2717,14 +2731,15 @@ function skylineSVG(catScores){
     const tier = tierOf(cs.score);
     const halfW = gap*0.34;
     bars += `<polygon points="${x-halfW},${baseY} ${x},${baseY-peakH} ${x+halfW},${baseY}" fill="${tier.color}" opacity="0.85"/>`;
-    bars += `<text x="${x}" y="${baseY-peakH-10}" text-anchor="middle" class="mono" font-size="13" fill="${tier.color}" font-family="IBM Plex Mono">${cs.score}</text>`;
-    labels += `<text x="${x}" y="${baseY+22}" text-anchor="middle" font-size="11.5" fill="#565f4e" font-family="IBM Plex Mono">${cs.short}</text>`;
+    bars += `<text x="${x}" y="${baseY-peakH-10}" text-anchor="middle" class="mono" font-size="13" fill="${tier.ink}" font-family="IBM Plex Mono">${cs.score}</text>`;
+    labels += `<text x="${x}" y="${baseY+22}" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)" font-family="IBM Plex Mono">${cs.short}</text>`;
   });
+  const skyDesc = 'Risk score out of 100 for each checkpoint: ' + catScores.map(cs=>cs.short+' '+cs.score).join(', ') + '.';
   return `
-  <svg viewBox="0 0 ${w} ${h+20}">
-    <line x1="0" y1="${baseY-67}" x2="${w}" y2="${baseY-67}" stroke="#c9c0a7" stroke-width="1" stroke-dasharray="4 4"/>
-    <text x="${w-4}" y="${baseY-72}" text-anchor="end" font-size="10" fill="#8a8168" font-family="IBM Plex Mono">MODERATE THRESHOLD</text>
-    <line x1="0" y1="${baseY}" x2="${w}" y2="${baseY}" stroke="#A79C82" stroke-width="1.5"/>
+  <svg viewBox="0 0 ${w} ${h+20}" role="img" aria-label="${escapeHtml(skyDesc)}">
+    <line x1="0" y1="${baseY-67}" x2="${w}" y2="${baseY-67}" stroke="var(--line-soft)" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="${w-4}" y="${baseY-72}" text-anchor="end" font-size="10" fill="var(--chart-label)" font-family="IBM Plex Mono">MODERATE THRESHOLD</text>
+    <line x1="0" y1="${baseY}" x2="${w}" y2="${baseY}" stroke="var(--line)" stroke-width="1.5"/>
     ${bars}
     ${labels}
   </svg>`;
@@ -2747,19 +2762,19 @@ function radarSVG(catScores){
     const r = (R*t)/RINGS;
     const pts = [];
     for(let i=0;i<n;i++) pts.push(pt(i,r).map(v=>v.toFixed(1)).join(','));
-    rings += `<polygon points="${pts.join(' ')}" fill="none" stroke="${t===RINGS?'#A79C82':'#ded6bf'}" stroke-width="1"/>`;
+    rings += `<polygon points="${pts.join(' ')}" fill="none" stroke="${t===RINGS?'var(--line)':'var(--chart-grid)'}" stroke-width="1"/>`;
   }
 
   let spokes = '';
   for(let i=0;i<n;i++){
     const [x,y] = pt(i,R);
-    spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ded6bf" stroke-width="1"/>`;
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--chart-grid)" stroke-width="1"/>`;
   }
 
   let ringLabels = '';
   for(let t=1;t<=RINGS;t++){
     const val = Math.round(100*t/RINGS);
-    ringLabels += `<text x="${cx+6}" y="${(cy-(R*t)/RINGS+4).toFixed(1)}" font-size="9.5" fill="#8a8168" font-family="IBM Plex Mono">${val}</text>`;
+    ringLabels += `<text x="${cx+6}" y="${(cy-(R*t)/RINGS+4).toFixed(1)}" font-size="9.5" fill="var(--chart-label)" font-family="IBM Plex Mono">${val}</text>`;
   }
 
   let axisLabels = '';
@@ -2772,7 +2787,7 @@ function radarSVG(catScores){
     if(s < -0.35) dy='0em';
     if(s > 0.35) dy='0.85em';
     const t = tierOf(catScores[i].score);
-    axisLabels += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" dy="${dy}" font-size="11.5" font-family="IBM Plex Mono" fill="${t.color}">${catScores[i].short}</text>`;
+    axisLabels += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" dy="${dy}" font-size="11.5" font-family="IBM Plex Mono" fill="${t.ink}">${catScores[i].short}</text>`;
   }
 
   const pts = catScores.map((cs,i)=>{
@@ -2785,11 +2800,12 @@ function radarSVG(catScores){
   let vertices = '';
   pts.forEach((p,i)=>{
     const t = tierOf(catScores[i].score);
-    vertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="#F1EEE1" stroke-width="1.5"/>`;
+    vertices += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.2" fill="${t.color}" stroke="var(--paper-2)" stroke-width="1.5"/>`;
   });
 
+  const radarDesc = 'Readiness out of 100 per checkpoint (higher is better): ' + catScores.map(cs=>cs.short+' '+(100-cs.score)).join(', ') + '.';
   return `
-  <svg viewBox="0 0 ${W} ${H}">
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHtml(radarDesc)}">
     ${rings}
     ${spokes}
     <polygon points="${ptStr}" fill="${overallColor}" fill-opacity="0.15" stroke="${overallColor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
@@ -2827,10 +2843,10 @@ function renderResults(){
         ${state.eventName ? escapeHtml(state.eventName) : 'Your Event'}${dateStr ? ' · '+dateStr : ''}
       </h1>
       <div class="score-block">
-        <div class="score-num" style="color:${tier.color}">${overall}</div>
+        <div class="score-num" style="color:${tier.onDark}">${overall}</div>
         <div class="score-suffix">/ 100 overall risk</div>
       </div>
-      <div class="tier-pill" style="background:${tier.color};color:#fff;">${tier.label} Risk</div>
+      <div class="tier-pill" style="background:${tier.strong};color:#fff;">${tier.label} Risk</div>
       <div class="btn-row no-print" style="margin-top:24px;">
         <button type="button" class="btn ghost-dark" id="compareFromResultsBtn">Compare With a Previous Assessment &rarr;</button>
       </div>
@@ -2860,7 +2876,7 @@ function renderResults(){
           const t = tierOf(c.score);
           return `
           <div class="priority-card" style="border-left-color:${t.color}">
-            <h3>${escapeHtml(c.name)} <span class="tier-tag" style="background:${t.bg};color:${t.color}">${c.score}/100 · ${t.label}</span><button type="button" class="info-btn" data-cat-id="${c.id}" aria-label="Learn more about ${escapeHtml(c.name)}">i</button></h3>
+            <h3>${escapeHtml(c.name)} <span class="tier-tag" style="background:${t.bg};color:${t.ink}">${c.score}/100 · ${t.label}</span><button type="button" class="info-btn" data-cat-id="${c.id}" aria-label="Learn more about ${escapeHtml(c.name)}">i</button></h3>
             <p>${escapeHtml(c.remediation.summary)}</p>
             <ul class="checklist">
               ${c.remediation.actions.map((a,ai)=>`
@@ -2892,7 +2908,7 @@ function renderResults(){
           <div class="breakdown-row">
             <div class="breakdown-name">${escapeHtml(c.name)}</div>
             <div class="breakdown-bar-track"><div class="breakdown-bar-fill" style="width:${c.score}%;background:${t.color}"></div></div>
-            <div class="breakdown-score mono" style="color:${t.color}">${c.score}</div>
+            <div class="breakdown-score mono" style="color:${t.ink}">${c.score}</div>
           </div>`;
         }).join('')}
       </div>
@@ -2998,7 +3014,7 @@ function renderComparisonResults(before, after){
         <div class="breakdown-row">
           <div class="breakdown-name">${escapeHtml(d.name)}</div>
           <div class="breakdown-bar-track"><div class="breakdown-bar-fill" style="width:${d.after}%;background:${t.color}"></div></div>
-          <div class="breakdown-score mono" style="color:${t.color}">${d.after}</div>
+          <div class="breakdown-score mono" style="color:${t.ink}">${d.after}</div>
         </div>`;
       }).join('')}
     </div>
@@ -3104,7 +3120,7 @@ function renderFeedbackModal(){
       <h2 style="font-size:22px;">Help make this better for everyone</h2>
       <p style="font-size:14px;color:var(--ink-soft);margin:10px 0 20px;">This tool improves every time someone flags a wrong link, a confusing question, or a gap in what it covers. Takes a minute, and it helps every ultrarunner, hiker, and mountain athlete who uses this after you \u2014 not just you.</p>
 
-      <div id="feedbackStatus" class="modal-status" hidden>Thanks \u2014 that's sent. I appreciate you flagging it.</div>
+      <div id="feedbackStatus" class="modal-status" role="status" hidden>Thanks \u2014 that's sent. I appreciate you flagging it.</div>
 
       <form id="feedbackForm" action="https://formspree.io/f/mqpakvzl" method="POST">
         <div class="field">
@@ -3179,8 +3195,46 @@ function escapeHtml(str){
 /* =========================================================
    MAIN RENDER + EVENTS
 ========================================================= */
+/* Keyboard and screen-reader support.
+   The page is redrawn from scratch after every answer, which would drop keyboard focus.
+   These helpers remember what had focus and put it back, and on a screen change they move
+   focus to the new heading and announce it. */
+function captureFocus(){
+  const a = document.activeElement;
+  const app = document.getElementById('app');
+  if(!a || a === document.body || !app || !app.contains(a)) return null;
+  const f = { id:a.id || '', name:a.name || '', value:a.value, type:a.type || '' };
+  if(a.type === 'text' || a.type === 'search'){ try{ f.start = a.selectionStart; f.end = a.selectionEnd; }catch(e){} }
+  return f;
+}
+function restoreFocus(f){
+  if(!f) return;
+  let el = null;
+  if(f.id) el = document.getElementById(f.id);
+  if(!el && f.name && f.type === 'radio'){
+    el = Array.prototype.find.call(document.querySelectorAll('#app input[type=radio]'), r => r.name === f.name && r.value === f.value);
+  }
+  if(!el) return;
+  try{ el.focus({preventScroll:true}); }catch(e){ el.focus(); }
+  if(f.start != null && el.setSelectionRange){ try{ el.setSelectionRange(f.start, f.end); }catch(e){} }
+}
+let a11yFirstRender = true;
+function announceScreen(){
+  // The first draw is the page loading, not the visitor moving: don't steal focus or announce.
+  if(a11yFirstRender){ a11yFirstRender = false; return; }
+  let msg = '';
+  if(state.screen === 'hero') msg = 'Start page';
+  else if(state.screen === 'stepper') msg = 'Checkpoint ' + (state.step+1) + ' of ' + CATEGORIES.length + ': ' + CATEGORIES[state.step].name;
+  else if(state.screen === 'compare') msg = 'Compare assessments';
+  else msg = 'Your results';
+  const live = document.getElementById('a11yStatus');
+  if(live){ live.textContent = ''; setTimeout(()=>{ live.textContent = msg; }, 30); }
+  const h = document.querySelector('#app h2, #app h1');
+  if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(e){ h.focus(); } }
+}
 function render(scrollTop = true){
   const app = document.getElementById('app');
+  const focusState = scrollTop ? null : captureFocus();
   if(state.screen==='hero') app.innerHTML = renderHero();
   else if(state.screen==='stepper') app.innerHTML = renderStepper();
   else if(state.screen==='compare') app.innerHTML = renderCompare();
@@ -3189,6 +3243,9 @@ function render(scrollTop = true){
   attachEvents();
   if(scrollTop){
     window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    announceScreen();
+  } else {
+    restoreFocus(focusState);
   }
 }
 
@@ -3359,6 +3416,86 @@ function attachEvents(){
     });
   }
 }
+
+/* Modals: dialog semantics, focus moves in on open, Tab stays inside, Esc closes, focus returns.
+   The modals open and close by adding and removing the 'open' class in several places, so this
+   watches that class instead of touching each call site. */
+(function setupModalA11y(){
+  let opener = null;
+  const app = document.getElementById('app');
+  if(!app || !window.MutationObserver) return;
+  function openModal(){ return app.querySelector('.modal-overlay.open'); }
+  function prepare(m){
+    if(m.getAttribute('role')) return;
+    m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true');
+    const sub = m.querySelector('.modal-sub');
+    if(sub) m.setAttribute('aria-label', sub.textContent.trim());
+  }
+  new MutationObserver(muts=>{
+    for(const mu of muts){
+      const m = mu.target;
+      if(!m.classList || !m.classList.contains('modal-overlay')) continue;
+      prepare(m);
+      if(m.classList.contains('open')){
+        if(!opener) opener = document.activeElement;
+        const close = m.querySelector('.modal-close');
+        if(close) close.focus();
+      } else if(opener){
+        try{ opener.focus({preventScroll:true}); }catch(e){}
+        opener = null;
+      }
+    }
+  }).observe(app, {attributes:true, attributeFilter:['class'], subtree:true});
+  document.addEventListener('keydown', e=>{
+    const m = openModal();
+    if(!m) return;
+    if(e.key === 'Escape'){ m.classList.remove('open'); return; }
+    if(e.key !== 'Tab') return;
+    const f = Array.prototype.filter.call(m.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select,textarea,[tabindex]:not([tabindex="-1"])'), el => el.offsetParent !== null);
+    if(!f.length) return;
+    const first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    else if(!m.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+  });
+})();
+
+/* Light / dark. The early script in <head> applies the saved choice (or the device setting on a
+   first visit) before the page paints. The choice is saved on this device only. */
+(function setupThemeToggle(){
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const KEY = 'uera-theme';
+  function mode(){ return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+  function apply(m){
+    root.setAttribute('data-theme', m);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', m === 'dark' ? '#121612' : '#DEDACB');
+    if(btn){
+      const next = m === 'dark' ? 'light' : 'dark';
+      btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      btn.setAttribute('title', 'Switch to ' + next + ' mode');
+    }
+  }
+  apply(mode());
+  if(btn) btn.addEventListener('click', ()=>{
+    const m = mode() === 'dark' ? 'light' : 'dark';
+    apply(m);
+    try{ localStorage.setItem(KEY, m); }catch(e){}
+  });
+  // Follow the device setting while the visitor has not chosen.
+  try{
+    if(window.matchMedia){
+      const mq = matchMedia('(prefers-color-scheme: dark)');
+      const onChange = e=>{
+        let saved = null;
+        try{ saved = localStorage.getItem(KEY); }catch(err){}
+        if(saved !== 'light' && saved !== 'dark') apply(e.matches ? 'dark' : 'light');
+      };
+      if(mq.addEventListener) mq.addEventListener('change', onChange);
+    }
+  }catch(e){}
+})();
 
 render();
 preloadCoachLogos();

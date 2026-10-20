@@ -19,7 +19,7 @@ Describes the UI as built in `index.html`, `theme.css` and `theme.js`. Where thi
 | Modals | Secondary content | License, learning resources, feedback form |
 
 ## Visual language
-- Light "paper" theme: `--paper #DEDACB` page, `--paper-2 #F1EEE1` panels, `--ink #232922` text, `--pine #1B2A1F` dark header and footer, `--accent #CB5A28` for actions.
+- Default "paper" (light) theme, plus a dark theme (below): `--paper #DEDACB` page, `--paper-2 #F1EEE1` panels, `--ink #232922` text, `--pine #1B2A1F` dark header and footer, `--accent #CB5A28` for actions.
 - Risk tiers use green, amber and red, with tier **labels** (Low, Moderate, High) so color is never the only signal. Tier cut points are 34 and 67 on a 0 to 100 scale.
 - Type: Big Shoulders Display (headings, uppercase), Source Serif 4 (body), IBM Plex Mono (labels, data, buttons).
 - Signature elements: topographic contour texture on dark headers, waypoint ring icon for categories and steps, the JCady cairn mark on the start page and tab icon.
@@ -35,11 +35,36 @@ Describes the UI as built in `index.html`, `theme.css` and `theme.js`. Where thi
 - **PDF:** a header band on the first page and a message in the coach section.
 - Logos load only from the repo's own `partners/` folder. If a logo is missing the name is shown without one.
 
-## Accessibility and quality: known gaps
-- The page uses `aria-` attributes in only a few places (6 in `index.html`). Keyboard use, focus order and screen reader behavior of the stepper, radios and modals have **not been audited**.
-- There is no dark mode and no `prefers-reduced-motion` handling.
-- Color contrast of the muted ink and accent colors on the paper backgrounds has **not been measured**.
-- Recommended before the next release: a keyboard-only pass, a screen reader pass, and a contrast check against WCAG AA.
+## Light and dark theme
+- Toggle (moon/sun button, fixed top right, 44px). `data-theme` on `<html>`, saved on the device in `localStorage` key `uera-theme`. First visit follows the device setting (`prefers-color-scheme`), and keeps following it until the visitor chooses.
+- An early script in `<head>` (`#theme-init`) applies the theme before first paint. It carries an `id` on purpose so the rebuild tooling does not mistake it for the app script.
+- Dark tokens live in `theme.css` under `:root[data-theme="dark"]` and only apply when that attribute is set, so other sites sharing the file are unaffected. The pine start page and results header stay dark in both themes.
+- The PDF report is always light, whatever the on-screen theme.
 
-## Ideas shared with the Tribal Knowledge app (not built)
-tk.jcady.org has a light/dark toggle that follows the same brand. If UERA adopts it, reuse the same approach: a `data-theme` attribute, CSS variables, a saved choice on the device, and an early script in `<head>` to avoid a flash.
+## Accessibility (as of this change)
+Built in:
+- **Keyboard focus survives redraws.** The page is redrawn after each answer; focus and text selection are put back afterwards.
+- **Screen changes:** focus moves to the new heading and a polite live region announces it ("Checkpoint 3 of 10: Gear & Tools").
+- **Modals:** `role="dialog"`, `aria-modal`, focus moves in, Tab stays inside, Esc closes, focus returns to the opener.
+- **Groups and charts:** answer options and the event-type choice are labelled radio groups; the skyline and radar charts have text descriptions of their values; decorative icons are hidden from assistive technology.
+- **Reduced motion:** transitions and smooth scrolling switch off when the device asks for it.
+- **Focus ring:** 3px accent outline on every interactive element (already in `theme.css`).
+
+Colour contrast, measured with the WCAG formula on the token values (AA needs 4.5 for small text, 3 for large text and graphics):
+
+| Pair | Before | Now |
+|---|---|---|
+| Orange text on paper | 2.98 | 4.62 (`--accent-text`) |
+| White on orange button | 4.17 | 4.91 (`--accent-btn`) |
+| White on amber risk pill | 3.46 | 5.35 (`--mid-strong`) |
+| Green text on paper | 4.31 | 4.99 (`--low-ink`) |
+| Chart labels on panel | 3.33 | 4.89 (`--chart-label`) |
+| Overall score number on the pine header (green / red) | 3.00 / 2.55 | 6.18 / 5.08 (`onDark`) |
+| Dark theme body text / secondary text on panels | n/a | 13.15 / 8.00 |
+
+Still open:
+- **Not tested with a real screen reader** (VoiceOver, TalkBack, NVDA). Everything above was checked with scripted keyboard tests and by reading the markup.
+- **Option card borders:** the border between answer cards uses `--line-soft`, which is below 3:1 against the page in both themes. The radio button and selected-state tint carry the meaning, but the card edge itself is faint.
+- **Risk skyline label overlap:** the "Moderate threshold" label can sit on top of a score number when a checkpoint scores near 25.
+- Compare screen and PDF upload flow were not re-audited for keyboard use.
+- Contrast was measured on tokens, not on every rendered screen.

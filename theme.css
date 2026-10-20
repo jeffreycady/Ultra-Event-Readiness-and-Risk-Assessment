@@ -45,11 +45,55 @@
   --low-bg:rgba(75,122,78,0.13);
   --mid-bg:rgba(178,129,42,0.15);
   --high-bg:rgba(178,59,46,0.14);
+
+  /* ---- Accessible variants (WCAG AA, 4.5:1 for small text) ----
+     --accent / --low / --mid / --high stay the brand colours for fills,
+     borders, charts and large type. Use the variants below for small text
+     or for text on a coloured fill. */
+  --accent-text:#9E4216;      /* orange text on --paper / --paper-2 */
+  --accent-on-dark:#E8855D;   /* orange text on --pine */
+  --accent-btn:#BC4F1F;       /* button fill behind white text */
+  --accent-btn-hover:#A5441A;
+  --accent-tint:#fbf1e9;      /* selected-option background */
+  --low-ink:#376339;  --mid-ink:#7F5710;  --high-ink:#A8362A;      /* tier text */
+  --low-strong:#3F6D43; --mid-strong:#8F6212; --high-strong:#B23B2E; /* tier fill behind white text */
+  --chart-grid:#ded6bf;
+  --chart-label:#6F6650;
+  --track:rgba(0,0,0,0.06);
+  color-scheme:light;
 }
+
+/* ---------- Dark theme ----------
+   Applies ONLY when <html data-theme="dark"> is set, so a site that copies
+   this file without a toggle is unaffected. The dark pine header, footer
+   and hero stay as they are in both themes. */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#121612;
+  --paper-2:#1B221C;
+  --ink:#ECE7D8;
+  --ink-soft:#B3B8A8;
+  --line:#6F7A6C;
+  --line-soft:#3A433A;
+  --accent-text:#E2744A;
+  --accent-tint:rgba(203,90,40,0.16);
+  --low:#7DB381;  --mid:#D8A84A;  --high:#E27766;
+  --low-ink:#7DB381; --mid-ink:#D8A84A; --high-ink:#E27766;
+  --low-bg:rgba(125,179,129,0.14);
+  --mid-bg:rgba(216,168,74,0.14);
+  --high-bg:rgba(226,119,102,0.15);
+  --chart-grid:#2E372F;
+  --chart-label:#9AA090;
+  --track:rgba(255,255,255,0.10);
+}
+:root[data-theme="light"]{color-scheme:light;}
 
 /* ---------- Reset & base ---------- */
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth;}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
+}
 body{
   margin:0;
   background:var(--paper);
@@ -133,13 +177,13 @@ section + section{border-top:1px solid var(--line-soft);}
 .btn-row{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap;}
 .btn{
   display:inline-flex;align-items:center;gap:10px;
-  background:var(--accent);color:#fff;border:none;
+  background:var(--accent-btn);color:#fff;border:none;
   padding:15px 26px;font-size:13.5px;letter-spacing:0.06em;text-transform:uppercase;
   border-radius:var(--radius);text-decoration:none;
   font-family:'IBM Plex Mono', monospace;
   transition:background .15s ease, transform .15s ease;
 }
-.btn:hover{background:#b04b1f;}
+.btn:hover{background:var(--accent-btn-hover);}
 .btn:active{transform:translateY(1px);}
 .btn:disabled{opacity:0.35;cursor:not-allowed;}
 .btn.small{padding:9px 16px;font-size:11.5px;}
@@ -148,6 +192,7 @@ section + section{border-top:1px solid var(--line-soft);}
    (body sections on --paper/--paper-2). */
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
 .btn.ghost:hover{background:rgba(0,0,0,0.05);}
+:root[data-theme="dark"] .btn.ghost:hover{background:rgba(255,255,255,0.07);}
 
 /* Ghost button automatically flips for dark/hero contexts —
    any page's hero gets a correctly-contrasted ghost button
@@ -192,3 +237,21 @@ footer.site-footer-full p.lead-f{color:#d9d2c0;font-size:15.5px;max-width:50ch;m
 .site-mark{display:block;width:max-content;line-height:0;margin:0 0 18px;border-radius:6px}
 .site-mark img{width:44px;height:44px;display:block}
 .site-mark:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+/* ---------- Theme toggle ----------
+   <button class="theme-toggle" data-theme-toggle> with .ic-sun and .ic-moon
+   SVGs. Shows the sun in dark mode (switch to light) and the moon in light
+   mode (switch to dark). Fixed top right; hidden in print. */
+.theme-toggle{
+  position:fixed;top:12px;right:12px;z-index:60;
+  width:44px;height:44px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;padding:0;
+  border:1px solid var(--line);background:var(--paper-2);color:var(--ink);
+  box-shadow:0 1px 4px rgba(0,0,0,0.18);
+}
+.theme-toggle:hover{border-color:var(--accent);}
+.theme-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.theme-toggle .ic-sun{display:none;}
+:root[data-theme="dark"] .theme-toggle .ic-sun{display:block;}
+:root[data-theme="dark"] .theme-toggle .ic-moon{display:none;}
+@media print{.theme-toggle{display:none !important;}}

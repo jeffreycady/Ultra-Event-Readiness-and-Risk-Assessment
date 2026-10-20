@@ -78,3 +78,17 @@ every repo that uses them.
 - The topo contour texture on dark hero/header sections.
 - Risk-tier coloring (green/amber/red) for anything that scores or
   flags — only pull this in if the page actually rates something.
+
+## Dark theme and accessible colour variants
+
+`theme.css` defines extra tokens. The brand tokens above (`--accent`, `--low`, `--mid`, `--high`) are for fills, borders, charts and large type. For small text or text on a coloured fill use:
+
+| Token | Light | Use |
+|---|---|---|
+| `--accent-text` | `#9E4216` | Orange text on `--paper` / `--paper-2` |
+| `--accent-on-dark` | `#E8855D` | Orange text on `--pine` |
+| `--accent-btn` / `--accent-btn-hover` | `#BC4F1F` / `#A5441A` | Button fill behind white text (`.btn` uses it) |
+| `--low-ink` `--mid-ink` `--high-ink` | green, amber, red | Risk text on paper |
+| `--low-strong` `--mid-strong` `--high-strong` | green, amber, red | Risk fill behind white text |
+
+Dark mode applies only when `<html data-theme="dark">` is set (see `:root[data-theme="dark"]` in `theme.css`), so a page that copies the file without a toggle stays light. To add the toggle to a page, copy the `#theme-init` script from the `<head>` of `index.html`, a `.theme-toggle` button, and the `setupThemeToggle` function. `.theme-toggle` and the reduced-motion rules are in `theme.css`.

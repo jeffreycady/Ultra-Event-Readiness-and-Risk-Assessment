@@ -12,8 +12,9 @@ How UERA is put together, as of the current `main` branch. Diagrams are Mermaid 
 ## How it's put together
 - **One page.** `index.html` holds the markup, styles, application code and the question data. Outside code and assets come from three places: jsPDF (CDN, version pinned with an integrity hash), pdf.js (CDN, version pinned, loaded as a module so it has no integrity hash) and Google Fonts. Shared styling comes from `theme.css` and `theme.js`.
 - **Questions are data.** `CATEGORIES` in `index.html` holds ten categories, each with questions, options, remediation steps and learning links. It is generated from `questions-and-learning-links.csv`. Do not edit the generated block by hand.
-- **State is in memory.** A single `state` object tracks screen, step, event details, answers and comparison data. Nothing is written to `localStorage` or cookies.
+- **State is in memory.** A single `state` object tracks screen, step, event details, answers and comparison data. Answers are never written to `localStorage` or cookies. The only stored value is the light/dark choice.
 - **Scoring.** Each category score is the average of its answered questions, each scaled 0 to 1 by the chosen option's position, times 100. "N/A" answers count as 0 risk and informational-only questions are excluded. The overall score is the mean of the category scores. Tiers: below 34 Low, below 67 Moderate, otherwise High.
+- **Theme.** `data-theme` on `<html>` switches CSS variables between light and dark. The choice is saved in `localStorage` (`uera-theme`) on the device and is the only thing the page ever stores. (The earlier statement that nothing is written to `localStorage` applies to answers, not the theme choice.)
 - **PDF.** Generated in the browser with jsPDF. A hidden data block (`UERA_DATA_V1`) is embedded on the last page so a later upload can read scores back reliably instead of parsing the rendered text.
 
 ## Components

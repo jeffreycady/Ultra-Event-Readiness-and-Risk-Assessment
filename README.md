@@ -16,7 +16,7 @@ A free readiness and risk assessment for ultramarathons, mountaineering, ski mou
 
 ## Privacy
 
-Everything runs in the visitor's browser. Answers are not stored and not sent anywhere. The optional feedback form is the only thing that sends data, and only when someone submits it. Partner logos are loaded only from this repo's own `partners/` folder, so a branded link makes no requests to other sites.
+Everything runs in the visitor's browser. Answers are not stored and not sent anywhere. The only thing saved on the device is the light/dark choice. The optional feedback form is the only thing that sends data, and only when someone submits it. Partner logos are loaded only from this repo's own `partners/` folder, so a branded link makes no requests to other sites.
 
 ## Repo layout
 
