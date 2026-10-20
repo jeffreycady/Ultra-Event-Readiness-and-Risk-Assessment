@@ -168,6 +168,25 @@
   .trail .dot.done{fill:var(--accent);stroke:var(--accent);}
   .trail .dot.current{fill:var(--pine);stroke:var(--pine);}
 
+  /* Start page form: rounded boxes like the Tribal Knowledge app (the hero form had no input styling before) */
+  .hero-meta{gap:16px;}
+  .hero-meta .field{flex:1 1 240px;display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .hero-meta .field label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#b7ac93;}
+  .hero-meta .field input{width:100%;min-height:46px;padding:12px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.28);border-radius:12px;color:#F7F2E7;font-family:'Source Serif 4',serif;font-size:15px;color-scheme:dark;}
+  .hero-meta .field input::placeholder{color:#a99b7d;opacity:1;}
+  .phase-indicator{border-radius:12px;}
+  .event-type-field label,.first-ultra-toggle label{
+    padding:12px 14px;border:1px solid rgba(255,255,255,0.22);border-radius:12px;background:rgba(255,255,255,0.05);
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .event-type-field label:hover,.first-ultra-toggle label:hover{border-color:var(--accent-on-dark);}
+  .event-type-field label:has(input:checked),.first-ultra-toggle label:has(input:checked){border-color:var(--accent-on-dark);background:rgba(232,133,93,0.14);}
+  .first-ultra-toggle{margin-top:14px;max-width:460px;}
+  .first-ultra-toggle label{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#d9d2c0;cursor:pointer;line-height:1.4;}
+  .first-ultra-toggle input[type=checkbox]{width:16px;height:16px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+  .framework-callout{border-radius:14px;}
+  .checkpoint-list{border-radius:14px;overflow:hidden;}
+
   /* Rounded buttons (pill) like the Tribal Knowledge app; answer boxes use 12px corners */
   .btn{border-radius:999px;padding-left:28px;padding-right:28px;}
   .btn.small{padding-left:18px;padding-right:18px;}
