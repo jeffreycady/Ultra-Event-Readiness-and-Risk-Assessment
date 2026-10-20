@@ -28,6 +28,7 @@ Describes the UI as built in `index.html`, `theme.css` and `theme.js`. Where thi
 - Default "paper" (light) theme, plus a dark theme (below): `--paper #DEDACB` page, `--paper-2 #F1EEE1` panels, `--ink #232922` text, `--pine #1B2A1F` dark header and footer, `--accent #CB5A28` for actions.
 - Risk tiers use green, amber and red, with tier **labels** (Low, Moderate, High) so color is never the only signal. Tier cut points are 34 and 67 on a 0 to 100 scale.
 - Type: Big Shoulders Display (headings, uppercase), Source Serif 4 (body), IBM Plex Mono (labels, data, buttons).
+- Corners: buttons are pills (fully rounded) and answer boxes have 12px corners, like the Tribal Knowledge app. Cards, panels and the callout boxes are still square (2px).
 - Signature elements: topographic contour texture on dark headers, waypoint ring icon for categories and steps, the JCady cairn mark on the start page and tab icon.
 
 ## Layout
