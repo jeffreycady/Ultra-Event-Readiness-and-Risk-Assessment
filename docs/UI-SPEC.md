@@ -13,10 +13,16 @@ Describes the UI as built in `index.html`, `theme.css` and `theme.js`. Where thi
 | Screen | Purpose | Key elements |
 |---|---|---|
 | Start (`hero`) | Set up the assessment | Event name, date, event type (ultra, mountaineering, skimo, hike), first-event toggle; partner bar and coach card if a branded link is used |
-| Stepper (`stepper`) | Answer the ten categories | Step indicator, one category's questions per step, single-choice options, "N/A" where a question allows it, learning links |
+| Stepper (`stepper`) | Answer the ten categories | Sticky top bar with a live skyline (see below), one category's questions per step, single-choice options, "N/A" where a question allows it, learning links |
 | Results (`results`) | Show readiness and next steps | Coach card at top (branded links), overall tier, radar chart, skyline chart, per-category tier and remediation, PDF button |
 | Compare (`compare`) | Before and after | Upload an earlier PDF, choose the after state (upload or the live session), side-by-side radar and insights, compare PDF |
 | Modals | Secondary content | License, learning resources, feedback form |
+
+## Live skyline in the stepper bar
+- One peak per checkpoint in the sticky top bar. When the visitor presses **Next** on a checkpoint, its peak rises in, sized by its risk score and coloured by its tier (green, amber, red). The checkpoint they are on is a dashed outline, and later ones are small grey stubs.
+- A running figure on the right shows the average risk of the checkpoints submitted so far, with a count ("Risk so far · 5/10"). It is a running average, not a prediction: the final overall score is the average of all ten.
+- A checkpoint's peak appears only after it is submitted, not while it is being answered. Going Back keeps peaks for checkpoints already answered.
+- Accessibility: the chart has a text description of scored checkpoints, and moving on announces the score ("Training scored 39, Moderate risk. Checkpoint 6 of 10: ..."). The running figure is hidden from screen readers to avoid repeating it. The peak animation is off when the device asks for reduced motion.
 
 ## Visual language
 - Default "paper" (light) theme, plus a dark theme (below): `--paper #DEDACB` page, `--paper-2 #F1EEE1` panels, `--ink #232922` text, `--pine #1B2A1F` dark header and footer, `--accent #CB5A28` for actions.

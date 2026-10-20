@@ -168,6 +168,21 @@
   .trail .dot.done{fill:var(--accent);stroke:var(--accent);}
   .trail .dot.current{fill:var(--pine);stroke:var(--pine);}
 
+  /* Live skyline in the top bar: one peak per checkpoint, filled in as each is submitted */
+  .stepper-header{padding:12px 0;}
+  .live-skyline{flex:1;height:56px;position:relative;min-width:0;}
+  .live-skyline svg{width:100%;height:100%;display:block;overflow:visible;}
+  .live-skyline .base{stroke:var(--line);stroke-width:1.5;vector-effect:non-scaling-stroke;}
+  .live-skyline .stub{fill:var(--line-soft);}
+  .live-skyline .here{fill:none;stroke:var(--ink-soft);stroke-width:1.5;stroke-dasharray:3 3;vector-effect:non-scaling-stroke;}
+  .live-skyline .peak{opacity:0.9;}
+  .live-skyline .peak.new{transform-box:fill-box;transform-origin:50% 100%;animation:peak-rise .6s ease-out;}
+  @keyframes peak-rise{from{transform:scaleY(0.15);opacity:0.4;}to{transform:scaleY(1);opacity:0.9;}}
+  .live-score{display:flex;flex-direction:column;align-items:flex-end;min-width:72px;line-height:1.1;}
+  .live-score .num{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:30px;}
+  .live-score .cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .live-score .empty{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);max-width:92px;text-align:right;}
+  @media (max-width:900px){ .stepper-header .wrap{padding-right:68px;} }
   .stepper-body{padding:44px 0 100px;}
   .cat-eyebrow{
     display:flex;align-items:center;gap:12px;
@@ -2647,6 +2662,51 @@ function trailSVG(){
   </svg>`;
 }
 
+/* Peaks for the checkpoints the visitor has already submitted (fully answered, not the one
+   they are on), sized and coloured by that checkpoint's risk tier. The current checkpoint is a
+   dashed outline and later ones are stubs. */
+function scoredSoFar(){
+  const out = [];
+  CATEGORIES.forEach((c,ci)=>{
+    if(ci !== state.step && state.answers && allAnswered(ci)) out.push({ci, short:c.short, name:c.name, score:categoryScore(ci)});
+  });
+  return out;
+}
+function liveSkylineSVG(){
+  const n = CATEGORIES.length, W = 1000, H = 56, base = H-2, slot = W/n, half = slot*0.36;
+  const scored = {};
+  scoredSoFar().forEach(x=>{ scored[x.ci] = x; });
+  let shapes = '';
+  CATEGORIES.forEach((c,ci)=>{
+    const cx = ci*slot + slot/2;
+    if(scored[ci]){
+      const t = tierOf(scored[ci].score);
+      const ph = 8 + (scored[ci].score/100)*44;
+      const isNew = state.justScored === ci;
+      shapes += `<polygon class="peak${isNew?' new':''}" points="${cx-half},${base} ${cx},${base-ph} ${cx+half},${base}" fill="${t.color}"/>`;
+    } else if(ci === state.step){
+      shapes += `<polygon class="here" points="${cx-half},${base} ${cx},${base-22} ${cx+half},${base}"/>`;
+    } else {
+      shapes += `<polygon class="stub" points="${cx-half},${base} ${cx},${base-7} ${cx+half},${base}"/>`;
+    }
+  });
+  const list = scoredSoFar();
+  const desc = list.length
+    ? 'Risk so far, out of 100: ' + list.map(x=>x.short+' '+x.score).join(', ') + '. Checkpoint ' + (state.step+1) + ' of ' + n + ' is in progress.'
+    : 'No checkpoints scored yet. Checkpoint ' + (state.step+1) + ' of ' + n + ' is in progress.';
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(desc)}">
+    <line class="base" x1="0" y1="${base}" x2="${W}" y2="${base}"/>
+    ${shapes}
+  </svg>`;
+}
+function liveScoreHTML(){
+  const list = scoredSoFar();
+  if(!list.length) return `<div class="live-score" aria-hidden="true"><span class="empty">Score builds as you go</span></div>`;
+  const avg = Math.round(list.reduce((a,x)=>a+x.score,0)/list.length);
+  const t = tierOf(avg);
+  return `<div class="live-score" aria-hidden="true"><span class="num" style="color:${t.ink}">${avg}</span><span class="cap">Risk so far · ${list.length}/${CATEGORIES.length}</span></div>`;
+}
+
 function renderStepper(){
   const ci = state.step;
   const cat = CATEGORIES[ci];
@@ -2668,7 +2728,8 @@ function renderStepper(){
     <div class="wrap">
       <div class="progress-row">
         <div class="progress-label mono">Waypoint ${ci+1} / ${CATEGORIES.length}${dText ? ' · '+dText : ''}</div>
-        <div class="trail">${trailSVG()}</div>
+        <div class="live-skyline">${liveSkylineSVG()}</div>
+        ${liveScoreHTML()}
       </div>
     </div>
   </section>
@@ -3224,7 +3285,10 @@ function announceScreen(){
   if(a11yFirstRender){ a11yFirstRender = false; return; }
   let msg = '';
   if(state.screen === 'hero') msg = 'Start page';
-  else if(state.screen === 'stepper') msg = 'Checkpoint ' + (state.step+1) + ' of ' + CATEGORIES.length + ': ' + CATEGORIES[state.step].name;
+  else if(state.screen === 'stepper'){
+    const ls = state.lastScored;
+    msg = (ls ? ls.name + ' scored ' + ls.score + ', ' + tierOf(ls.score).label + ' risk. ' : '') + 'Checkpoint ' + (state.step+1) + ' of ' + CATEGORIES.length + ': ' + CATEGORIES[state.step].name;
+  }
   else if(state.screen === 'compare') msg = 'Compare assessments';
   else msg = 'Your results';
   const live = document.getElementById('a11yStatus');
@@ -3241,6 +3305,7 @@ function render(scrollTop = true){
   else app.innerHTML = renderResults();
 
   attachEvents();
+  state.justScored = null;
   if(scrollTop){
     window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
     announceScreen();
@@ -3317,6 +3382,7 @@ function attachEvents(){
     });
     document.getElementById('startBtn').addEventListener('click', ()=>{
       initAnswers();
+      state.lastScored = null;
       state.screen='stepper'; state.step=0; render();
     });
     const compareLink = document.getElementById('compareFromHeroBtn');
@@ -3334,14 +3400,18 @@ function attachEvents(){
       });
     });
     document.getElementById('backBtn').addEventListener('click', ()=>{
-      if(state.step>0){ state.step--; render(); }
+      if(state.step>0){ state.lastScored = null; state.step--; render(); }
     });
     document.getElementById('nextBtn').addEventListener('click', ()=>{
       if(!allAnswered(state.step)){
         document.getElementById('navHint').textContent = 'Answer every question to continue.';
         return;
       }
-      if(state.step < CATEGORIES.length-1){ state.step++; render(); }
+      if(state.step < CATEGORIES.length-1){
+        state.justScored = state.step;
+        state.lastScored = { name:CATEGORIES[state.step].name, score:categoryScore(state.step) };
+        state.step++; render();
+      }
       else { state.screen='results'; render(); }
     });
   }
