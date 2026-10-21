@@ -34,7 +34,7 @@
   --accent:#CB5A28;
   --cream:#F7F2E7;
   --dim:#c8b190;
-  --radius:2px;
+  --radius:8px;
 
   /* ---- Risk/status tiers ----
      For any tool that scores, flags, or rates something.
@@ -179,7 +179,7 @@ section + section{border-top:1px solid var(--line-soft);}
   display:inline-flex;align-items:center;gap:10px;
   background:var(--accent-btn);color:#fff;border:none;
   padding:15px 26px;font-size:13.5px;letter-spacing:0.06em;text-transform:uppercase;
-  border-radius:var(--radius);text-decoration:none;
+  border-radius:var(--radius-sm);text-decoration:none;
   font-family:'IBM Plex Mono', monospace;
   transition:background .15s ease, transform .15s ease;
 }
@@ -259,10 +259,10 @@ footer.site-footer-full p.lead-f{color:#d9d2c0;font-size:15.5px;max-width:50ch;m
 /* ---------- Rounded corners ----------
    One radius scale for the site family: --radius-sm for inputs, selects and
    textareas, --radius-md for cards, panels and callouts, --radius-lg for
-   dialogs, --radius-pill for pill shapes. --radius (2px, used by .btn) is
-   unchanged. These rules use :where(), so they have zero specificity and only
-   reach elements that had no radius of their own; anything a page already
-   rounds keeps its radius. */
+   dialogs, --radius-pill for pill shapes. --radius is now 8px, the same as
+   --radius-sm (it was 2px); buttons (.btn) use --radius-sm. These rules use
+   :where(), so they have zero specificity and only reach elements that had no
+   radius of their own; anything a page already rounds keeps its radius. */
 :root{--radius-sm:8px;--radius-md:12px;--radius-lg:14px;--radius-pill:999px;}
 :where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]),select,textarea){border-radius:var(--radius-sm);}
 :where(.card){border-radius:var(--radius-md);}
